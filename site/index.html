@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="pt-BR" data-lang="pt" data-os="win" data-ai="claude">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>whoqol-toolkit · LaBiOmicS</title>
+<meta name="description" content="Pontuação pelas regras da OMS, psicometria e estatística para publicação de questionários WHOQOL, a partir da planilha, com Claude Code, Antigravity ou Gemini CLI.">
+<meta property="og:title" content="whoqol-toolkit — análise de questionários WHOQOL para publicação">
+<meta property="og:description" content="Da planilha do Google Forms às tabelas APA, figuras e texto de métodos em português, inglês e espanhol.">
+<meta property="og:image" content="https://labiomics.github.io/whoqol-toolkit/assets/logo-180.png">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --ink: #14182b; --ink-2: #3d4257; --muted: #6b6f80;
+  --line: #e3e0d8; --gold: #b45309; --gold-soft: #fdf3e1; --cyan: #0369a1; --cyan-soft: #e6f2f9;
+  --red: #b42318; --red-soft: #fdecea; --green: #1f7a4d; --green-soft: #e8f5ee;
+  --code-bg: #0f1730; --code-ink: #e8ecf8; --code-dim: #8c95b8; --code-hi: #f2b25c;
+  --shadow: 0 1px 2px rgba(20,24,43,.05), 0 6px 24px rgba(20,24,43,.06);
+  --radius: 14px;
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0f1f; --surface: #111831; --surface-2: #161f3d; --ink: #eef0f7; --ink-2: #c4c8d8; --muted: #8d93a8;
+    --line: #253056; --gold: #f2b25c; --gold-soft: #2a2213; --cyan: #67c1ec; --cyan-soft: #10273a;
+    --red: #f08a80; --red-soft: #2c1615; --green: #6fcf9c; --green-soft: #12281d; --code-bg: #060a17;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0f1f; --surface: #111831; --surface-2: #161f3d; --ink: #eef0f7; --ink-2: #c4c8d8; --muted: #8d93a8;
+  --line: #253056; --gold: #f2b25c; --gold-soft: #2a2213; --cyan: #67c1ec; --cyan-soft: #10273a;
+  --red: #f08a80; --red-soft: #2c1615; --green: #6fcf9c; --green-soft: #12281d; --code-bg: #060a17;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
+}
+
+/* Language, operating system and AI selectors show one variant at a time. */
+html[data-lang="pt"] [lang="en"], html[data-lang="pt"] [lang="es"],
+html[data-lang="en"] [lang="pt"], html[data-lang="en"] [lang="es"],
+html[data-lang="es"] [lang="pt"], html[data-lang="es"] [lang="en"] { display: none !important; }
+html[data-os="win"] .os-mac, html[data-os="win"] .os-linux, html[data-os="win"] .os-unix,
+html[data-os="mac"] .os-win, html[data-os="mac"] .os-linux,
+html[data-os="linux"] .os-win, html[data-os="linux"] .os-mac { display: none !important; }
+html[data-ai="claude"] .ai-agy, html[data-ai="agy"] .ai-claude { display: none !important; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--cyan); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+code, pre, kbd { font-family: var(--mono); }
+code { font-size: .86em; background: var(--surface-2); padding: .1em .35em; border-radius: 5px; overflow-wrap: anywhere; }
+kbd { font-size: .8em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: .05em .4em; background: var(--surface); }
+h1, h2, h3 { font-family: var(--serif); font-weight: 650; letter-spacing: -.01em; line-height: 1.15; margin: 0; }
+h2 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); }
+h3 { font-size: 1.15rem; font-weight: 600; }
+p { margin: 0; }
+p + p { margin-top: 10px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+@media (max-width: 600px) { .wrap { padding: 0 16px; } body { font-size: 16px; } }
+.eyebrow { font: 500 .78rem var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+
+/* Header */
+header.top { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 600; min-width: 0; }
+.brand img { width: 30px; height: 30px; border-radius: 8px; flex: none; }
+.brand span { font-family: var(--mono); font-size: .92rem; white-space: nowrap; }
+nav.links { display: flex; gap: 20px; margin-left: auto; }
+nav.links a { color: var(--ink-2); text-decoration: none; font-size: .9rem; white-space: nowrap; }
+nav.links a:hover { color: var(--ink); }
+.toggles { display: flex; gap: 6px; align-items: center; }
+.chip-btn { font: 500 .78rem var(--mono); color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; cursor: pointer; }
+.chip-btn:hover { border-color: var(--muted); }
+.seg { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.seg button { font: 500 .8rem var(--sans); color: var(--ink-2); background: none; border: 0; border-radius: 999px; padding: 5px 11px; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.top .seg button { font-family: var(--mono); font-size: .74rem; padding: 4px 8px; }
+/* Narrow screens: the menu moves to a second, horizontally scrollable row instead of disappearing. */
+@media (max-width: 980px) {
+  .top .wrap { flex-wrap: wrap; height: auto; padding-top: 10px; gap: 8px 14px; }
+  .toggles { margin-left: auto; }
+  nav.links { order: 3; width: 100%; margin: 0; gap: 18px; overflow-x: auto; padding: 2px 0 10px; scrollbar-width: none; }
+  nav.links::-webkit-scrollbar { display: none; }
+  html { scroll-padding-top: 110px; }
+  .pickers { top: 98px; }
+}
+@media (max-width: 420px) { .brand span { display: none; } }
+
+/* Hero */
+.hero { padding: 76px 0 64px; position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: -40% -10% auto auto; width: 760px; height: 760px; background: radial-gradient(closest-side, color-mix(in srgb, var(--gold) 14%, transparent), transparent); pointer-events: none; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: 1.05fr .95fr; gap: 52px; align-items: center; }
+.hero .wrap > * { min-width: 0; }
+@media (max-width: 920px) { .hero .wrap { grid-template-columns: 1fr; gap: 36px; } .hero { padding: 48px 0 40px; } }
+.hero h1 { font-size: clamp(2.3rem, 5.2vw, 3.8rem); margin: 6px 0 20px; }
+.hero h1 em { font-style: italic; color: var(--gold); }
+.lede { font-size: 1.12rem; color: var(--ink-2); max-width: 36em; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: .95rem; text-decoration: none; border: 1px solid transparent; }
+.btn.primary { background: var(--ink); color: var(--bg); }
+.btn.ghost { border-color: var(--line); color: var(--ink); background: var(--surface); }
+.btn:hover { transform: translateY(-1px); }
+.meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.tag { font: 500 .76rem var(--mono); padding: 4px 10px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); }
+.tag.beta { background: var(--gold-soft); color: var(--gold); border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); font-weight: 600; letter-spacing: .04em; }
+.beta-note { display: flex; gap: 12px; align-items: flex-start; margin-top: 22px; padding: 12px 16px; max-width: 36em; border: 1px solid color-mix(in srgb, var(--gold) 40%, var(--line)); border-left: 4px solid var(--gold); border-radius: 0 10px 10px 0; background: var(--gold-soft); font-size: .9rem; color: var(--ink); }
+.beta-note b { color: var(--gold); font: 600 .74rem var(--mono); letter-spacing: .06em; padding-top: 3px; flex: none; }
+
+/* Terminal mock */
+.term { background: var(--code-bg); color: var(--code-ink); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; font: .84rem/1.65 var(--mono); }
+.term .bar { display: flex; align-items: center; gap: 7px; padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.term .bar i { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,.18); }
+.term .bar span { margin-left: 8px; color: var(--code-dim); font-size: .74rem; }
+.term .body { padding: 16px 18px 18px; }
+.term .body > div { white-space: pre-wrap; overflow-wrap: anywhere; }
+.term .u { color: var(--code-hi); }
+.term .d { color: var(--code-dim); }
+.term .ok { color: #6fcf9c; }
+.term .w { color: #f08a80; }
+.term .gap { height: 10px; }
+.term .cap { margin-top: 12px; color: var(--code-dim); font-size: .72rem; }
+.term .bar .replay { margin-left: auto; font: .8rem var(--mono); color: var(--code-dim); background: none; border: 1px solid rgba(255,255,255,.18); border-radius: 6px; padding: 0 8px; cursor: pointer; }
+.term .bar .replay:hover { color: var(--code-ink); }
+.term .prow { display: grid; grid-template-columns: 6em 1fr 1.4em; gap: 10px; align-items: center; padding-left: 1.2em; }
+.term .prow .pbar { background: rgba(255,255,255,.12); }
+.term .prow .pbar b { background: var(--code-hi); }
+.term .rest { color: transparent; }
+.term.anim:not(.typed) .rest { box-shadow: inset 2px 0 var(--code-hi); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { box-shadow: none; } }
+
+/* Animation states. Without JavaScript, or with reduced motion, everything stays in its final state. */
+.pbar { display: block; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.pbar b { display: block; height: 100%; width: var(--w, 100%); border-radius: 3px; background: var(--cyan); }
+.anim .pbar b { width: 0; transition: width var(--d, 1.4s) cubic-bezier(.45,0,.25,1); }
+.anim .on .pbar b { width: var(--w, 100%); }
+.term.anim .ln { opacity: 0; transition: opacity .35s; }
+.term.anim .ln.on { opacity: 1; }
+.term.anim .tick { opacity: 0; transition: opacity .2s var(--d, 1.4s); }
+.term.anim .ln.on .tick { opacity: 1; }
+
+/* Sections */
+section { padding: 80px 0; }
+section.alt { background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.sec-head { max-width: 48em; margin-bottom: 38px; }
+.sec-head p { color: var(--ink-2); margin-top: 14px; font-size: 1.04rem; }
+@media (max-width: 600px) { section { padding: 54px 0; } }
+
+/* Two uses */
+.uses { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.uses > * { min-width: 0; }
+@media (max-width: 860px) { .uses { grid-template-columns: 1fr; } }
+.use { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; border-top: 4px solid var(--gold); }
+.use.ref { border-top-color: var(--cyan); }
+.use .ico { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: var(--gold-soft); color: var(--gold); }
+.use.ref .ico { background: var(--cyan-soft); color: var(--cyan); }
+.use h3 { font-size: 1.3rem; margin: 14px 0 8px; }
+.use > p { color: var(--ink-2); font-size: .95rem; }
+.use ul { margin: 14px 0 0; padding: 0; list-style: none; }
+.use li { position: relative; padding-left: 24px; margin: 7px 0; font-size: .92rem; color: var(--ink-2); }
+.use li::before { content: "→"; position: absolute; left: 0; color: var(--gold); font-family: var(--mono); }
+.use.ref li::before { color: var(--cyan); }
+
+/* Guide */
+.pickers { position: sticky; top: 64px; z-index: 10; display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; padding: 14px 18px; margin-bottom: 30px; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.pickers label { font: 500 .74rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-right: 8px; }
+.pickers > div { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+@media (max-width: 600px) { .pickers { position: static; } }
+.needs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 36px; }
+@media (max-width: 900px) { .needs { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .needs { grid-template-columns: 1fr; } }
+.needs div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-size: .9rem; color: var(--ink-2); }
+.needs b { display: block; color: var(--ink); font-weight: 600; margin-bottom: 3px; }
+ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+ol.steps > li { counter-increment: s; position: relative; padding: 0 0 34px 64px; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font: 600 1rem var(--serif); color: var(--gold); background: var(--surface); border: 1.5px solid var(--gold); }
+ol.steps > li::after { content: ""; position: absolute; left: 20px; top: 46px; bottom: 6px; width: 1.5px; background: var(--line); }
+ol.steps > li:last-child::after { display: none; }
+ol.steps h3 { font-family: var(--sans); font-size: 1.12rem; padding-top: 8px; margin-bottom: 8px; }
+ol.steps .txt { color: var(--ink-2); font-size: .97rem; max-width: 46em; }
+ol.steps .txt ul { margin: 8px 0 0; padding-left: 20px; }
+ol.steps .txt li { margin: 3px 0; }
+@media (max-width: 600px) { ol.steps > li { padding-left: 52px; } ol.steps > li::before { width: 36px; height: 36px; } ol.steps > li::after { left: 17px; top: 40px; } }
+.tip { margin-top: 12px; padding: 12px 14px; border-left: 3px solid var(--cyan); background: var(--cyan-soft); border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink); max-width: 46em; }
+.warn { border-left-color: var(--gold); background: var(--gold-soft); }
+
+/* Code blocks */
+.code { position: relative; background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 16px 18px; margin-top: 12px; font-size: .86rem; line-height: 1.7; max-width: 46em; }
+.code pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; padding-right: 64px; }
+.code .c { color: var(--code-dim); }
+.code .p { color: var(--code-hi); user-select: none; }
+.code .ph { color: var(--code-hi); border-bottom: 1px dashed var(--code-hi); }
+.copy { position: absolute; top: 10px; right: 10px; font: 500 .72rem var(--mono); color: var(--code-ink); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 6px; padding: 5px 9px; cursor: pointer; }
+.copy:hover { background: rgba(255,255,255,.16); }
+
+/* Prompts */
+.prompts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.prompts > * { min-width: 0; }
+@media (max-width: 900px) { .prompts { grid-template-columns: 1fr; } }
+.pcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; }
+.pcard .when { font: 500 .72rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.pcard h3 { font-family: var(--sans); font-size: 1.05rem; margin: 6px 0 4px; }
+.pcard > p { font-size: .9rem; color: var(--ink-2); }
+.pcard .code { max-width: none; margin-top: auto; }
+.pcard > p:last-of-type { margin-bottom: 14px; }
+.badge { display: inline-block; font: 500 .68rem var(--mono); padding: 2px 7px; border-radius: 5px; background: var(--cyan-soft); color: var(--cyan); margin-left: 6px; vertical-align: 1px; text-transform: none; letter-spacing: 0; }
+
+/* Pipeline */
+.pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; counter-reset: step; }
+@media (max-width: 900px) { .pipeline { grid-template-columns: 1fr; } }
+@media (min-width: 901px) and (max-width: 1120px) { .pipeline { grid-template-columns: repeat(3, 1fr); } .pipeline .step:nth-child(3)::after { display: none; } }
+.step { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; transition: opacity .35s, border-color .35s, box-shadow .35s; }
+.step:not(:last-child)::after { content: ""; position: absolute; right: -13px; top: 50%; width: 12px; height: 2px; background: var(--line); transition: background .35s; }
+@media (max-width: 900px) { .step:not(:last-child)::after { right: auto; left: 50%; top: auto; bottom: -13px; width: 2px; height: 12px; } }
+.viz { position: relative; height: 120px; margin-bottom: 14px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); overflow: hidden; font: .72rem/1.5 var(--mono); color: var(--ink-2); }
+.step.llm .viz { background: color-mix(in srgb, var(--cyan-soft) 70%, var(--surface)); }
+.viz .ok { color: var(--green); }
+.viz .w { color: var(--red); font-weight: 600; }
+.viz .doc { position: absolute; left: 12px; top: 10px; width: 32px; height: 42px; padding: 6px 5px; border-radius: 4px; border: 1px solid var(--line); background: var(--surface); display: grid; gap: 4px; align-content: start; overflow: hidden; }
+.viz .doc i { display: block; height: 3px; border-radius: 2px; background: var(--line); }
+.viz .doc i:nth-child(3n) { width: 70%; }
+.viz .scan { display: none; position: absolute; left: 0; right: 0; height: 2px; background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+.viz .tags { position: absolute; left: 12px; right: 8px; top: 60px; display: flex; flex-wrap: wrap; gap: 4px; font-size: .66rem; }
+.viz .tags span[lang] { display: inline-block; }
+.viz .tags > span { padding: 0 6px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); background: var(--gold-soft); color: var(--gold); white-space: nowrap; }
+.viz .doc-cap { position: absolute; left: 54px; right: 8px; top: 22px; color: var(--ink); }
+.viz ul { list-style: none; margin: 0; padding: 0; }
+.viz li, .viz .row { display: flex; gap: 8px; align-items: center; white-space: nowrap; }
+.viz .row .pbar { flex: 1; }
+.viz .row .g { width: 1.1em; text-align: center; color: var(--cyan); font-weight: 600; }
+.viz .row .n { width: 1.4em; text-align: center; border-radius: 4px; font-weight: 600; }
+.viz .row.t-block .n { background: var(--red-soft); color: var(--red); }
+.viz .row.t-ess .n { background: var(--gold-soft); color: var(--gold); }
+.viz .row.t-opt .n { background: var(--green-soft); color: var(--green); }
+.viz .row + .row { margin-top: 6px; }
+.viz .row.p + .row.p { margin-top: 2px; }
+.viz .row.t-block .pbar b { background: var(--red); }
+.viz .row.t-ess .pbar b { background: var(--gold); }
+.viz .row.t-opt .pbar b { background: var(--green); }
+.viz .stamp { margin-top: 6px; color: var(--green); }
+.viz .fi { display: inline-block; min-width: 3.4em; text-align: center; padding: 0 4px; border-radius: 4px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); font-weight: 600; }
+.viz .fi.pdf { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.flow.anim .step { opacity: .5; }
+.flow.anim .step.active, .flow.anim .step.done { opacity: 1; }
+.flow.anim .step.active { border-color: var(--gold); box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent); }
+.flow.anim .step.llm.active { border-color: var(--cyan); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 22%, transparent); }
+.flow.anim .step.done::after { background: var(--gold); }
+.flow.anim .step.active .scan { display: block; animation: scan 1.1s ease-in-out infinite alternate; }
+@keyframes scan { from { top: 0; } to { top: calc(100% - 2px); } }
+.flow.anim .k { opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; }
+.flow.anim .k.on { opacity: 1; transform: none; }
+.legend .replay-btn { margin-left: auto; }
+.step::before { counter-increment: step; content: counter(step); font: 600 .8rem var(--mono); color: var(--gold); display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--gold); margin-bottom: 12px; }
+.step h3 { font-family: var(--sans); font-size: 1.02rem; margin-bottom: 8px; }
+.step p { font-size: .9rem; color: var(--ink-2); }
+.step.llm { border-color: color-mix(in srgb, var(--cyan) 45%, var(--line)); background: color-mix(in srgb, var(--cyan-soft) 40%, var(--surface)); }
+.legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; font-size: .85rem; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; border: 1px solid var(--line); background: var(--surface); }
+.legend .l-llm { border-color: var(--cyan); background: var(--cyan-soft); }
+
+/* Panel */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.grid-2 > * { min-width: 0; }
+@media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+.roles { display: grid; gap: 12px; }
+.role-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: grid; grid-template-columns: 40px 1fr; gap: 14px; }
+.role-card .ico { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: var(--surface-2); color: var(--ink); }
+.role-card h3 { font-size: 1rem; font-family: var(--sans); margin-bottom: 4px; }
+.role-card p { font-size: .9rem; color: var(--ink-2); }
+table.comp { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; font-size: .92rem; }
+table.comp th, table.comp td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.comp th { font: 500 .74rem var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--surface-2); }
+table.comp tr:last-child td { border-bottom: 0; }
+table.comp td:first-child { font-family: var(--mono); white-space: nowrap; }
+@media (max-width: 380px) { table.comp th, table.comp td { padding: 9px 10px; } table.comp th { letter-spacing: 0; } }
+
+/* Calibration */
+.cal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 900px) { .cal { grid-template-columns: 1fr; } }
+.cal-card { border-radius: var(--radius); padding: 22px; border: 1px solid var(--line); background: var(--surface); }
+.lbl { font: 600 .76rem var(--mono); text-transform: uppercase; letter-spacing: .06em; padding: 3px 9px; border-radius: 6px; display: inline-block; margin-bottom: 12px; }
+.cal-card p { font-size: .93rem; color: var(--ink-2); }
+.cal-card .ex { margin-top: 12px; font-size: .85rem; color: var(--muted); font-style: italic; }
+.t-block { background: var(--red-soft); color: var(--red); }
+.t-ess { background: var(--gold-soft); color: var(--gold); }
+.t-opt { background: var(--green-soft); color: var(--green); }
+
+/* Audit and axes */
+.audit { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 900px) { .audit { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .audit { grid-template-columns: 1fr; } }
+.a-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.a-card h3 { font-family: var(--sans); font-size: 1rem; margin-bottom: 6px; }
+.a-card p { font-size: .9rem; color: var(--ink-2); }
+.axes { display: grid; grid-template-columns: .8fr 1.3fr 1.2fr; gap: 14px; margin-top: 30px; }
+@media (max-width: 900px) { .axes { grid-template-columns: 1fr; } }
+.axis { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.axis .n { font-family: var(--serif); font-size: 2.4rem; line-height: 1; color: var(--gold); }
+.axis h3 { margin: 6px 0 12px; font-family: var(--sans); font-size: 1rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { font-size: .79rem; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); background: var(--bg); }
+
+/* Outputs */
+.out { display: grid; grid-template-columns: .9fr 1.1fr; gap: 40px; align-items: start; }
+.out > * { min-width: 0; }
+@media (max-width: 900px) { .out { grid-template-columns: 1fr; } }
+.report { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; font-size: .9rem; }
+.report .rhead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 12px; }
+.report .rhead b { font-family: var(--serif); font-size: 1.05rem; font-weight: 600; }
+.report .rhead small { font: .72rem var(--mono); color: var(--muted); }
+.rev { display: grid; grid-template-columns: 62px 1fr auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+.rev code { background: none; padding: 0; font-weight: 500; }
+.rev .role { color: var(--ink-2); font-size: .85rem; }
+.verdict { font: 500 .72rem var(--mono); padding: 3px 8px; border-radius: 6px; background: var(--gold-soft); color: var(--gold); white-space: nowrap; }
+.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.tier { border-radius: 10px; padding: 10px; text-align: center; }
+.tier b { display: block; font-family: var(--serif); font-size: 1.5rem; line-height: 1; }
+.tier span { font: .68rem var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+@media (max-width: 380px) { .report { padding: 16px; } .rev { grid-template-columns: 1fr auto; } .rev .role { grid-column: 1 / -1; grid-row: 2; } .tier span { font-size: .6rem; letter-spacing: 0; } }
+.report .foot { margin-top: 12px; font: .72rem var(--mono); color: var(--muted); }
+.file { display: grid; grid-template-columns: minmax(0, 15em) 1fr; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: .91rem; }
+.file code { background: none; padding: 0; color: var(--ink); word-break: break-all; }
+.file span { color: var(--ink-2); }
+.file.key code { color: var(--gold); font-weight: 500; }
+@media (max-width: 600px) { .file { grid-template-columns: 1fr; gap: 3px; } }
+
+/* FAQ */
+.faq { display: grid; gap: 10px; max-width: 52em; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0 18px; }
+summary { cursor: pointer; padding: 15px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font: 500 1.2rem var(--mono); color: var(--gold); line-height: 1.2; }
+details[open] summary::after { content: "–"; }
+details > div { padding: 0 0 16px; color: var(--ink-2); font-size: .94rem; }
+details .code { margin-top: 10px; }
+
+/* Advanced install */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab { font: 500 .85rem var(--sans); padding: 9px 16px; border: 1px solid var(--line); border-bottom: 0; border-radius: 10px 10px 0 0; background: var(--surface-2); color: var(--ink-2); cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--code-bg); color: var(--code-ink); border-color: var(--code-bg); }
+.panel { display: none; }
+.panel.on { display: block; }
+.panel .code { margin-top: 0; border-radius: 0 12px 12px 12px; max-width: none; }
+
+/* Responsible use */
+.resp { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 900px) { .resp { grid-template-columns: 1fr; } }
+.resp div { border-top: 2px solid var(--ink); padding-top: 14px; }
+.resp h3 { font-family: var(--sans); font-size: 1rem; margin-bottom: 6px; }
+.resp p { font-size: .92rem; color: var(--ink-2); }
+
+footer { padding: 44px 0 56px; border-top: 1px solid var(--line); font-size: .9rem; color: var(--muted); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; }
+footer b { color: var(--ink); font-weight: 600; }
+footer a { color: var(--ink-2); }
+
+/* WHOQOL additions */
+.dom { display: grid; grid-template-columns: 9.5em 1fr 3.2em 3em; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px dashed var(--line); font-size: .88rem; }
+.dom .pbar { height: 8px; }
+.dom .pbar b { background: var(--cyan); }
+.dom.low .pbar b { background: var(--gold); }
+.dom .v { font: 500 .86rem var(--mono); text-align: right; color: var(--ink); }
+.dom .a { font: .76rem var(--mono); color: var(--muted); text-align: right; }
+@media (max-width: 420px) { .dom { grid-template-columns: 1fr 3em; } .dom .pbar, .dom .a { display: none; } }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid3 > * { min-width: 0; }
+@media (max-width: 900px) { .grid3 { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+.card h3 { font-family: var(--sans); font-size: 1.05rem; margin-bottom: 8px; }
+.card p, .card li { font-size: .92rem; color: var(--ink-2); }
+.card ul { margin: 8px 0 0; padding-left: 18px; }
+.card li { margin: 4px 0; }
+.card .eyebrow { margin-bottom: 6px; }
+.pipe4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: step; }
+@media (max-width: 900px) { .pipe4 { grid-template-columns: 1fr; } }
+html[data-ai="claude"] .ai-gem, html[data-ai="agy"] .ai-gem, html[data-ai="gem"] .ai-claude, html[data-ai="gem"] .ai-agy { display: none !important; }
+</style>
+
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="assets/logo-180.png" alt="" width="30" height="30"><span>whoqol-toolkit</span></a>
+    <nav class="links">
+      <a href="#guia"><span lang="pt">Guia passo a passo</span><span lang="en">Step-by-step guide</span><span lang="es">Guía paso a paso</span></a>
+      <a href="#prompts"><span lang="pt">Prompts prontos</span><span lang="en">Ready prompts</span><span lang="es">Prompts listos</span></a>
+      <a href="#como"><span lang="pt">Como funciona</span><span lang="en">How it works</span><span lang="es">Cómo funciona</span></a>
+      <a href="#saidas"><span lang="pt">Resultados</span><span lang="en">Outputs</span><span lang="es">Resultados</span></a>
+      <a href="#faq"><span lang="pt">Dúvidas</span><span lang="en">FAQ</span><span lang="es">Preguntas</span></a>
+      <a href="https://github.com/LaBiOmicS/whoqol-toolkit">GitHub</a>
+    </nav>
+    <div class="toggles">
+      <div class="seg" role="group" aria-label="Language">
+        <button type="button" data-set="lang" data-val="pt">PT</button><button type="button" data-set="lang" data-val="en">EN</button><button type="button" data-set="lang" data-val="es">ES</button>
+      </div>
+      <button class="chip-btn" id="theme-btn" type="button" aria-label="Toggle dark mode">◐</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow"><span lang="pt">Plugin para Claude Code, Antigravity e Gemini CLI</span><span lang="en">Plugin for Claude Code, Antigravity and Gemini CLI</span><span lang="es">Plugin para Claude Code, Antigravity y Gemini CLI</span></div>
+      <h1 lang="pt">Da planilha ao <em>artigo</em>, sem errar a pontuação.</h1><h1 lang="en">From spreadsheet to <em>paper</em>, with the scoring right.</h1><h1 lang="es">De la hoja de cálculo al <em>artículo</em>, sin errores de puntuación.</h1>
+      <p class="lede" lang="pt">Análise de questionários de qualidade de vida WHOQOL com assistência de IA. Você entrega a planilha do Google Forms, REDCap ou Excel; a ferramenta aplica as regras oficiais da OMS, confere a qualidade dos dados, estima confiabilidade e validade, compara grupos e gera tabelas no estilo APA, figuras e o rascunho de métodos e resultados. Todos os números vêm de código testado; a IA conduz, pergunta e interpreta. Não é preciso saber programar.</p><p class="lede" lang="en">AI-assisted analysis of WHOQOL quality-of-life questionnaires. You hand over the Google Forms, REDCap or Excel spreadsheet; the tool applies the official WHO rules, checks data quality, estimates reliability and validity, compares groups and writes APA tables, figures and a draft of the methods and results. Every number comes from tested code; the AI guides, asks and interprets. No programming needed.</p><p class="lede" lang="es">Análisis de cuestionarios de calidad de vida WHOQOL con asistencia de IA. Usted entrega la hoja de Google Forms, REDCap o Excel; la herramienta aplica las reglas oficiales de la OMS, revisa la calidad de los datos, estima fiabilidad y validez, compara grupos y genera tablas en estilo APA, figuras y el borrador de métodos y resultados. Todas las cifras vienen de código probado; la IA guía, pregunta e interpreta. No hace falta saber programar.</p>
+      <div class="cta">
+        <a class="btn primary" href="#guia"><span lang="pt">Começar pelo guia</span><span lang="en">Start with the guide</span><span lang="es">Empezar por la guía</span> →</a>
+        <a class="btn ghost" href="#prompts"><span lang="pt">Ver prompts prontos</span><span lang="en">See ready prompts</span><span lang="es">Ver prompts listos</span></a>
+      </div>
+      <div class="beta-note" role="note"><b>BETA</b>
+        <span lang="pt">A ferramenta ainda está em versão beta e pode conter erros. Confira cada resultado antes de publicar e <a href="https://github.com/LaBiOmicS/whoqol-toolkit/issues">relate problemas</a>.</span><span lang="en">The tool is still in beta and may contain errors. Check every result before publishing and <a href="https://github.com/LaBiOmicS/whoqol-toolkit/issues">report problems</a>.</span><span lang="es">La herramienta todavía está en versión beta y puede contener errores. Verifique cada resultado antes de publicar e <a href="https://github.com/LaBiOmicS/whoqol-toolkit/issues">informe los problemas</a>.</span></div>
+      <div class="meta-row"><span class="tag beta">BETA</span><span class="tag">v0.1.0</span><span class="tag">MIT</span><span class="tag">WHOQOL-BREF</span><span class="tag">Windows · macOS · Linux</span><span class="tag">PT · EN · ES</span></div>
+    </div>
+    <div class="term" aria-label="Exemplo de uso no terminal">
+      <div class="bar"><i></i><i></i><i></i><span>~/Documentos/pesquisa — claude</span></div>
+      <div class="body">
+        <div><span class="u">&gt; </span><span class="u" lang="pt">Analise a planilha whoqol.xlsx e compare os domínios por sexo e escolaridade.</span><span class="u" lang="en">Analyse whoqol.xlsx and compare the domains by sex and education.</span><span class="u" lang="es">Analiza whoqol.xlsx y compara los dominios por sexo y nivel educativo.</span></div>
+        <div class="gap"></div>
+        <div><span class="ok">✓</span> <span lang="pt">26 itens reconhecidos pelo texto das perguntas · versão pt-BR (Fleck, 2000)</span><span lang="en">26 items recognised from the question text · pt-BR version (Fleck, 2000)</span><span lang="es">26 ítems reconocidos por el texto de las preguntas · versión pt-BR (Fleck, 2000)</span></div>
+        <div><span class="ok">✓</span> <span lang="pt">300 respostas · 297 analisadas · 3 excluídas (&lt; 21 itens válidos)</span><span lang="en">300 responses · 297 analysed · 3 excluded (&lt; 21 valid items)</span><span lang="es">300 respuestas · 297 analizadas · 3 excluidas (&lt; 21 ítems válidos)</span></div>
+        <div><span class="w">!</span> <span lang="pt">Q21 (vida sexual) com 8% de ausentes · 1 resposta idêntica em todos os itens</span><span lang="en">Q21 (sex life) 8% missing · 1 identical answer to every item</span><span lang="es">Q21 (vida sexual) con 8% de faltantes · 1 respuesta idéntica en todos los ítems</span></div>
+        <div><span class="ok">✓</span> <span lang="pt">α: físico 0,91 · psicológico 0,85 · social 0,78 · ambiente 0,90</span><span lang="en">α: physical .91 · psychological .85 · social .78 · environment .90</span><span lang="es">α: física 0,91 · psicológico 0,85 · social 0,78 · ambiente 0,90</span></div>
+        <div><span class="ok">✓</span> <span lang="pt">Ambiente × escolaridade: ANOVA de Welch, p &lt; 0,001, ω² = 0,10</span><span lang="en">Environment × education: Welch ANOVA, p &lt; .001, ω² = .10</span><span lang="es">Ambiente × nivel educativo: ANOVA de Welch, p &lt; 0,001, ω² = 0,10</span></div>
+        <div class="gap"></div>
+        <div class="d">→ tables.docx · results.xlsx · report.md · figures/ · methods_results_pt.md</div>
+        <div class="cap"><span lang="pt">Dados sintéticos do exemplo incluído no repositório.</span><span lang="en">Synthetic data from the example included in the repository.</span><span lang="es">Datos sintéticos del ejemplo incluido en el repositorio.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ USES -->
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Para quem é</span><span lang="en">Who it is for</span><span lang="es">Para quién es</span></div>
+      <h2 lang="pt">Dois usos, a mesma régua da OMS.</h2><h2 lang="en">Two uses, the same WHO ruler.</h2><h2 lang="es">Dos usos, la misma regla de la OMS.</h2>
+    </div>
+    <div class="uses">
+      <div class="use">
+        <div class="ico">∑</div>
+        <h3 lang="pt">Quem coletou os dados</h3><h3 lang="en">Whoever collected the data</h3><h3 lang="es">Quien recogió los datos</h3>
+        <p lang="pt">Estudantes de iniciação científica, mestrado e doutorado, e pesquisadores que aplicaram o WHOQOL-BREF e precisam dos resultados prontos para o artigo ou a dissertação.</p><p lang="en">Undergraduate and graduate students and researchers who administered the WHOQOL-BREF and need results ready for the paper or thesis.</p><p lang="es">Estudiantes de grado y posgrado e investigadores que aplicaron el WHOQOL-BREF y necesitan los resultados listos para el artículo o la tesis.</p>
+        <ul>
+          <li><span lang="pt">Pontuação exata, com itens invertidos e regras de ausentes</span><span lang="en">Exact scoring, with reversed items and missing-data rules</span><span lang="es">Puntuación exacta, con ítems invertidos y reglas de faltantes</span></li>
+          <li><span lang="pt">Tabelas APA no Word e figuras em 300 dpi</span><span lang="en">APA tables in Word and 300 dpi figures</span><span lang="es">Tablas APA en Word y figuras a 300 dpi</span></li>
+          <li><span lang="pt">Texto de métodos e resultados em PT, EN e ES</span><span lang="en">Methods and results text in PT, EN and ES</span><span lang="es">Texto de métodos y resultados en PT, EN y ES</span></li>
+        </ul>
+      </div>
+      <div class="use ref">
+        <div class="ico">ω</div>
+        <h3 lang="pt">Quem valida ou revisa</h3><h3 lang="en">Whoever validates or reviews</h3><h3 lang="es">Quien valida o revisa</h3>
+        <p lang="pt">Estudos psicométricos e orientadores ou revisores que querem conferir se a análise segue o manual e os critérios de qualidade de medida.</p><p lang="en">Psychometric studies, and supervisors or reviewers who want to check that the analysis follows the manual and measurement-quality criteria.</p><p lang="es">Estudios psicométricos, y directores o revisores que quieren comprobar que el análisis sigue el manual y los criterios de calidad de medida.</p>
+        <ul>
+          <li><span lang="pt">α com IC, ω, EPM e mudança mínima detectável</span><span lang="en">α with CI, ω, SEM and minimal detectable change</span><span lang="es">α con IC, ω, EEM y cambio mínimo detectable</span></li>
+          <li><span lang="pt">AFC, HTMT e análise multitraço; script WLSMV para o R</span><span lang="en">CFA, HTMT and multitrait scaling; WLSMV script for R</span><span lang="es">AFC, HTMT y análisis multirrasgo; script WLSMV para R</span></li>
+          <li><span lang="pt">Alertas de qualidade dos dados e limitações explícitas</span><span lang="en">Data-quality alerts and explicit limitations</span><span lang="es">Alertas de calidad de datos y limitaciones explícitas</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ GUIDE -->
+<section id="guia">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Guia passo a passo</span><span lang="en">Step-by-step guide</span><span lang="es">Guía paso a paso</span></div>
+      <h2 lang="pt">Da instalação à primeira análise, em sete passos.</h2><h2 lang="en">From installation to the first analysis, in seven steps.</h2><h2 lang="es">De la instalación al primer análisis, en siete pasos.</h2>
+      <p lang="pt">Escolha o seu sistema e a IA que vai usar; o guia mostra só os comandos certos. Em cada caixa escura, clique em <b>copy</b> e cole no terminal.</p><p lang="en">Choose your system and the AI you will use; the guide shows only the right commands. In each dark box, click <b>copy</b> and paste into the terminal.</p><p lang="es">Elija su sistema y la IA que va a usar; la guía muestra solo los comandos adecuados. En cada caja oscura, haga clic en <b>copy</b> y pegue en la terminal.</p>
+    </div>
+    <div class="pickers">
+      <div><label><span lang="pt">Sistema</span><span lang="en">System</span><span lang="es">Sistema</span></label>
+        <div class="seg" role="group" aria-label="Operating system"><button type="button" data-set="os" data-val="win">Windows</button><button type="button" data-set="os" data-val="mac">macOS</button><button type="button" data-set="os" data-val="linux">Linux</button></div></div>
+      <div><label><span lang="pt">IA</span><span lang="en">AI</span><span lang="es">IA</span></label>
+        <div class="seg" role="group" aria-label="AI"><button type="button" data-set="ai" data-val="claude">Claude Code</button><button type="button" data-set="ai" data-val="agy">Antigravity</button><button type="button" data-set="ai" data-val="gem">Gemini CLI</button></div></div>
+    </div>
+    <ol class="steps">
+      <li>
+        <h3 lang="pt">Abra o terminal</h3><h3 lang="en">Open the terminal</h3><h3 lang="es">Abra la terminal</h3>
+        <div class="txt">
+          <p lang="pt">O terminal é uma janela onde você digita comandos. Você vai usá-lo só para colar o que está nas caixas escuras.</p><p lang="en">The terminal is a window where you type commands. You will only use it to paste what is in the dark boxes.</p><p lang="es">La terminal es una ventana donde se escriben comandos. Solo la usará para pegar lo que está en las cajas oscuras.</p>
+          <p class="os-win" lang="pt">No Windows, aperte <kbd>⊞ Win</kbd>, digite <b>PowerShell</b> e abra o <b>Windows PowerShell</b>.</p><p class="os-win" lang="en">On Windows, press <kbd>⊞ Win</kbd>, type <b>PowerShell</b> and open <b>Windows PowerShell</b>.</p><p class="os-win" lang="es">En Windows, pulse <kbd>⊞ Win</kbd>, escriba <b>PowerShell</b> y abra <b>Windows PowerShell</b>.</p>
+          <p class="os-mac" lang="pt">No Mac, aperte <kbd>⌘ Cmd</kbd> + <kbd>Espaço</kbd>, digite <b>Terminal</b> e aperte <kbd>Enter</kbd>.</p><p class="os-mac" lang="en">On a Mac, press <kbd>⌘ Cmd</kbd> + <kbd>Space</kbd>, type <b>Terminal</b> and press <kbd>Enter</kbd>.</p><p class="os-mac" lang="es">En Mac, pulse <kbd>⌘ Cmd</kbd> + <kbd>Espacio</kbd>, escriba <b>Terminal</b> y pulse <kbd>Enter</kbd>.</p>
+          <p class="os-linux" lang="pt">No Linux, aperte <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</p><p class="os-linux" lang="en">On Linux, press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</p><p class="os-linux" lang="es">En Linux, pulse <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</p>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Instale o uv</h3><h3 lang="en">Install uv</h3><h3 lang="es">Instale uv</h3>
+        <div class="txt">
+          <p lang="pt">O <b>uv</b> é um programa gratuito que baixa sozinho as peças em Python que fazem os cálculos. Cole, aperte <kbd>Enter</kbd> e espere terminar.</p><p lang="en"><b>uv</b> is a free program that downloads the Python pieces that do the calculations. Paste, press <kbd>Enter</kbd> and wait.</p><p lang="es"><b>uv</b> es un programa gratuito que descarga las piezas en Python que hacen los cálculos. Pegue, pulse <kbd>Enter</kbd> y espere.</p>
+          <div class="code os-win"><button class="copy" type="button">copy</button><pre>powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"</pre></div>
+          <div class="code os-unix"><button class="copy" type="button">copy</button><pre>curl -LsSf https://astral.sh/uv/install.sh | sh</pre></div>
+          <div class="tip" lang="pt">Ao terminar, <b>feche o terminal e abra outro</b>. Isso vale para todos os passos de instalação.</div><div class="tip" lang="en">When it finishes, <b>close the terminal and open a new one</b>. This applies to every installation step.</div><div class="tip" lang="es">Al terminar, <b>cierre la terminal y abra otra</b>. Esto vale para todos los pasos de instalación.</div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Instale o assistente de IA</h3><h3 lang="en">Install the AI assistant</h3><h3 lang="es">Instale el asistente de IA</h3>
+        <div class="txt">
+          <div class="code ai-claude os-win"><button class="copy" type="button">copy</button><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
+          <div class="code ai-claude os-unix"><button class="copy" type="button">copy</button><pre>curl -fsSL https://claude.ai/install.sh | bash</pre></div>
+          <div class="code ai-agy os-win"><button class="copy" type="button">copy</button><pre>irm https://antigravity.google/cli/install.ps1 | iex</pre></div>
+          <div class="code ai-agy os-unix"><button class="copy" type="button">copy</button><pre>curl -fsSL https://antigravity.google/cli/install.sh | bash</pre></div>
+          <div class="code ai-gem"><button class="copy" type="button">copy</button><pre>npm install -g @google/gemini-cli</pre></div>
+          <p class="ai-gem" lang="pt">O Gemini CLI precisa do <a href='https://nodejs.org'>Node.js</a> instalado antes.</p><p class="ai-gem" lang="en">Gemini CLI needs <a href='https://nodejs.org'>Node.js</a> installed first.</p><p class="ai-gem" lang="es">Gemini CLI necesita tener <a href='https://nodejs.org'>Node.js</a> instalado antes.</p>
+          <p lang="pt">Abra um terminal novo, digite o nome do assistente e entre na sua conta pelo navegador:</p><p lang="en">Open a new terminal, type the assistant's name and sign in through the browser:</p><p lang="es">Abra una terminal nueva, escriba el nombre del asistente e inicie sesión en el navegador:</p>
+          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre>claude</pre></div><div class="code ai-agy"><button class="copy" type="button">copy</button><pre>agy</pre></div><div class="code ai-gem"><button class="copy" type="button">copy</button><pre>gemini</pre></div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Instale o plugin</h3><h3 lang="en">Install the plugin</h3><h3 lang="es">Instale el plugin</h3>
+        <div class="txt">
+          <p class="ai-claude" lang="pt">Com o Claude Code aberto, cole as duas linhas, <b>uma de cada vez</b>, e depois digite <code>/exit</code>:</p><p class="ai-claude" lang="en">With Claude Code open, paste the two lines <b>one at a time</b>, then type <code>/exit</code>:</p><p class="ai-claude" lang="es">Con Claude Code abierto, pegue las dos líneas <b>una a la vez</b> y luego escriba <code>/exit</code>:</p>
+          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>/plugin marketplace add LaBiOmicS/whoqol-toolkit</pre></div>
+          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>/plugin install whoqol-toolkit@labiomics-whoqol</pre></div>
+          <p class="ai-agy" lang="pt">Fora do assistente, baixe o plugin com o git e instale-o:</p><p class="ai-agy" lang="en">Outside the assistant, download the plugin with git and install it:</p><p class="ai-agy" lang="es">Fuera del asistente, descargue el plugin con git e instálelo:</p>
+          <div class="code ai-agy"><button class="copy" type="button">copy</button><pre>git clone https://github.com/LaBiOmicS/whoqol-toolkit.git
+agy plugin install whoqol-toolkit
+agy plugin enable whoqol-toolkit</pre></div>
+          <p class="ai-gem" lang="pt">Fora do assistente:</p><p class="ai-gem" lang="en">Outside the assistant:</p><p class="ai-gem" lang="es">Fuera del asistente:</p>
+          <div class="code ai-gem"><button class="copy" type="button">copy</button><pre>gemini extensions install https://github.com/LaBiOmicS/whoqol-toolkit</pre></div>
+          <div class="tip" lang="pt">O plugin passa a funcionar na próxima vez que você abrir o assistente.</div><div class="tip" lang="en">The plugin is active the next time you open the assistant.</div><div class="tip" lang="es">El plugin funciona la próxima vez que abra el asistente.</div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Prepare a pasta com a planilha</h3><h3 lang="en">Prepare the folder with the spreadsheet</h3><h3 lang="es">Prepare la carpeta con la hoja de cálculo</h3>
+        <div class="txt">
+          <p lang="pt">Crie uma pasta, por exemplo <b>pesquisa</b> em <b>Documentos</b>, e coloque nela a planilha exportada (.xlsx, .csv, .ods ou .sav). No terminal, digite <code>cd </code> com um espaço, <b>arraste a pasta para a janela</b> e aperte <kbd>Enter</kbd>.</p><p lang="en">Create a folder, for example <b>research</b> in <b>Documents</b>, and put the exported spreadsheet in it (.xlsx, .csv, .ods or .sav). In the terminal, type <code>cd </code> with a space, <b>drag the folder into the window</b> and press <kbd>Enter</kbd>.</p><p lang="es">Cree una carpeta, por ejemplo <b>investigacion</b> en <b>Documentos</b>, y ponga en ella la hoja exportada (.xlsx, .csv, .ods o .sav). En la terminal, escriba <code>cd </code> con un espacio, <b>arrastre la carpeta a la ventana</b> y pulse <kbd>Enter</kbd>.</p>
+          <div class="tip" lang="pt">As colunas podem ter o número da pergunta (<code>Q1</code>, <code>1.</code>) ou o próprio texto da pergunta, e as respostas podem ser números (1–5) ou texto ("Muito satisfeito"). Não é preciso arrumar a planilha.</div><div class="tip" lang="en">Columns can carry the question number (<code>Q1</code>, <code>1.</code>) or the question text itself, and answers can be numbers (1–5) or text ("Very satisfied"). There is no need to tidy the spreadsheet.</div><div class="tip" lang="es">Las columnas pueden tener el número de la pregunta (<code>Q1</code>, <code>1.</code>) o el texto de la pregunta, y las respuestas pueden ser números (1–5) o texto ("Muy satisfecho"). No hace falta ordenar la hoja.</div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Peça a análise</h3><h3 lang="en">Ask for the analysis</h3><h3 lang="es">Pida el análisis</h3>
+        <div class="txt">
+          <p lang="pt">Abra o assistente nessa pasta e escreva o pedido com as suas palavras, ou use um dos <a href='#prompts'>prompts prontos</a>.</p><p lang="en">Open the assistant in that folder and write the request in your own words, or use one of the <a href='#prompts'>ready prompts</a>.</p><p lang="es">Abra el asistente en esa carpeta y escriba la solicitud con sus palabras, o use uno de los <a href='#prompts'>prompts listos</a>.</p>
+          <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Analise a planilha <span class="ph">whoqol.xlsx</span> e compare os domínios por <span class="ph">sexo</span>.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Analyse <span class="ph">whoqol.xlsx</span> and compare the domains by <span class="ph">sex</span>.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Analiza <span class="ph">whoqol.xlsx</span> y compara los dominios por <span class="ph">sexo</span>.</pre></div>
+          <div class="tip warn" lang="pt"><b>O assistente vai mostrar as colunas que reconheceu</b> e perguntar o que você quer comparar. Confira: a análise depende disso. Ele também pede permissão para rodar programas; escolha <b>Yes</b>.</div><div class="tip warn" lang="en"><b>The assistant will show the columns it recognised</b> and ask what you want to compare. Check them: the analysis depends on it. It will also ask permission to run programs; choose <b>Yes</b>.</div><div class="tip warn" lang="es"><b>El asistente mostrará las columnas que reconoció</b> y preguntará qué quiere comparar. Revíselas: el análisis depende de ello. También pedirá permiso para ejecutar programas; elija <b>Yes</b>.</div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Confira os resultados</h3><h3 lang="en">Check the results</h3><h3 lang="es">Revise los resultados</h3>
+        <div class="txt">
+          <p lang="pt">Os arquivos ficam na pasta <code>&lt;planilha&gt;_whoqol</code>. Comece pelo <b>report.md</b> (alertas e tabelas) e pelo <b>tables.docx</b> (tabelas prontas para o Word).</p><p lang="en">Files are written to the <code>&lt;spreadsheet&gt;_whoqol</code> folder. Start with <b>report.md</b> (alerts and tables) and <b>tables.docx</b> (tables ready for Word).</p><p lang="es">Los archivos quedan en la carpeta <code>&lt;hoja&gt;_whoqol</code>. Empiece por <b>report.md</b> (alertas y tablas) y <b>tables.docx</b> (tablas listas para Word).</p>
+          <div class="tip" lang="pt">A IA pode errar na interpretação. Os números vêm do código, mas confira o texto antes de usá-lo no manuscrito.</div><div class="tip" lang="en">The AI can get the interpretation wrong. The numbers come from the code, but check the text before using it in the manuscript.</div><div class="tip" lang="es">La IA puede equivocarse en la interpretación. Las cifras vienen del código, pero revise el texto antes de usarlo en el manuscrito.</div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================================================================ PROMPTS -->
+<section id="prompts" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Prompts prontos</span><span lang="en">Ready prompts</span><span lang="es">Prompts listos</span></div>
+      <h2 lang="pt">Copie, troque o que está sublinhado e envie.</h2><h2 lang="en">Copy, replace the underlined parts and send.</h2><h2 lang="es">Copie, cambie lo subrayado y envíe.</h2>
+    </div>
+    <div class="prompts">
+      <div class="pcard">
+        <div class="when"><span lang="pt">Primeira análise</span><span lang="en">First analysis</span><span lang="es">Primer análisis</span></div>
+        <h3 lang="pt">Descrever a amostra</h3><h3 lang="en">Describe the sample</h3><h3 lang="es">Describir la muestra</h3>
+        <p lang="pt">Escores por domínio, confiabilidade e qualidade dos dados.</p><p lang="en">Domain scores, reliability and data quality.</p><p lang="es">Puntuaciones por dominio, fiabilidad y calidad de los datos.</p>
+        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Pontue e descreva o WHOQOL-BREF da planilha <span class="ph">dados.xlsx</span> e gere as tabelas para o artigo.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Score and describe the WHOQOL-BREF in <span class="ph">data.xlsx</span> and produce the tables for the paper.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Puntúa y describe el WHOQOL-BREF de <span class="ph">datos.xlsx</span> y genera las tablas para el artículo.</pre></div>
+      </div>
+      <div class="pcard">
+        <div class="when"><span lang="pt">Comparação</span><span lang="en">Comparison</span><span lang="es">Comparación</span></div>
+        <h3 lang="pt">Comparar grupos</h3><h3 lang="en">Compare groups</h3><h3 lang="es">Comparar grupos</h3>
+        <p lang="pt">Teste escolhido pelos dados, tamanho de efeito e correção de Holm.</p><p lang="en">Test chosen from the data, effect size and Holm correction.</p><p lang="es">Prueba elegida según los datos, tamaño del efecto y corrección de Holm.</p>
+        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Compare os domínios por <span class="ph">sexo</span> e <span class="ph">escolaridade</span> e ajuste por <span class="ph">idade</span>.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Compare the domains by <span class="ph">sex</span> and <span class="ph">education</span> and adjust for <span class="ph">age</span>.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Compara los dominios por <span class="ph">sexo</span> y <span class="ph">nivel educativo</span> y ajusta por <span class="ph">edad</span>.</pre></div>
+      </div>
+      <div class="pcard">
+        <div class="when"><span lang="pt">Psicometria</span><span lang="en">Psychometrics</span><span lang="es">Psicometría</span></div>
+        <h3 lang="pt">Validar o instrumento</h3><h3 lang="en">Validate the instrument</h3><h3 lang="es">Validar el instrumento</h3>
+        <p lang="pt">Confiabilidade, AFC, validade discriminante e script para o R.</p><p lang="en">Reliability, CFA, discriminant validity and an R script.</p><p lang="es">Fiabilidad, AFC, validez discriminante y script para R.</p>
+        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Avalie as propriedades psicométricas do WHOQOL-BREF em <span class="ph">dados.csv</span> para um artigo de validação.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Assess the psychometric properties of the WHOQOL-BREF in <span class="ph">data.csv</span> for a validation paper.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Evalúa las propiedades psicométricas del WHOQOL-BREF en <span class="ph">datos.csv</span> para un artículo de validación.</pre></div>
+      </div>
+      <div class="pcard">
+        <div class="when"><span lang="pt">Planilha codificada</span><span lang="en">Coded spreadsheet</span><span lang="es">Hoja codificada</span></div>
+        <h3 lang="pt">Explicar as variáveis</h3><h3 lang="en">Explain the variables</h3><h3 lang="es">Explicar las variables</h3>
+        <p lang="pt">Gera um dicionário pré-preenchido para rótulos, ordens e códigos de ausente.</p><p lang="en">Creates a pre-filled dictionary for labels, level orders and missing codes.</p><p lang="es">Genera un diccionario prerrellenado para etiquetas, órdenes y códigos de faltante.</p>
+        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Minha planilha <span class="ph">dados.sav</span> tem variáveis codificadas (1/2, 99). Crie o dicionário de dados para eu preencher.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>My spreadsheet <span class="ph">data.sav</span> has coded variables (1/2, 99). Create the data dictionary for me to fill in.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Mi hoja <span class="ph">datos.sav</span> tiene variables codificadas (1/2, 99). Crea el diccionario de datos para que lo complete.</pre></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ HOW -->
+<section id="como">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Como funciona</span><span lang="en">How it works</span><span lang="es">Cómo funciona</span></div>
+      <h2 lang="pt">O código calcula. A IA pergunta e interpreta.</h2><h2 lang="en">The code computes. The AI asks and interprets.</h2><h2 lang="es">El código calcula. La IA pregunta e interpreta.</h2>
+      <p lang="pt">Nenhum número é produzido pela IA. A pontuação, os testes e as tabelas vêm de um pacote Python testado; o assistente confirma com você o que analisar e explica o que saiu.</p><p lang="en">No number is produced by the AI. Scoring, tests and tables come from a tested Python package; the assistant confirms with you what to analyse and explains the output.</p><p lang="es">Ninguna cifra la produce la IA. La puntuación, las pruebas y las tablas vienen de un paquete Python probado; el asistente confirma con usted qué analizar y explica la salida.</p>
+    </div>
+    <div class="pipe4">
+      <div class="step"><h3 lang="pt">Inspecionar</h3><h3 lang="en">Inspect</h3><h3 lang="es">Inspeccionar</h3><p lang="pt">Encontra as 26 perguntas pelo número ou pelo texto em PT, EN ou ES, reconhece respostas em texto e identifica a versão linguística aplicada.</p><p lang="en">Finds the 26 questions by number or by text in PT, EN or ES, recognises text answers and identifies the language version administered.</p><p lang="es">Encuentra las 26 preguntas por número o por texto en PT, EN o ES, reconoce respuestas de texto e identifica la versión lingüística aplicada.</p></div>
+      <div class="step llm"><h3 lang="pt">Combinar o plano</h3><h3 lang="en">Agree on the plan</h3><h3 lang="es">Acordar el plan</h3><p lang="pt">O assistente confirma as colunas, os grupos, as covariáveis e, se houver, os valores de referência publicados.</p><p lang="en">The assistant confirms columns, groups, covariates and, if any, published reference values.</p><p lang="es">El asistente confirma columnas, grupos, covariables y, si los hay, valores de referencia publicados.</p></div>
+      <div class="step"><h3 lang="pt">Analisar</h3><h3 lang="en">Analyse</h3><h3 lang="es">Analizar</h3><p lang="pt">Regras da OMS, qualidade dos dados, confiabilidade, validade, comparações e associações, com tabelas e figuras.</p><p lang="en">WHO rules, data quality, reliability, validity, comparisons and associations, with tables and figures.</p><p lang="es">Reglas de la OMS, calidad de datos, fiabilidad, validez, comparaciones y asociaciones, con tablas y figuras.</p></div>
+      <div class="step llm"><h3 lang="pt">Interpretar</h3><h3 lang="en">Interpret</h3><h3 lang="es">Interpretar</h3><p lang="pt">No seu idioma, a partir dos números devolvidos e dos guias metodológicos: perfil, efeitos, alertas e limitações.</p><p lang="en">In your language, from the returned numbers and the methodological guides: profile, effects, alerts and limitations.</p><p lang="es">En su idioma, a partir de las cifras devueltas y las guías metodológicas: perfil, efectos, alertas y limitaciones.</p></div>
+    </div>
+    <div class="legend"><span><i></i><span lang="pt">código determinístico</span><span lang="en">deterministic code</span><span lang="es">código determinista</span></span><span><i class="l-llm"></i><span lang="pt">assistente de IA</span><span lang="en">AI assistant</span><span lang="es">asistente de IA</span></span></div>
+
+    <div class="grid3" style="margin-top:40px">
+      <div class="card"><div class="eyebrow"><span lang="pt">Pontuação</span><span lang="en">Scoring</span><span lang="es">Puntuación</span></div>
+        <ul>
+          <li><span lang="pt">Q3, Q4 e Q26 invertidos</span><span lang="en">Q3, Q4 and Q26 reversed</span><span lang="es">Q3, Q4 y Q26 invertidos</span></li>
+          <li><span lang="pt">Escores 4–20 e 0–100</span><span lang="en">4–20 and 0–100 scores</span><span lang="es">Puntuaciones 4–20 y 0–100</span></li>
+          <li><span lang="pt">Mínimo de itens válidos por domínio; exclusão com menos de 21</span><span lang="en">Minimum valid items per domain; exclusion below 21</span><span lang="es">Mínimo de ítems válidos por dominio; exclusión con menos de 21</span></li>
+          <li><span lang="pt">Ausentes, respostas idênticas, piso e teto</span><span lang="en">Missing data, identical answers, floor and ceiling</span><span lang="es">Faltantes, respuestas idénticas, suelo y techo</span></li>
+        </ul></div>
+      <div class="card"><div class="eyebrow"><span lang="pt">Psicometria</span><span lang="en">Psychometrics</span><span lang="es">Psicometría</span></div>
+        <ul>
+          <li><span lang="pt">α de Cronbach com IC de Feldt e ω de McDonald</span><span lang="en">Cronbach's α with Feldt CI and McDonald's ω</span><span lang="es">α de Cronbach con IC de Feldt y ω de McDonald</span></li>
+          <li><span lang="pt">EPM, MMD95 e ½ DP</span><span lang="en">SEM, MDC95 and ½ SD</span><span lang="es">EEM, CMD95 y ½ DE</span></li>
+          <li><span lang="pt">Análise multitraço e HTMT</span><span lang="en">Multitrait scaling and HTMT</span><span lang="es">Análisis multirrasgo y HTMT</span></li>
+          <li><span lang="pt">AFC (CFI, TLI, RMSEA, SRMR) e script WLSMV</span><span lang="en">CFA (CFI, TLI, RMSEA, SRMR) and WLSMV script</span><span lang="es">AFC (CFI, TLI, RMSEA, SRMR) y script WLSMV</span></li>
+        </ul></div>
+      <div class="card"><div class="eyebrow"><span lang="pt">Estatística</span><span lang="en">Statistics</span><span lang="es">Estadística</span></div>
+        <ul>
+          <li><span lang="pt">Welch, Mann-Whitney, Kruskal-Wallis, Games-Howell, Dunn</span><span lang="en">Welch, Mann-Whitney, Kruskal-Wallis, Games-Howell, Dunn</span><span lang="es">Welch, Mann-Whitney, Kruskal-Wallis, Games-Howell, Dunn</span></li>
+          <li><span lang="pt">Tamanhos de efeito com IC e correção de Holm</span><span lang="en">Effect sizes with CI and Holm correction</span><span lang="es">Tamaños del efecto con IC y corrección de Holm</span></li>
+          <li><span lang="pt">Spearman e regressão com erros HC3</span><span lang="en">Spearman and regression with HC3 errors</span><span lang="es">Spearman y regresión con errores HC3</span></li>
+          <li><span lang="pt">Comparação com normas citadas</span><span lang="en">Comparison with cited norms</span><span lang="es">Comparación con normas citadas</span></li>
+        </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ OUTPUTS -->
+<section id="saidas" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Resultados</span><span lang="en">Outputs</span><span lang="es">Resultados</span></div>
+      <h2 lang="pt">Pronto para colar no manuscrito.</h2><h2 lang="en">Ready to paste into the manuscript.</h2><h2 lang="es">Listo para pegar en el manuscrito.</h2>
+      <p lang="pt">O relatório sai no idioma do questionário; o texto de métodos e resultados sai sempre em português, inglês e espanhol, citando a versão validada aplicada.</p><p lang="en">The report follows the language of the questionnaire; the methods and results text is always written in Portuguese, English and Spanish, citing the validated version administered.</p><p lang="es">El informe sigue el idioma del cuestionario; el texto de métodos y resultados se genera siempre en portugués, inglés y español, citando la versión validada aplicada.</p>
+    </div>
+    <div class="out">
+      <div class="report">
+        <div class="rhead"><b><span lang="pt">Tabela 1. Escores do WHOQOL-BREF</span><span lang="en">Table 1. WHOQOL-BREF scores</span><span lang="es">Tabla 1. Puntuaciones del WHOQOL-BREF</span></b><small>0–100 · α</small></div>
+        <div class="dom"><span lang="pt">Físico</span><span lang="en">Physical</span><span lang="es">Salud física</span><span class="pbar" style="--w:59.5%"><b></b></span><span class="v" lang="pt">59,5</span><span class="v" lang="en">59.5</span><span class="v" lang="es">59,5</span><span class="a" lang="pt">0,91</span><span class="a" lang="en">.91</span><span class="a" lang="es">0,91</span></div>
+        <div class="dom"><span lang="pt">Psicológico</span><span lang="en">Psychological</span><span lang="es">Psicológico</span><span class="pbar" style="--w:61.3%"><b></b></span><span class="v" lang="pt">61,3</span><span class="v" lang="en">61.3</span><span class="v" lang="es">61,3</span><span class="a" lang="pt">0,85</span><span class="a" lang="en">.85</span><span class="a" lang="es">0,85</span></div>
+        <div class="dom"><span lang="pt">Relações sociais</span><span lang="en">Social relationships</span><span lang="es">Relaciones sociales</span><span class="pbar" style="--w:61.3%"><b></b></span><span class="v" lang="pt">61,3</span><span class="v" lang="en">61.3</span><span class="v" lang="es">61,3</span><span class="a" lang="pt">0,78</span><span class="a" lang="en">.78</span><span class="a" lang="es">0,78</span></div>
+        <div class="dom low"><span lang="pt">Meio ambiente</span><span lang="en">Environment</span><span lang="es">Ambiente</span><span class="pbar" style="--w:59.5%"><b></b></span><span class="v" lang="pt">59,5</span><span class="v" lang="en">59.5</span><span class="v" lang="es">59,5</span><span class="a" lang="pt">0,90</span><span class="a" lang="en">.90</span><span class="a" lang="es">0,90</span></div>
+        <div class="foot">n = 297 · <span lang="pt">dados sintéticos do exemplo</span><span lang="en">synthetic example data</span><span lang="es">datos sintéticos del ejemplo</span></div>
+      </div>
+      <div>
+        <div class="file key"><code>tables.docx</code><span lang="pt">Tabelas no estilo APA, figuras e referências, prontas para o Word.</span><span lang="en">APA-style tables, figures and references, ready for Word.</span><span lang="es">Tablas en estilo APA, figuras y referencias, listas para Word.</span></div>
+        <div class="file key"><code>report.md</code><span lang="pt">Relatório completo com alertas para a interpretação.</span><span lang="en">Full report with interpretation alerts.</span><span lang="es">Informe completo con alertas para la interpretación.</span></div>
+        <div class="file"><code>methods_results_pt/en/es.md</code><span lang="pt">Rascunho de métodos e resultados nos três idiomas.</span><span lang="en">Methods and results draft in three languages.</span><span lang="es">Borrador de métodos y resultados en los tres idiomas.</span></div>
+        <div class="file"><code>results.xlsx</code><span lang="pt">Escores por participante e todas as tabelas.</span><span lang="en">Scores per participant and every table.</span><span lang="es">Puntuaciones por participante y todas las tablas.</span></div>
+        <div class="file"><code>figures/</code><span lang="pt">Distribuições, respostas por item, correlações e grupos (PNG 300 dpi e PDF).</span><span lang="en">Distributions, item responses, correlations and groups (PNG 300 dpi and PDF).</span><span lang="es">Distribuciones, respuestas por ítem, correlaciones y grupos (PNG 300 dpi y PDF).</span></div>
+        <div class="file"><code>cfa_wlsmv_lavaan.R</code><span lang="pt">AFC com estimador WLSMV no R, para artigos psicométricos.</span><span lang="en">CFA with the WLSMV estimator in R, for psychometric papers.</span><span lang="es">AFC con el estimador WLSMV en R, para artículos psicométricos.</span></div>
+        <div class="file"><code>results.json</code><span lang="pt">Resumo legível por máquina.</span><span lang="en">Machine-readable summary.</span><span lang="es">Resumen legible por máquina.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Dúvidas</span><span lang="en">Questions</span><span lang="es">Preguntas</span></div>
+      <h2 lang="pt">Perguntas frequentes.</h2><h2 lang="en">Frequently asked questions.</h2><h2 lang="es">Preguntas frecuentes.</h2>
+    </div>
+    <div class="faq">
+      <details><summary><span lang="pt">Preciso preencher um arquivo de metadados?</span><span lang="en">Do I need to fill in a metadata file?</span><span lang="es">¿Tengo que completar un archivo de metadatos?</span></summary>
+        <div><p lang="pt">Não. Uma planilha com cabeçalhos claros é analisada como está. O dicionário de dados é opcional e já vem pré-preenchido; ajuda quando há variáveis codificadas (1/2), categorias ordinais ou códigos de ausente (99).</p><p lang="en">No. A spreadsheet with clear headers is analysed as it is. The data dictionary is optional and comes pre-filled; it helps with coded variables (1/2), ordinal categories or missing codes (99).</p><p lang="es">No. Una hoja con encabezados claros se analiza tal cual. El diccionario de datos es opcional y viene prerrellenado; ayuda con variables codificadas (1/2), categorías ordinales o códigos de faltante (99).</p></div></details>
+      <details><summary><span lang="pt">Qual é o ponto de corte para "boa" qualidade de vida?</span><span lang="en">What is the cut-off for "good" quality of life?</span><span lang="es">¿Cuál es el punto de corte para "buena" calidad de vida?</span></summary>
+        <div><p lang="pt">A OMS não define pontos de corte. O de 60 (Silva et al., 2014) vale só para idosos brasileiros. Comparar com valores normativos publicados, citando a fonte, é mais informativo.</p><p lang="en">The WHO defines no cut-offs. The cut-off of 60 (Silva et al., 2014) applies only to Brazilian older adults. Comparing with published normative values, citing the source, is more informative.</p><p lang="es">La OMS no define puntos de corte. El de 60 (Silva et al., 2014) solo vale para personas mayores brasileñas. Comparar con valores normativos publicados, citando la fuente, es más informativo.</p></div></details>
+      <details><summary><span lang="pt">Meus dados saem do computador?</span><span lang="en">Do my data leave my computer?</span><span lang="es">¿Mis datos salen de mi computadora?</span></summary>
+        <div><p lang="pt">A planilha é lida e analisada localmente. O assistente de IA vê as saídas das ferramentas, que são estatísticas agregadas. Use identificadores pseudonimizados e siga a aprovação do comitê de ética.</p><p lang="en">The spreadsheet is read and analysed locally. The AI assistant sees the tool outputs, which are aggregated statistics. Use pseudonymised IDs and follow your ethics approval.</p><p lang="es">La hoja se lee y analiza en local. El asistente de IA ve las salidas de las herramientas, que son estadísticas agregadas. Use identificadores seudonimizados y siga la aprobación del comité de ética.</p></div></details>
+      <details><summary><span lang="pt">O terminal diz que "uv", "claude" ou "agy" não foi encontrado.</span><span lang="en">The terminal says "uv", "claude" or "agy" was not found.</span><span lang="es">La terminal dice que no encuentra "uv", "claude" o "agy".</span></summary>
+        <div><p lang="pt">Quase sempre basta fechar o terminal e abrir um novo. Se continuar, reinicie o computador e repita o passo de instalação.</p><p lang="en">Usually you only need to close the terminal and open a new one. If it persists, restart the computer and repeat the installation step.</p><p lang="es">Casi siempre basta con cerrar la terminal y abrir una nueva. Si continúa, reinicie la computadora y repita el paso de instalación.</p></div></details>
+      <details><summary><span lang="pt">E os outros instrumentos WHOQOL?</span><span lang="en">What about the other WHOQOL instruments?</span><span lang="es">¿Y los otros instrumentos WHOQOL?</span></summary>
+        <div><p lang="pt">Por enquanto o WHOQOL-BREF está implementado. A ferramenta foi construída para receber outros (WHOQOL-100, WHOQOL-OLD, WHOQOL-HIV-BREF) sem mudar a análise.</p><p lang="en">For now the WHOQOL-BREF is implemented. The tool was built to take others (WHOQOL-100, WHOQOL-OLD, WHOQOL-HIV-BREF) without changing the analysis.</p><p lang="es">Por ahora está implementado el WHOQOL-BREF. La herramienta se construyó para recibir otros (WHOQOL-100, WHOQOL-OLD, WHOQOL-HIV-BREF) sin cambiar el análisis.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ RESPONSIBLE USE -->
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Uso responsável</span><span lang="en">Responsible use</span><span lang="es">Uso responsable</span></div>
+      <h2 lang="pt">A autoria e a responsabilidade continuam suas.</h2><h2 lang="en">Authorship and responsibility remain yours.</h2><h2 lang="es">La autoría y la responsabilidad siguen siendo suyas.</h2>
+    </div>
+    <div class="resp">
+      <div><h3 lang="pt">Confira antes de publicar</h3><h3 lang="en">Check before publishing</h3><h3 lang="es">Revise antes de publicar</h3><p lang="pt">Os números vêm de código testado, mas a interpretação da IA pode errar. Revise o texto e as tabelas.</p><p lang="en">The numbers come from tested code, but the AI's interpretation can be wrong. Review the text and tables.</p><p lang="es">Las cifras vienen de código probado, pero la interpretación de la IA puede equivocarse. Revise el texto y las tablas.</p></div>
+      <div><h3 lang="pt">Dados de saúde</h3><h3 lang="en">Health data</h3><h3 lang="es">Datos de salud</h3><p lang="pt">Respostas a questionários são dados pessoais sensíveis (LGPD, GDPR). Mantenha-os locais e pseudonimizados.</p><p lang="en">Questionnaire answers are sensitive personal data (LGPD, GDPR). Keep them local and pseudonymised.</p><p lang="es">Las respuestas a cuestionarios son datos personales sensibles (LGPD, RGPD). Manténgalos en local y seudonimizados.</p></div>
+      <div><h3 lang="pt">Cite o instrumento</h3><h3 lang="en">Cite the instrument</h3><h3 lang="es">Cite el instrumento</h3><p lang="pt">O uso do WHOQOL segue os termos da OMS. Cite o instrumento e a versão linguística validada aplicada.</p><p lang="en">WHOQOL use follows the WHO's terms. Cite the instrument and the validated language version administered.</p><p lang="es">El uso del WHOQOL sigue los términos de la OMS. Cite el instrumento y la versión lingüística validada aplicada.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <b>whoqol-toolkit</b><br>
+      <span lang="pt">Desenvolvido no LaBiOmicS — Laboratório de Bioinformática e Ciências Ômicas, Universidade de Mogi das Cruzes.</span><span lang="en">Developed at LaBiOmicS — Laboratory of Bioinformatics and Omics Sciences, University of Mogi das Cruzes.</span><span lang="es">Desarrollado en LaBiOmicS — Laboratorio de Bioinformática y Ciencias Ómicas, Universidade de Mogi das Cruzes.</span><br>
+      <span lang="pt">Coordenação</span><span lang="en">Lead</span><span lang="es">Coordinación</span>: Prof. Dr. Fabiano Bezerra Menegidio · <a href="mailto:fabianomenegidio@umc.br">fabianomenegidio@umc.br</a>
+    </div>
+    <div>
+      <a href="https://github.com/LaBiOmicS/whoqol-toolkit">GitHub</a> ·
+      <a href="https://github.com/LaBiOmicS/whoqol-toolkit/releases">Releases</a> ·
+      <a href="https://github.com/LaBiOmicS/whoqol-toolkit/blob/main/CHANGELOG.md">Changelog</a> ·
+      <a lang="pt" href="https://github.com/LaBiOmicS/whoqol-toolkit/blob/main/README.pt-BR.md">Documentação</a><a lang="en" href="https://github.com/LaBiOmicS/whoqol-toolkit/blob/main/README.md">Documentation</a><a lang="es" href="https://github.com/LaBiOmicS/whoqol-toolkit/blob/main/README.es.md">Documentación</a> ·
+      <a href="https://labiomics.github.io/academic-peer-review/">academic-peer-review</a> ·
+      <a href="https://labiomics.github.io/congress-abstract-review/">congress-abstract-review</a> ·
+      <a href="https://github.com/LaBiOmicS/whoqol-toolkit/blob/main/LICENSE"><span lang="pt">Licença MIT</span><span lang="en">MIT License</span><span lang="es">Licencia MIT</span></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var CHOICES = { lang: ["pt", "en", "es"], os: ["win", "mac", "linux"], ai: ["claude", "agy", "gem"] };
+  var HTML_LANG = { pt: "pt-BR", en: "en", es: "es" };
+  function set(kind, val) {
+    if (CHOICES[kind].indexOf(val) < 0) val = CHOICES[kind][0];
+    root.setAttribute("data-" + kind, val);
+    if (kind === "lang") root.setAttribute("lang", HTML_LANG[val]);
+    document.querySelectorAll('[data-set="' + kind + '"]').forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.val === val ? "true" : "false");
+    });
+    store("wq-" + kind, val);
+  }
+  var bl = (navigator.language || "").toLowerCase().slice(0, 2);
+  var ua = (navigator.userAgent || "").toLowerCase();
+  var os = ua.indexOf("win") >= 0 ? "win" : (ua.indexOf("mac") >= 0 ? "mac" : (ua.indexOf("linux") >= 0 ? "linux" : "win"));
+  set("lang", read("wq-lang") || (HTML_LANG[bl] ? bl : "en"));
+  set("os", read("wq-os") || os);
+  set("ai", read("wq-ai") || "claude");
+  document.querySelectorAll("[data-set]").forEach(function (b) {
+    b.addEventListener("click", function () { set(b.dataset.set, b.dataset.val); });
+  });
+  var theme = read("wq-theme");
+  if (theme) root.setAttribute("data-theme", theme);
+  document.getElementById("theme-btn").addEventListener("click", function () {
+    var dark = root.getAttribute("data-theme") === "dark" ||
+      (!root.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    var next = dark ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    store("wq-theme", next);
+  });
+  function visibleText(node) {
+    if (node.nodeType === 3) return node.textContent;
+    if (node.nodeType !== 1 || getComputedStyle(node).display === "none") return "";
+    if (node.classList.contains("p") || node.classList.contains("c")) return "";
+    var out = "";
+    node.childNodes.forEach(function (c) { out += visibleText(c); });
+    return out;
+  }
+  document.querySelectorAll(".copy").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var text = "";
+      btn.parentElement.querySelectorAll("pre").forEach(function (pre) { text += visibleText(pre); });
+      text = text.split("\n").map(function (l) { return l.trim(); }).filter(Boolean).join("\n");
+      var done = function () { btn.textContent = "✓"; setTimeout(function () { btn.textContent = "copy"; }, 1400); };
+      if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
+    });
+  });
+})();
+</script>
+</body>
+</html>

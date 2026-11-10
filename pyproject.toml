@@ -1,0 +1,80 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "whoqol-toolkit"
+version = "0.1.0"
+description = "Scoring, psychometrics and publication-grade statistics for WHOQOL questionnaires (WHOQOL-BREF first), as an MCP server and CLI for Claude Code, Antigravity and Gemini CLI"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+license = { text = "MIT" }
+authors = [
+    { name = "Prof. Dr. Fabiano Bezerra Menegidio", email = "fabianomenegidio@umc.br" }
+]
+keywords = [
+    "whoqol",
+    "whoqol-bref",
+    "quality-of-life",
+    "psychometrics",
+    "patient-reported-outcomes",
+    "mcp",
+    "claude-code",
+    "antigravity",
+    "gemini",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Natural Language :: Spanish",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+dependencies = [
+    "pandas>=2.1",
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "openpyxl>=3.1",
+    "matplotlib>=3.8",
+    "python-docx>=1.1",
+    "semopy>=2.3",
+    "statsmodels>=0.14",
+    "mcp>=1.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/LaBiOmicS/whoqol-toolkit"
+Repository = "https://github.com/LaBiOmicS/whoqol-toolkit.git"
+Issues = "https://github.com/LaBiOmicS/whoqol-toolkit/issues"
+
+[project.scripts]
+whoqol = "whoqol.cli:main"
+whoqol-mcp = "whoqol.mcp_server:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/whoqol"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/whoqol/figures.py" = ["E402"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

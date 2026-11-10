@@ -1,0 +1,6 @@
+{
+  "name": "labiomics-whoqol",
+  "owner": {"name": "LaBiOmicS / UMC", "email": "fabianomenegidio@umc.br"},
+  "description": "LaBiOmicS / UMC: WHOQOL quality-of-life analysis.",
+  "plugins": [{"name": "whoqol-toolkit", "source": "./", "description": "WHOQOL scoring, psychometrics and publication-grade statistics."}]
+}

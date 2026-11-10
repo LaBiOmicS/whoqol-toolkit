@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.venv/
+.pytest_cache/
+.ruff_cache/
+dist/
+*.tmp
+
+# Participant data and analysis outputs (personal health data, never committed)
+/data/
+/dados/
+/datos/
+*_whoqol/
+*_scores.xlsx
+*.sav
+*.xlsx
+*.xls
+*.ods
+*.csv
+*.tsv
+# Synthetic example data is safe to commit
+!examples/*.xlsx
+!examples/*.csv

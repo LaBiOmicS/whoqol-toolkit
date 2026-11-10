@@ -1,0 +1,19 @@
+{
+  "name": "whoqol-toolkit",
+  "version": "0.1.0",
+  "description": "Scoring (WHO rules), psychometrics and publication-grade statistics for WHOQOL questionnaires (WHOQOL-BREF first) from spreadsheets in Portuguese, English or Spanish: APA tables, figures, XLSX and a methods/results draft in PT, EN and ES.",
+  "contextFileName": "skills/whoqol/SKILL.md",
+  "mcpServers": {
+    "whoqol": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--quiet",
+        "--directory",
+        "${extensionPath}",
+        "whoqol-mcp"
+      ],
+      "timeout": 600000
+    }
+  }
+}

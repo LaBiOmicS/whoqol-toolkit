@@ -1,0 +1,8 @@
+description = "Analyse a WHOQOL questionnaire spreadsheet (WHO scoring, psychometrics, comparisons, tables and text for publication)"
+prompt = """
+Analyse the WHOQOL data following the whoqol-toolkit context (skill whoqol). Answer in the user's language.
+
+User input: {{args}}
+
+If no file was given, ask for the spreadsheet path. Start with the whoqol_inspect tool.
+"""

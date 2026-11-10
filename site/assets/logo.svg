@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B1938"/><stop offset="55%" stop-color="#071026"/><stop offset="100%" stop-color="#030712"/>
+    </linearGradient>
+    <linearGradient id="goldRim" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE68A"/><stop offset="50%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="profGrad" x1="150" y1="150" x2="370" y2="370" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#67E8F9" stop-opacity="0.85"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0.75"/>
+    </linearGradient>
+  </defs>
+  <!-- Emblem (same family as the other LaBiOmicS plugins) -->
+  <rect x="64" y="64" width="384" height="384" rx="84" fill="#061024" stroke="url(#goldRim)" stroke-width="12"/>
+  <rect x="76" y="76" width="360" height="360" rx="74" fill="url(#bgGrad)" stroke="#38BDF8" stroke-width="4" stroke-opacity="0.75"/>
+  <!-- Quality-of-life profile: radar of the four WHOQOL domains -->
+  <circle cx="256" cy="262" r="39" stroke="#38BDF8" stroke-opacity="0.3" stroke-width="2"/><circle cx="256" cy="262" r="79" stroke="#38BDF8" stroke-opacity="0.4" stroke-width="2"/><circle cx="256" cy="262" r="118" stroke="#38BDF8" stroke-opacity="0.6" stroke-width="3"/>
+  
+  <line x1="256" y1="262" x2="256.0" y2="144.0" stroke="#38BDF8" stroke-opacity="0.45" stroke-width="2"/><line x1="256" y1="262" x2="374.0" y2="262.0" stroke="#38BDF8" stroke-opacity="0.45" stroke-width="2"/><line x1="256" y1="262" x2="256.0" y2="380.0" stroke="#38BDF8" stroke-opacity="0.45" stroke-width="2"/><line x1="256" y1="262" x2="138.0" y2="262.0" stroke="#38BDF8" stroke-opacity="0.45" stroke-width="2"/>
+  <polygon points="256.0,170.0 333.9,262.0 256.0,363.5 185.2,262.0" fill="url(#profGrad)" stroke="#FEF9C3" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="256.0" cy="170.0" r="11" fill="#67E8F9" stroke="#061024" stroke-width="4"/><circle cx="333.9" cy="262.0" r="11" fill="#FDE68A" stroke="#061024" stroke-width="4"/><circle cx="256.0" cy="363.5" r="11" fill="#F59E0B" stroke="#061024" stroke-width="4"/><circle cx="185.2" cy="262.0" r="11" fill="#38BDF8" stroke="#061024" stroke-width="4"/>
+  <!-- Sparkle -->
+  <path d="M372 114C372 140 378 146 404 146C378 146 372 152 372 178C372 152 366 146 340 146C366 146 372 140 372 114Z" fill="#7DD3FC"/>
+  <path d="M336 104C336 115 339 118 350 118C339 118 336 121 336 132C336 121 333 118 322 118C333 118 336 115 336 104Z" fill="#BAE6FD"/>
+</svg>
