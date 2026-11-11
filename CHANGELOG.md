@@ -4,6 +4,13 @@ Todas as mudanças relevantes deste projeto são documentadas aqui.
 O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o projeto adota o
 [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [Não lançado]
+
+### Adicionado
+- Página do projeto: seção "Instrumentos" (PT/EN/ES) com a definição de qualidade de vida da OMS, a importância dos
+  instrumentos, tabela comparativa (quando usar cada um), explicação do cálculo do escore com exemplo trabalhado e
+  ficha de cada questionário (estrutura, regra de pontuação, pontos de atenção e versões validadas).
+
 ## [0.3.0] — 2026-11-11
 
 ### Adicionado

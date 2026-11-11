@@ -378,6 +378,40 @@ footer a { color: var(--ink-2); }
 .card .eyebrow { margin-bottom: 6px; }
 .pipe4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: step; }
 @media (max-width: 900px) { .pipe4 { grid-template-columns: 1fr; } }
+
+/* Instruments */
+.sub { font-size: clamp(1.3rem, 2.4vw, 1.7rem); margin: 56px 0 10px; }
+.sub-lede { color: var(--ink-2); max-width: 48em; margin-bottom: 22px; }
+.tscroll { overflow-x: auto; border-radius: var(--radius); }
+table.inst-t { min-width: 760px; }
+table.inst-t td:first-child { font-family: var(--sans); font-weight: 600; color: var(--ink); white-space: normal; }
+table.inst-t td.n { font-family: var(--mono); white-space: nowrap; }
+table.inst-t td code { white-space: nowrap; }
+table.inst-t tr.fam td { background: var(--surface-2); font: 500 .72rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--gold); padding-top: 8px; padding-bottom: 8px; }
+.calc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: step; }
+@media (max-width: 900px) { .calc { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .calc { grid-template-columns: 1fr; } }
+.calc .step::after { display: none; }
+.fx { display: block; margin-top: 10px; font: 500 .82rem/1.5 var(--mono); color: var(--ink); background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; overflow-wrap: anywhere; }
+.example { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.example > * { min-width: 0; }
+@media (max-width: 900px) { .example { grid-template-columns: 1fr; } }
+.example .code { max-width: none; margin-top: 0; }
+.example .code pre { padding-right: 0; }
+.inst-list { display: grid; gap: 10px; }
+.inst-list details[open] { box-shadow: var(--shadow); }
+.inst-list summary { align-items: baseline; }
+.inst-list summary .nm { font-family: var(--serif); font-size: 1.08rem; }
+.inst-list summary .meta { font: 500 .74rem var(--mono); color: var(--muted); margin-left: 10px; font-weight: 400; }
+.inst-list summary > span:first-child { flex: 1; }
+.fam-h { font: 500 .78rem var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin: 22px 0 2px; }
+.fam-h:first-child { margin-top: 0; }
+dl.spec { display: grid; grid-template-columns: 10.5em 1fr; gap: 10px 20px; margin: 4px 0 0; }
+dl.spec dt { font: 500 .74rem var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding-top: 3px; }
+dl.spec dd { margin: 0; color: var(--ink-2); font-size: .93rem; }
+dl.spec dd ul { margin: 0; padding-left: 18px; }
+dl.spec dd li { margin: 2px 0; }
+@media (max-width: 640px) { dl.spec { grid-template-columns: 1fr; gap: 2px; } dl.spec dd { margin-bottom: 10px; } }
 </style>
 
 </head>
@@ -390,6 +424,7 @@ footer a { color: var(--ink-2); }
       <a href="#guia"><span lang="pt">Guia passo a passo</span><span lang="en">Step-by-step guide</span><span lang="es">Guía paso a paso</span></a>
       <a href="#prompts"><span lang="pt">Prompts prontos</span><span lang="en">Ready prompts</span><span lang="es">Prompts listos</span></a>
       <a href="#como"><span lang="pt">Como funciona</span><span lang="en">How it works</span><span lang="es">Cómo funciona</span></a>
+      <a href="#instrumentos"><span lang="pt">Instrumentos</span><span lang="en">Instruments</span><span lang="es">Instrumentos</span></a>
       <a href="#saidas"><span lang="pt">Resultados</span><span lang="en">Outputs</span><span lang="es">Resultados</span></a>
       <a href="#faq"><span lang="pt">Dúvidas</span><span lang="en">FAQ</span><span lang="es">Preguntas</span></a>
       <a href="https://github.com/LaBiOmicS/whoqol-toolkit">GitHub</a>
@@ -596,7 +631,7 @@ agy plugin enable whoqol-toolkit</pre></div>
       <p lang="pt">Nenhum número é produzido pela IA. A pontuação, os testes e as tabelas vêm de um pacote Python testado; o assistente confirma com você o que analisar e explica o que saiu.</p><p lang="en">No number is produced by the AI. Scoring, tests and tables come from a tested Python package; the assistant confirms with you what to analyse and explains the output.</p><p lang="es">Ninguna cifra la produce la IA. La puntuación, las pruebas y las tablas vienen de un paquete Python probado; el asistente confirma con usted qué analizar y explica la salida.</p>
     </div>
     <div class="pipe4">
-      <div class="step"><h3 lang="pt">Inspecionar</h3><h3 lang="en">Inspect</h3><h3 lang="es">Inspeccionar</h3><p lang="pt">Encontra as 26 perguntas pelo número ou pelo texto em PT, EN ou ES, reconhece respostas em texto e identifica a versão linguística aplicada.</p><p lang="en">Finds the 26 questions by number or by text in PT, EN or ES, recognises text answers and identifies the language version administered.</p><p lang="es">Encuentra las 26 preguntas por número o por texto en PT, EN o ES, reconoce respuestas de texto e identifica la versión lingüística aplicada.</p></div>
+      <div class="step"><h3 lang="pt">Inspecionar</h3><h3 lang="en">Inspect</h3><h3 lang="es">Inspeccionar</h3><p lang="pt">Identifica o instrumento e encontra as perguntas pelo número ou pelo texto em PT, EN ou ES, reconhece respostas em texto e identifica a versão linguística aplicada.</p><p lang="en">Identifies the instrument and finds the questions by number or by text in PT, EN or ES, recognises text answers and identifies the language version administered.</p><p lang="es">Identifica el instrumento y encuentra las preguntas por número o por texto en PT, EN o ES, reconoce respuestas de texto e identifica la versión lingüística aplicada.</p></div>
       <div class="step llm"><h3 lang="pt">Combinar o plano</h3><h3 lang="en">Agree on the plan</h3><h3 lang="es">Acordar el plan</h3><p lang="pt">O assistente confirma as colunas, os grupos, as covariáveis e, se houver, os valores de referência publicados.</p><p lang="en">The assistant confirms columns, groups, covariates and, if any, published reference values.</p><p lang="es">El asistente confirma columnas, grupos, covariables y, si los hay, valores de referencia publicados.</p></div>
       <div class="step"><h3 lang="pt">Analisar</h3><h3 lang="en">Analyse</h3><h3 lang="es">Analizar</h3><p lang="pt">Regras da OMS, qualidade dos dados, confiabilidade, validade, comparações e associações, com tabelas e figuras.</p><p lang="en">WHO rules, data quality, reliability, validity, comparisons and associations, with tables and figures.</p><p lang="es">Reglas de la OMS, calidad de datos, fiabilidad, validez, comparaciones y asociaciones, con tablas y figuras.</p></div>
       <div class="step llm"><h3 lang="pt">Interpretar</h3><h3 lang="en">Interpret</h3><h3 lang="es">Interpretar</h3><p lang="pt">No seu idioma, a partir dos números devolvidos e dos guias metodológicos: perfil, efeitos, alertas e limitações.</p><p lang="en">In your language, from the returned numbers and the methodological guides: profile, effects, alerts and limitations.</p><p lang="es">En su idioma, a partir de las cifras devueltas y las guías metodológicas: perfil, efectos, alertas y limitaciones.</p></div>
@@ -604,7 +639,7 @@ agy plugin enable whoqol-toolkit</pre></div>
     <div class="legend"><span><i></i><span lang="pt">código determinístico</span><span lang="en">deterministic code</span><span lang="es">código determinista</span></span><span><i class="l-llm"></i><span lang="pt">assistente de IA</span><span lang="en">AI assistant</span><span lang="es">asistente de IA</span></span></div>
 
     <div class="grid3" style="margin-top:40px">
-      <div class="card"><div class="eyebrow"><span lang="pt">Pontuação</span><span lang="en">Scoring</span><span lang="es">Puntuación</span></div>
+      <div class="card"><div class="eyebrow"><span lang="pt">Pontuação (ex.: BREF)</span><span lang="en">Scoring (e.g. BREF)</span><span lang="es">Puntuación (ej.: BREF)</span></div>
         <ul>
           <li><span lang="pt">Q3, Q4 e Q26 invertidos</span><span lang="en">Q3, Q4 and Q26 reversed</span><span lang="es">Q3, Q4 y Q26 invertidos</span></li>
           <li><span lang="pt">Escores 4–20 e 0–100</span><span lang="en">4–20 and 0–100 scores</span><span lang="es">Puntuaciones 4–20 y 0–100</span></li>
@@ -629,8 +664,235 @@ agy plugin enable whoqol-toolkit</pre></div>
   </div>
 </section>
 
+<!-- ================================================================ INSTRUMENTS -->
+<section id="instrumentos" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Instrumentos</span><span lang="en">Instruments</span><span lang="es">Instrumentos</span></div>
+      <h2 lang="pt">Dez questionários, uma mesma definição de qualidade de vida.</h2><h2 lang="en">Ten questionnaires, one definition of quality of life.</h2><h2 lang="es">Diez cuestionarios, una misma definición de calidad de vida.</h2>
+      <p lang="pt">A OMS define qualidade de vida como <i>"a percepção do indivíduo de sua posição na vida, no contexto da cultura e do sistema de valores nos quais vive, e em relação aos seus objetivos, expectativas, padrões e preocupações"</i> (WHOQOL Group, 1995). Todos os instrumentos da família WHOQOL partem dessa definição; eles diferem no tamanho, na população a que se destinam e no tipo de escore que produzem.</p><p lang="en">The WHO defines quality of life as <i>"individuals' perception of their position in life in the context of the culture and value systems in which they live and in relation to their goals, expectations, standards and concerns"</i> (WHOQOL Group, 1995). Every instrument of the WHOQOL family starts from that definition; they differ in length, in the population they target and in the kind of score they produce.</p><p lang="es">La OMS define la calidad de vida como <i>"la percepción del individuo de su posición en la vida, en el contexto de la cultura y del sistema de valores en que vive, y en relación con sus objetivos, expectativas, normas e inquietudes"</i> (WHOQOL Group, 1995). Todos los instrumentos de la familia WHOQOL parten de esa definición; difieren en extensión, en la población a la que se dirigen y en el tipo de puntuación que producen.</p>
+    </div>
+
+    <div class="grid3">
+      <div class="card"><div class="eyebrow"><span lang="pt">O que medem</span><span lang="en">What they measure</span><span lang="es">Qué miden</span></div>
+        <p lang="pt">A avaliação <b>subjetiva</b> que a própria pessoa faz da sua vida, não as suas condições objetivas. Perguntam o quanto ela está satisfeita, o quanto algo a incomoda ou o quanto consegue fazer, sempre nas últimas duas semanas.</p><p lang="en">The person's own <b>subjective</b> appraisal of their life, not their objective conditions. Items ask how satisfied they are, how much something bothers them or how much they can do, always over the last two weeks.</p><p lang="es">La valoración <b>subjetiva</b> que la propia persona hace de su vida, no sus condiciones objetivas. Las preguntas se refieren a cuánto está satisfecha, cuánto le molesta algo o cuánto puede hacer, siempre en las dos últimas semanas.</p></div>
+      <div class="card"><div class="eyebrow"><span lang="pt">Por que importam</span><span lang="en">Why they matter</span><span lang="es">Por qué importan</span></div>
+        <p lang="pt">Foram desenvolvidos ao mesmo tempo em vários centros e culturas (o WHOQOL-100 em 15 centros), e não traduzidos de um original. Por isso os escores são comparáveis entre países, e há versões validadas em português, espanhol e inglês. Complementam desfechos clínicos com o ponto de vista do paciente.</p><p lang="en">They were developed simultaneously in many centres and cultures (the WHOQOL-100 in 15 centres) rather than translated from an original. Scores are therefore comparable across countries, and validated Portuguese, Spanish and English versions exist. They complement clinical outcomes with the patient's point of view.</p><p lang="es">Se desarrollaron a la vez en varios centros y culturas (el WHOQOL-100 en 15 centros), y no se tradujeron de un original. Por eso las puntuaciones son comparables entre países, y existen versiones validadas en portugués, español e inglés. Complementan los desenlaces clínicos con el punto de vista del paciente.</p></div>
+      <div class="card"><div class="eyebrow"><span lang="pt">Como ler o escore</span><span lang="en">How to read the score</span><span lang="es">Cómo leer la puntuación</span></div>
+        <ul>
+          <li><span lang="pt">Quanto maior, melhor a qualidade de vida (0–100).</span><span lang="en">Higher means better quality of life (0–100).</span><span lang="es">Cuanto mayor, mejor calidad de vida (0–100).</span></li>
+          <li><span lang="pt">O resultado é um <b>perfil</b> de domínios; WHOQOL-BREF e WHOQOL-100 não têm escore total.</span><span lang="en">The result is a <b>profile</b> of domains; the WHOQOL-BREF and WHOQOL-100 have no total score.</span><span lang="es">El resultado es un <b>perfil</b> de dominios; el WHOQOL-BREF y el WHOQOL-100 no tienen puntuación total.</span></li>
+          <li><span lang="pt">A OMS não define pontos de corte: compare com normas publicadas.</span><span lang="en">The WHO defines no cut-offs: compare with published norms.</span><span lang="es">La OMS no define puntos de corte: compare con normas publicadas.</span></li>
+        </ul></div>
+    </div>
+
+    <!-- Comparison table -->
+    <h3 class="sub" lang="pt">Qual usar, e em que eles diferem</h3><h3 class="sub" lang="en">Which one to use, and how they differ</h3><h3 class="sub" lang="es">Cuál usar, y en qué se diferencian</h3>
+    <p class="sub-lede" lang="pt">Os <b>genéricos</b> servem para qualquer adulto. Os <b>módulos</b> acrescentam o que importa para um grupo específico e são aplicados junto com um genérico. A chave é o que se passa ao toolkit (<code>-i</code>); o assistente a escolhe a partir da planilha.</p><p class="sub-lede" lang="en"><b>Generic</b> instruments suit any adult. <b>Modules</b> add what matters to a specific group and are administered with a generic one. The key is what the toolkit takes (<code>-i</code>); the assistant picks it from the spreadsheet.</p><p class="sub-lede" lang="es">Los <b>genéricos</b> sirven para cualquier adulto. Los <b>módulos</b> añaden lo que importa a un grupo específico y se aplican junto con un genérico. La clave es lo que recibe el toolkit (<code>-i</code>); el asistente la elige a partir de la hoja.</p>
+    <div class="tscroll">
+    <table class="comp inst-t">
+      <thead><tr>
+        <th><span lang="pt">Instrumento</span><span lang="en">Instrument</span><span lang="es">Instrumento</span></th>
+        <th><span lang="pt">Itens</span><span lang="en">Items</span><span lang="es">Ítems</span></th>
+        <th><span lang="pt">Quando usar</span><span lang="en">When to use</span><span lang="es">Cuándo usar</span></th>
+        <th><span lang="pt">Escores</span><span lang="en">Scores</span><span lang="es">Puntuaciones</span></th>
+        <th><span lang="pt">Chave</span><span lang="en">Key</span><span lang="es">Clave</span></th>
+      </tr></thead>
+      <tbody>
+        <tr class="fam"><td colspan="5"><span lang="pt">Genéricos</span><span lang="en">Generic</span><span lang="es">Genéricos</span></td></tr>
+        <tr><td>WHOQOL-BREF</td><td class="n">26</td><td><span lang="pt">A escolha padrão: estudos com adultos em geral ou com qualquer doença, quando o questionário precisa ser curto.</span><span lang="en">The default: studies of adults in general or with any condition, when the questionnaire must be short.</span><span lang="es">La opción por defecto: estudios con adultos en general o con cualquier enfermedad, cuando el cuestionario debe ser corto.</span></td><td><span lang="pt">4 domínios + Q1–Q2</span><span lang="en">4 domains + Q1–Q2</span><span lang="es">4 dominios + Q1–Q2</span></td><td><code>whoqol-bref</code></td></tr>
+        <tr><td>WHOQOL-100</td><td class="n">100</td><td><span lang="pt">Perfil detalhado, faceta por faceta; estudos psicométricos ou clínicos em profundidade.</span><span lang="en">A detailed, facet-by-facet profile; in-depth psychometric or clinical studies.</span><span lang="es">Perfil detallado, faceta por faceta; estudios psicométricos o clínicos en profundidad.</span></td><td><span lang="pt">24 facetas + geral, 6 domínios</span><span lang="en">24 facets + overall, 6 domains</span><span lang="es">24 facetas + general, 6 dominios</span></td><td><code>whoqol-100</code></td></tr>
+        <tr><td>EUROHIS-QOL 8</td><td class="n">8</td><td><span lang="pt">Inquéritos populacionais em que se quer um único número; pode ser extraído de um WHOQOL-BREF.</span><span lang="en">Population surveys that need a single number; can be extracted from a WHOQOL-BREF.</span><span lang="es">Encuestas poblacionales que necesitan un único número; puede extraerse de un WHOQOL-BREF.</span></td><td><span lang="pt">índice único</span><span lang="en">single index</span><span lang="es">índice único</span></td><td><code>eurohis-qol-8</code></td></tr>
+        <tr class="fam"><td colspan="5"><span lang="pt">Populações específicas</span><span lang="en">Specific populations</span><span lang="es">Poblaciones específicas</span></td></tr>
+        <tr><td>WHOQOL-OLD</td><td class="n">24</td><td><span lang="pt">Idosos, junto com o WHOQOL-BREF ou o WHOQOL-100.</span><span lang="en">Older adults, with the WHOQOL-BREF or WHOQOL-100.</span><span lang="es">Personas mayores, junto con el WHOQOL-BREF o el WHOQOL-100.</span></td><td><span lang="pt">6 facetas + total</span><span lang="en">6 facets + total</span><span lang="es">6 facetas + total</span></td><td><code>whoqol-old</code></td></tr>
+        <tr><td>WHOQOL-HIV-BREF</td><td class="n">31</td><td><span lang="pt">Pessoas vivendo com HIV, versão curta.</span><span lang="en">People living with HIV, short form.</span><span lang="es">Personas que viven con VIH, versión corta.</span></td><td><span lang="pt">6 domínios + Q1–Q2</span><span lang="en">6 domains + Q1–Q2</span><span lang="es">6 dominios + Q1–Q2</span></td><td><code>whoqol-hiv-bref</code></td></tr>
+        <tr><td>WHOQOL-HIV</td><td class="n">120</td><td><span lang="pt">Pessoas vivendo com HIV, versão completa (WHOQOL-100 + 5 facetas).</span><span lang="en">People living with HIV, full form (WHOQOL-100 + 5 facets).</span><span lang="es">Personas que viven con VIH, versión completa (WHOQOL-100 + 5 facetas).</span></td><td><span lang="pt">29 facetas + geral, 6 domínios</span><span lang="en">29 facets + overall, 6 domains</span><span lang="es">29 facetas + general, 6 dominios</span></td><td><code>whoqol-hiv</code></td></tr>
+        <tr><td>WHOQOL-DIS</td><td class="n">39–43</td><td><span lang="pt">Adultos com deficiência física ou intelectual (WHOQOL-BREF + módulo); há versão por representante.</span><span lang="en">Adults with physical or intellectual disabilities (WHOQOL-BREF + module); a proxy version exists.</span><span lang="es">Adultos con discapacidad física o intelectual (WHOQOL-BREF + módulo); existe versión por representante.</span></td><td><span lang="pt">4 domínios, Q27, 3 facetas + total</span><span lang="en">4 domains, Q27, 3 facets + total</span><span lang="es">4 dominios, Q27, 3 facetas + total</span></td><td><code>whoqol-dis</code> …</td></tr>
+        <tr class="fam"><td colspan="5"><span lang="pt">Espiritualidade, religiosidade e crenças pessoais</span><span lang="en">Spirituality, religion and personal beliefs</span><span lang="es">Espiritualidad, religiosidad y creencias personales</span></td></tr>
+        <tr><td>WHOQOL-SRPB BREF</td><td class="n">34</td><td><span lang="pt">Estudos curtos que querem um domínio de espiritualidade mais rico que o do BREF.</span><span lang="en">Short studies that want a richer spirituality domain than the BREF's.</span><span lang="es">Estudios cortos que quieren un dominio de espiritualidad más rico que el del BREF.</span></td><td><span lang="pt">4 domínios + SRPB + Q1–Q2</span><span lang="en">4 domains + SRPB + Q1–Q2</span><span lang="es">4 dominios + SRPB + Q1–Q2</span></td><td><code>whoqol-srpb-bref</code></td></tr>
+        <tr><td>WHOQOL-SRPB</td><td class="n">32</td><td><span lang="pt">O módulo sozinho, para descrever as facetas de espiritualidade.</span><span lang="en">The module alone, to describe the spirituality facets.</span><span lang="es">El módulo solo, para describir las facetas de espiritualidad.</span></td><td><span lang="pt">8 facetas</span><span lang="en">8 facets</span><span lang="es">8 facetas</span></td><td><code>whoqol-srpb</code></td></tr>
+        <tr><td>WHOQOL-100 + SRPB</td><td class="n">132</td><td><span lang="pt">Instrumento completo com o domínio VI ampliado.</span><span lang="en">Full instrument with the expanded domain VI.</span><span lang="es">Instrumento completo con el dominio VI ampliado.</span></td><td><span lang="pt">6 domínios (VI = 9 facetas)</span><span lang="en">6 domains (VI = 9 facets)</span><span lang="es">6 dominios (VI = 9 facetas)</span></td><td><code>whoqol-100-srpb</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- How the score is computed -->
+    <h3 class="sub" lang="pt">Como o índice é calculado</h3><h3 class="sub" lang="en">How the score is computed</h3><h3 class="sub" lang="es">Cómo se calcula la puntuación</h3>
+    <p class="sub-lede" lang="pt">A lógica é a mesma em toda a família; mudam os itens de cada domínio, os itens invertidos e o número mínimo de respostas válidas. As regras seguem o manual ou a sintaxe oficial de cada instrumento.</p><p class="sub-lede" lang="en">The logic is the same across the family; what changes is which items form each domain, which are reversed and how many valid answers are required. The rules follow each instrument's manual or official syntax.</p><p class="sub-lede" lang="es">La lógica es la misma en toda la familia; cambian los ítems de cada dominio, los ítems invertidos y el número mínimo de respuestas válidas. Las reglas siguen el manual o la sintaxis oficial de cada instrumento.</p>
+    <div class="calc">
+      <div class="step"><h3 lang="pt">Inverter</h3><h3 lang="en">Reverse</h3><h3 lang="es">Invertir</h3><p lang="pt">Itens redigidos no sentido negativo (dor, sentimentos negativos, dependência de tratamento) são invertidos para que um valor alto seja sempre bom.</p><p lang="en">Negatively worded items (pain, negative feelings, dependence on treatment) are reversed so that a high value is always good.</p><p lang="es">Los ítems redactados en sentido negativo (dolor, sentimientos negativos, dependencia del tratamiento) se invierten para que un valor alto sea siempre bueno.</p><span class="fx">6 − <span lang="pt">resposta</span><span lang="en">answer</span><span lang="es">respuesta</span></span></div>
+      <div class="step"><h3 lang="pt">Conferir ausentes</h3><h3 lang="en">Check missing data</h3><h3 lang="es">Revisar faltantes</h3><p lang="pt">Cada domínio exige um mínimo de itens respondidos; a média é calculada só com eles. Questionários com mais de ~20% dos itens em branco são excluídos.</p><p lang="en">Each domain needs a minimum of answered items; the mean uses only those. Questionnaires with more than ~20% of items blank are excluded.</p><p lang="es">Cada dominio exige un mínimo de ítems respondidos; la media usa solo esos. Los cuestionarios con más de ~20% de ítems en blanco se excluyen.</p><span class="fx">BREF: 6/7 · 5/6 · 2/3 · 6/8</span></div>
+      <div class="step"><h3 lang="pt">Escore bruto</h3><h3 lang="en">Raw score</h3><h3 lang="es">Puntuación bruta</h3><p lang="pt">Média dos itens multiplicada por 4, para ficar na escala 4–20 do WHOQOL-100. Os módulos OLD, EUROHIS e DIS usam a soma dos itens.</p><p lang="en">Mean of the items times 4, putting it on the WHOQOL-100's 4–20 scale. The OLD, EUROHIS and DIS modules use the sum of the items.</p><p lang="es">Media de los ítems multiplicada por 4, para quedar en la escala 4–20 del WHOQOL-100. Los módulos OLD, EUROHIS y DIS usan la suma de los ítems.</p><span class="fx"><span lang="pt">média</span><span lang="en">mean</span><span lang="es">media</span> × 4 → 4–20</span></div>
+      <div class="step"><h3 lang="pt">Transformar</h3><h3 lang="en">Transform</h3><h3 lang="es">Transformar</h3><p lang="pt">Conversão linear para 0–100, que facilita comparar domínios e instrumentos de tamanhos diferentes.</p><p lang="en">Linear conversion to 0–100, which makes domains and instruments of different lengths easier to compare.</p><p lang="es">Conversión lineal a 0–100, que facilita comparar dominios e instrumentos de distinta extensión.</p><span class="fx">(<span lang="pt">bruto</span><span lang="en">raw</span><span lang="es">bruta</span> − 4) × 100 / 16</span></div>
+    </div>
+    <div class="example">
+      <div class="code"><pre><span class="c" lang="pt"># Exemplo: domínio físico do WHOQOL-BREF</span><span class="c" lang="en"># Example: WHOQOL-BREF physical domain</span><span class="c" lang="es"># Ejemplo: dominio físico del WHOQOL-BREF</span>
+Q3 = 2  →  6 − 2 = 4   <span class="c" lang="pt"># invertido</span><span class="c" lang="en"># reversed</span><span class="c" lang="es"># invertido</span>
+Q4 = 1  →  6 − 1 = 5   <span class="c" lang="pt"># invertido</span><span class="c" lang="en"># reversed</span><span class="c" lang="es"># invertido</span>
+Q10 = 4 · Q15 = 4 · Q16 = 3 · Q17 = 4 · Q18 = 4
+
+<span lang="pt">média</span><span lang="en">mean</span><span lang="es">media</span>  = (4+5+4+4+3+4+4) / 7 = <span lang="pt">4,0</span><span lang="en">4.0</span><span lang="es">4,0</span>
+<span lang="pt">bruto</span><span lang="en">raw</span><span lang="es">bruta</span>  = <span lang="pt">4,0</span><span lang="en">4.0</span><span lang="es">4,0</span> × 4 = <span class="p">16</span>         <span class="c"># 4–20</span>
+0–100  = (16 − 4) × 100 / 16 = <span class="p">75</span></pre></div>
+      <div>
+        <p lang="pt"><b>Por que × 4?</b> O WHOQOL-BREF nasceu do WHOQOL-100, cujas facetas têm 4 itens e vão de 4 a 20. Multiplicar a média por 4 coloca os dois instrumentos na mesma escala.</p><p lang="en"><b>Why × 4?</b> The WHOQOL-BREF was derived from the WHOQOL-100, whose facets have 4 items and range from 4 to 20. Multiplying the mean by 4 puts both instruments on the same scale.</p><p lang="es"><b>¿Por qué × 4?</b> El WHOQOL-BREF nació del WHOQOL-100, cuyas facetas tienen 4 ítems y van de 4 a 20. Multiplicar la media por 4 pone ambos instrumentos en la misma escala.</p>
+        <p lang="pt"><b>Por que a média e não a soma?</b> Com a média, uma resposta em branco não derruba o escore: o domínio é calculado com os itens respondidos, desde que o mínimo seja atingido (equivale ao <code>MEAN.n</code> do SPSS).</p><p lang="en"><b>Why the mean and not the sum?</b> With the mean, one blank answer does not drag the score down: the domain is computed from the answered items as long as the minimum is met (equivalent to SPSS <code>MEAN.n</code>).</p><p lang="es"><b>¿Por qué la media y no la suma?</b> Con la media, una respuesta en blanco no hunde la puntuación: el dominio se calcula con los ítems respondidos, siempre que se alcance el mínimo (equivale a <code>MEAN.n</code> de SPSS).</p>
+        <p lang="pt"><b>Q1 e Q2</b> (qualidade de vida e saúde em geral) não entram em nenhum domínio e são relatadas à parte. Não some os domínios: eles medem coisas diferentes.</p><p lang="en"><b>Q1 and Q2</b> (overall quality of life and general health) belong to no domain and are reported separately. Do not add the domains up: they measure different things.</p><p lang="es"><b>Q1 y Q2</b> (calidad de vida y salud en general) no pertenecen a ningún dominio y se informan aparte. No sume los dominios: miden cosas distintas.</p>
+      </div>
+    </div>
+
+    <!-- Per-instrument detail -->
+    <h3 class="sub" lang="pt">Cada instrumento em detalhe</h3><h3 class="sub" lang="en">Each instrument in detail</h3><h3 class="sub" lang="es">Cada instrumento en detalle</h3>
+    <p class="sub-lede" lang="pt">Estrutura, regra de cálculo e pontos de atenção. Onde as fontes oficiais divergem, a convenção adotada é indicada e aparece no texto de métodos. Para a regra completa de um instrumento, peça ao assistente: <i>"mostre as regras de pontuação do WHOQOL-OLD"</i>.</p><p class="sub-lede" lang="en">Structure, scoring rule and points to watch. Where the official sources disagree, the convention adopted is stated and appears in the methods text. For the full rule of an instrument, ask the assistant: <i>"show me the WHOQOL-OLD scoring rules"</i>.</p><p class="sub-lede" lang="es">Estructura, regla de cálculo y puntos de atención. Donde las fuentes oficiales difieren, se indica la convención adoptada, que aparece en el texto de métodos. Para la regla completa de un instrumento, pida al asistente: <i>"muestra las reglas de puntuación del WHOQOL-OLD"</i>.</p>
+
+    <div class="inst-list">
+      <div class="fam-h"><span lang="pt">Genéricos</span><span lang="en">Generic</span><span lang="es">Genéricos</span></div>
+
+      <details open><summary><span><span class="nm">WHOQOL-BREF</span><span class="meta">26 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">Versão abreviada do WHOQOL-100: uma pergunta de cada uma das 24 facetas mais duas gerais. Testado em 23 países (Skevington et al., 2004), é o instrumento WHOQOL mais usado.</dd><dd lang="en">Short form of the WHOQOL-100: one question from each of the 24 facets plus two general ones. Tested in 23 countries (Skevington et al., 2004), it is the most widely used WHOQOL instrument.</dd><dd lang="es">Versión abreviada del WHOQOL-100: una pregunta de cada una de las 24 facetas más dos generales. Probado en 23 países (Skevington et al., 2004), es el instrumento WHOQOL más usado.</dd>
+          <dt lang="pt">Domínios</dt><dt lang="en">Domains</dt><dt lang="es">Dominios</dt>
+          <dd><ul>
+            <li><span lang="pt">Físico (7): Q3*, Q4*, Q10, Q15–Q18</span><span lang="en">Physical (7): Q3*, Q4*, Q10, Q15–Q18</span><span lang="es">Salud física (7): Q3*, Q4*, Q10, Q15–Q18</span></li>
+            <li><span lang="pt">Psicológico (6): Q5–Q7, Q11, Q19, Q26*</span><span lang="en">Psychological (6): Q5–Q7, Q11, Q19, Q26*</span><span lang="es">Psicológico (6): Q5–Q7, Q11, Q19, Q26*</span></li>
+            <li><span lang="pt">Relações sociais (3): Q20–Q22</span><span lang="en">Social relationships (3): Q20–Q22</span><span lang="es">Relaciones sociales (3): Q20–Q22</span></li>
+            <li><span lang="pt">Meio ambiente (8): Q8, Q9, Q12–Q14, Q23–Q25</span><span lang="en">Environment (8): Q8, Q9, Q12–Q14, Q23–Q25</span><span lang="es">Ambiente (8): Q8, Q9, Q12–Q14, Q23–Q25</span></li>
+            <li><span lang="pt">Q1–Q2: qualidade de vida geral e satisfação com a saúde, à parte</span><span lang="en">Q1–Q2: overall quality of life and satisfaction with health, separately</span><span lang="es">Q1–Q2: calidad de vida general y satisfacción con la salud, aparte</span></li>
+          </ul></dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">* invertidos (6 − resposta). Domínio = média × 4 (4–20) e 0–100. Mínimo de 6/7, 5/6, 2/3 e 6/8 itens válidos; exclusão com menos de 21 dos 26 itens.</dd><dd lang="en">* reversed (6 − answer). Domain = mean × 4 (4–20) and 0–100. Minimum 6/7, 5/6, 2/3 and 6/8 valid items; exclusion below 21 of 26 items.</dd><dd lang="es">* invertidos (6 − respuesta). Dominio = media × 4 (4–20) y 0–100. Mínimo de 6/7, 5/6, 2/3 y 6/8 ítems válidos; exclusión con menos de 21 de los 26 ítems.</dd>
+          <dt lang="pt">Atenção</dt><dt lang="en">Watch out</dt><dt lang="es">Atención</dt>
+          <dd lang="pt">O domínio social tem só 3 itens e costuma ter α mais baixo; a Q21 (vida sexual) concentra respostas em branco.</dd><dd lang="en">The social domain has only 3 items and usually a lower α; Q21 (sex life) collects most blank answers.</dd><dd lang="es">El dominio social tiene solo 3 ítems y suele tener un α más bajo; la Q21 (vida sexual) concentra las respuestas en blanco.</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Fleck et al. (2000) · es-ES: Lucas (1998) · en: WHOQOL Group (1998) · <code>whoqol-bref</code></dd>
+        </dl></div></details>
+
+      <details><summary><span><span class="nm">WHOQOL-100</span><span class="meta">100 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">O instrumento original da família: 24 facetas específicas e uma faceta geral, cada uma com 4 itens, organizadas em 6 domínios. Dá o perfil mais detalhado e é a base de todos os outros.</dd><dd lang="en">The family's original instrument: 24 specific facets and one overall facet, 4 items each, grouped into 6 domains. It gives the most detailed profile and underlies all the others.</dd><dd lang="es">El instrumento original de la familia: 24 facetas específicas y una faceta general, cada una con 4 ítems, agrupadas en 6 dominios. Ofrece el perfil más detallado y es la base de todos los demás.</dd>
+          <dt lang="pt">Domínios</dt><dt lang="en">Domains</dt><dt lang="es">Dominios</dt>
+          <dd lang="pt">I Físico (dor*, energia, sono) · II Psicológico (sentimentos positivos, cognição, autoestima, imagem corporal, sentimentos negativos*) · III Nível de independência (mobilidade, atividades da vida cotidiana, dependência de medicação*, capacidade de trabalho) · IV Relações sociais · V Meio ambiente (8 facetas) · VI Espiritualidade/religião/crenças pessoais (1 faceta)</dd><dd lang="en">I Physical (pain*, energy, sleep) · II Psychological (positive feelings, cognition, self-esteem, body image, negative feelings*) · III Level of independence (mobility, activities of daily living, dependence on medication*, work capacity) · IV Social relationships · V Environment (8 facets) · VI Spirituality/religion/personal beliefs (1 facet)</dd><dd lang="es">I Físico (dolor*, energía, sueño) · II Psicológico (sentimientos positivos, cognición, autoestima, imagen corporal, sentimientos negativos*) · III Nivel de independencia (movilidad, actividades de la vida diaria, dependencia de medicación*, capacidad de trabajo) · IV Relaciones sociales · V Ambiente (8 facetas) · VI Espiritualidad/religión/creencias personales (1 faceta)</dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">18 itens invertidos. Faceta = média de 4 itens × 4 (mínimo 3). Domínio = média das facetas, com as facetas negativas* invertidas (24 − faceta). Exclusão com menos de 80 itens válidos.</dd><dd lang="en">18 reversed items. Facet = mean of 4 items × 4 (minimum 3). Domain = mean of facets, with negative facets* reversed (24 − facet). Exclusion below 80 valid items.</dd><dd lang="es">18 ítems invertidos. Faceta = media de 4 ítems × 4 (mínimo 3). Dominio = media de las facetas, con las facetas negativas* invertidas (24 − faceta). Exclusión con menos de 80 ítems válidos.</dd>
+          <dt lang="pt">Atenção</dt><dt lang="en">Watch out</dt><dt lang="es">Atención</dt>
+          <dd lang="pt">Os escores de faceta mantêm o sentido da faceta (dor alta = mais dor). Não há escore total. Para comparar com estudos do BREF, os 4 domínios podem ser calculados a partir das 26 perguntas correspondentes (<code>whoqol-100-bref</code>).</dd><dd lang="en">Facet scores keep the facet's direction (high pain = more pain). There is no total score. For comparison with BREF studies, the 4 domains can be computed from the 26 matching questions (<code>whoqol-100-bref</code>).</dd><dd lang="es">Las puntuaciones de faceta mantienen el sentido de la faceta (dolor alto = más dolor). No hay puntuación total. Para comparar con estudios del BREF, los 4 dominios pueden calcularse con las 26 preguntas correspondientes (<code>whoqol-100-bref</code>).</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Fleck et al. (1999) · en: WHOQOL Group (1998) · <code>whoqol-100</code></dd>
+        </dl></div></details>
+
+      <details><summary><span><span class="nm">EUROHIS-QOL 8</span><span class="meta">8 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">Índice de 8 itens derivado do WHOQOL-BREF no projeto europeu EUROHIS, pensado para inquéritos de saúde em que só cabe um número. Cobre qualidade de vida geral, saúde, energia, atividades diárias, autoestima, relações, dinheiro e moradia.</dd><dd lang="en">An 8-item index derived from the WHOQOL-BREF in the European EUROHIS project, designed for health surveys with room for a single number. It covers overall quality of life, health, energy, daily activities, self-esteem, relationships, money and housing.</dd><dd lang="es">Índice de 8 ítems derivado del WHOQOL-BREF en el proyecto europeo EUROHIS, pensado para encuestas de salud en las que solo cabe un número. Cubre calidad de vida general, salud, energía, actividades diarias, autoestima, relaciones, dinero y vivienda.</dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">Soma dos 8 itens (8–40); 0–100 = (soma − 8) × 100 / 32. Nenhum item invertido. Todos os 8 itens são exigidos.</dd><dd lang="en">Sum of the 8 items (8–40); 0–100 = (sum − 8) × 100 / 32. No reversed items. All 8 items are required.</dd><dd lang="es">Suma de los 8 ítems (8–40); 0–100 = (suma − 8) × 100 / 32. Ningún ítem invertido. Se exigen los 8 ítems.</dd>
+          <dt lang="pt">Atenção</dt><dt lang="en">Watch out</dt><dt lang="es">Atención</dt>
+          <dd lang="pt">Pode ser calculado de uma planilha do WHOQOL-BREF (itens Q1, Q2, Q10, Q12, Q17, Q19, Q20, Q23). A sintaxe da UFRGS relata a média (1–5) e traz um erro de digitação (<code>Q5-Q6</code>); o toolkit segue a soma do artigo original.</dd><dd lang="en">Can be scored from a WHOQOL-BREF sheet (items Q1, Q2, Q10, Q12, Q17, Q19, Q20, Q23). The UFRGS syntax reports the mean (1–5) and has a typo (<code>Q5-Q6</code>); the toolkit follows the sum in the original paper.</dd><dd lang="es">Puede calcularse a partir de una hoja del WHOQOL-BREF (ítems Q1, Q2, Q10, Q12, Q17, Q19, Q20, Q23). La sintaxis de la UFRGS informa la media (1–5) y tiene un error tipográfico (<code>Q5-Q6</code>); el toolkit sigue la suma del artículo original.</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Pires et al. (2018) · en: Schmidt, Mühlan &amp; Power (2006) · <code>eurohis-qol-8</code></dd>
+        </dl></div></details>
+
+      <div class="fam-h"><span lang="pt">Populações específicas</span><span lang="en">Specific populations</span><span lang="es">Poblaciones específicas</span></div>
+
+      <details><summary><span><span class="nm">WHOQOL-OLD</span><span class="meta">24 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">Módulo para idosos, aplicado junto com o WHOQOL-BREF ou o WHOQOL-100. Acrescenta temas que os genéricos não cobrem bem nessa fase da vida, como perdas sensoriais, autonomia e a relação com a morte.</dd><dd lang="en">Module for older adults, administered with the WHOQOL-BREF or WHOQOL-100. It adds themes the generic instruments cover poorly at that stage of life, such as sensory losses, autonomy and attitudes towards death.</dd><dd lang="es">Módulo para personas mayores, aplicado junto con el WHOQOL-BREF o el WHOQOL-100. Añade temas que los genéricos no cubren bien en esa etapa de la vida, como las pérdidas sensoriales, la autonomía y la relación con la muerte.</dd>
+          <dt lang="pt">Facetas</dt><dt lang="en">Facets</dt><dt lang="es">Facetas</dt>
+          <dd lang="pt">Funcionamento do sensório · Autonomia · Atividades passadas, presentes e futuras · Participação social · Morte e morrer · Intimidade (4 itens cada)</dd><dd lang="en">Sensory abilities · Autonomy · Past, present and future activities · Social participation · Death and dying · Intimacy (4 items each)</dd><dd lang="es">Habilidades sensoriales · Autonomía · Actividades pasadas, presentes y futuras · Participación social · Muerte y morir · Intimidad (4 ítems cada una)</dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">Itens 1, 2 e 6–10 invertidos. Faceta = soma dos 4 itens (4–20); escore total = soma dos 24 (24–120); ambos também em 0–100. Facetas e total exigem todos os itens; exclusão com mais de 20% em branco.</dd><dd lang="en">Items 1, 2 and 6–10 reversed. Facet = sum of 4 items (4–20); total = sum of the 24 (24–120); both also on 0–100. Facets and total need every item; exclusion with more than 20% blank.</dd><dd lang="es">Ítems 1, 2 y 6–10 invertidos. Faceta = suma de los 4 ítems (4–20); puntuación total = suma de los 24 (24–120); ambos también en 0–100. Facetas y total exigen todos los ítems; exclusión con más del 20% en blanco.</dd>
+          <dt lang="pt">Atenção</dt><dt lang="en">Watch out</dt><dt lang="es">Atención</dt>
+          <dd lang="pt">É pontuado separadamente do BREF aplicado junto: o assistente roda uma análise para cada instrumento na mesma planilha.</dd><dd lang="en">It is scored separately from the BREF given with it: the assistant runs one analysis per instrument on the same spreadsheet.</dd><dd lang="es">Se puntúa por separado del BREF aplicado con él: el asistente realiza un análisis por instrumento en la misma hoja.</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Fleck, Chachamovich &amp; Trentini (2006) · en: Power, Quinn &amp; Schmidt (2005) · <code>whoqol-old</code></dd>
+        </dl></div></details>
+
+      <details><summary><span><span class="nm">WHOQOL-HIV-BREF</span><span class="meta">31 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">Versão curta do WHOQOL-HIV para pessoas vivendo com HIV: os itens do BREF mais 5 itens sobre sintomas, inclusão social, perdão e culpa, preocupações com o futuro e morte. Mantém os 6 domínios do WHOQOL-100.</dd><dd lang="en">Short form of the WHOQOL-HIV for people living with HIV: the BREF items plus 5 items on symptoms, social inclusion, forgiveness and blame, concerns about the future and death. It keeps the WHOQOL-100's 6 domains.</dd><dd lang="es">Versión corta del WHOQOL-HIV para personas que viven con VIH: los ítems del BREF más 5 ítems sobre síntomas, inclusión social, perdón y culpa, preocupaciones por el futuro y muerte. Mantiene los 6 dominios del WHOQOL-100.</dd>
+          <dt lang="pt">Domínios</dt><dt lang="en">Domains</dt><dt lang="es">Dominios</dt>
+          <dd lang="pt">Físico (4) · Psicológico (5) · Nível de independência (4) · Relações sociais (4) · Meio ambiente (8) · Espiritualidade (4) · Q1–Q2 à parte</dd><dd lang="en">Physical (4) · Psychological (5) · Level of independence (4) · Social relationships (4) · Environment (8) · Spirituality (4) · Q1–Q2 separately</dd><dd lang="es">Físico (4) · Psicológico (5) · Nivel de independencia (4) · Relaciones sociales (4) · Ambiente (8) · Espiritualidad (4) · Q1–Q2 aparte</dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">Q3, Q4, Q5, Q8, Q9, Q10 e Q31 invertidos. Domínio = média × 4 (4–20) e 0–100.</dd><dd lang="en">Q3, Q4, Q5, Q8, Q9, Q10 and Q31 reversed. Domain = mean × 4 (4–20) and 0–100.</dd><dd lang="es">Q3, Q4, Q5, Q8, Q9, Q10 y Q31 invertidos. Dominio = media × 4 (4–20) y 0–100.</dd>
+          <dt lang="pt">Atenção</dt><dt lang="en">Watch out</dt><dt lang="es">Atención</dt>
+          <dd lang="pt">A sintaxe oficial não define regra de ausentes; o toolkit adota a do BREF (um item em branco por domínio, dois no meio ambiente; mínimo de 25 dos 31) e declara isso nos métodos.</dd><dd lang="en">The official syntax sets no missing-data rule; the toolkit adopts the BREF's (one blank item per domain, two in environment; at least 25 of 31) and says so in the methods.</dd><dd lang="es">La sintaxis oficial no define regla de faltantes; el toolkit adopta la del BREF (un ítem en blanco por dominio, dos en ambiente; mínimo de 25 de 31) y lo declara en los métodos.</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Zimpel &amp; Fleck (2007) · en: O'Connell &amp; Skevington (2012) · <code>whoqol-hiv-bref</code></dd>
+        </dl></div></details>
+
+      <details><summary><span><span class="nm">WHOQOL-HIV</span><span class="meta">120 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">WHOQOL-100 com 5 facetas específicas do HIV (20 itens): sintomas (domínio I), inclusão social (IV), perdão e culpa, preocupações com o futuro, morte e morrer (VI).</dd><dd lang="en">WHOQOL-100 with 5 HIV-specific facets (20 items): symptoms (domain I), social inclusion (IV), forgiveness and blame, concerns about the future, death and dying (VI).</dd><dd lang="es">WHOQOL-100 con 5 facetas específicas del VIH (20 ítems): síntomas (dominio I), inclusión social (IV), perdón y culpa, preocupaciones por el futuro, muerte y morir (VI).</dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">Como o WHOQOL-100: facetas × 4, domínios = média das facetas, facetas negativas invertidas no domínio. Exclusão com menos de 96 dos 120 itens.</dd><dd lang="en">As the WHOQOL-100: facets × 4, domains = mean of facets, negative facets reversed at domain level. Exclusion below 96 of 120 items.</dd><dd lang="es">Como el WHOQOL-100: facetas × 4, dominios = media de las facetas, facetas negativas invertidas en el dominio. Exclusión con menos de 96 de los 120 ítems.</dd>
+          <dt lang="pt">Atenção</dt><dt lang="en">Watch out</dt><dt lang="es">Atención</dt>
+          <dd lang="pt">A sintaxe da UFRGS inverte o item F2.1 (energia) por engano; esse erro não é reproduzido. Os domínios ficam idênticos aos da sintaxe nos demais casos.</dd><dd lang="en">The UFRGS syntax reverses item F2.1 (energy) by mistake; that error is not reproduced. Domains are otherwise identical to the syntax's.</dd><dd lang="es">La sintaxis de la UFRGS invierte el ítem F2.1 (energía) por error; ese error no se reproduce. En lo demás, los dominios son idénticos a los de la sintaxis.</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Zimpel &amp; Fleck (2007) · en: WHOQOL HIV Group (2004) · <code>whoqol-hiv</code></dd>
+        </dl></div></details>
+
+      <details><summary><span><span class="nm">WHOQOL-DIS</span><span class="meta">39–43 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5 / 1–3</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">Módulo para adultos com deficiência física ou intelectual, aplicado com o WHOQOL-BREF: uma pergunta sobre o impacto da deficiência (Q27) e 12 itens sobre discriminação, autonomia e inclusão. Na deficiência intelectual usa-se o WHOQOL-BREF-ID, com respostas em 3 pontos e linguagem simplificada.</dd><dd lang="en">Module for adults with physical or intellectual disabilities, administered with the WHOQOL-BREF: one question on the impact of disability (Q27) and 12 items on discrimination, autonomy and inclusion. For intellectual disabilities the WHOQOL-BREF-ID is used, with 3-point answers and simplified wording.</dd><dd lang="es">Módulo para adultos con discapacidad física o intelectual, aplicado con el WHOQOL-BREF: una pregunta sobre el impacto de la discapacidad (Q27) y 12 ítems sobre discriminación, autonomía e inclusión. En la discapacidad intelectual se usa el WHOQOL-BREF-ID, con respuestas de 3 puntos y lenguaje simplificado.</dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">Domínios do BREF como de costume. Q27 invertida e relatada sozinha. Discriminação (Q28–Q30, invertidos), Autonomia (Q31–Q33) e Inclusão (Q34–Q39) = soma dos itens; total do módulo = soma dos 12 (12–60 físico; 12–36 intelectual), 0–100 = (soma − 12) × 100 / 48 (ou / 24).</dd><dd lang="en">BREF domains as usual. Q27 reversed and reported alone. Discrimination (Q28–Q30, reversed), Autonomy (Q31–Q33) and Inclusion (Q34–Q39) = sum of items; module total = sum of the 12 (12–60 physical; 12–36 intellectual), 0–100 = (sum − 12) × 100 / 48 (or / 24).</dd><dd lang="es">Dominios del BREF como de costumbre. Q27 invertida e informada sola. Discriminación (Q28–Q30, invertidos), Autonomía (Q31–Q33) e Inclusión (Q34–Q39) = suma de los ítems; total del módulo = suma de los 12 (12–60 física; 12–36 intelectual), 0–100 = (suma − 12) × 100 / 48 (o / 24).</dd>
+          <dt lang="pt">Variantes</dt><dt lang="en">Variants</dt><dt lang="es">Variantes</dt>
+          <dd lang="pt"><code>whoqol-dis</code> (física) · <code>whoqol-dis-id</code> (intelectual) · <code>-br</code>: formulários brasileiros com os itens nacionais Q40–Q43 (trabalho, adaptações, estudo, alimentação), pontuados à parte · <code>whoqol-dis-id-proxy</code>: respondido por familiar ou cuidador, em 5 pontos.</dd><dd lang="en"><code>whoqol-dis</code> (physical) · <code>whoqol-dis-id</code> (intellectual) · <code>-br</code>: Brazilian forms with national items Q40–Q43 (work, adaptations, study, food), scored separately · <code>whoqol-dis-id-proxy</code>: answered by a relative or carer, on 5 points.</dd><dd lang="es"><code>whoqol-dis</code> (física) · <code>whoqol-dis-id</code> (intelectual) · <code>-br</code>: formularios brasileños con los ítems nacionales Q40–Q43 (trabajo, adaptaciones, estudio, alimentación), puntuados aparte · <code>whoqol-dis-id-proxy</code>: respondido por un familiar o cuidador, en 5 puntos.</dd>
+          <dt lang="pt">Atenção</dt><dt lang="en">Watch out</dt><dt lang="es">Atención</dt>
+          <dd lang="pt">A sintaxe brasileira pontua o módulo de outra forma (médias × 4); o toolkit segue o manual da OMS (2011). Relate escores por representante separados dos autorrelatados.</dd><dd lang="en">The Brazilian syntax scores the module differently (means × 4); the toolkit follows the WHO manual (2011). Report proxy scores separately from self-reports.</dd><dd lang="es">La sintaxis brasileña puntúa el módulo de otra forma (medias × 4); el toolkit sigue el manual de la OMS (2011). Informe las puntuaciones por representante aparte de las autoinformadas.</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Bredemeier et al. (2014); <span lang="pt">representante</span><span lang="en">proxy</span><span lang="es">representante</span>: Schmidt et al. (2010) · en: Power &amp; Green (2010)</dd>
+        </dl></div></details>
+
+      <div class="fam-h"><span lang="pt">Espiritualidade, religiosidade e crenças pessoais</span><span lang="en">Spirituality, religion and personal beliefs</span><span lang="es">Espiritualidad, religiosidad y creencias personales</span></div>
+
+      <details><summary><span><span class="nm">WHOQOL-SRPB</span><span class="meta">32 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">Módulo que aprofunda a faceta única de espiritualidade do WHOQOL-100 em 8 facetas. Serve para crentes e não crentes: fala de sentido, paz e esperança, não de uma religião específica.</dd><dd lang="en">Module that expands the WHOQOL-100's single spirituality facet into 8 facets. It suits believers and non-believers alike: it addresses meaning, peace and hope, not a particular religion.</dd><dd lang="es">Módulo que amplía la faceta única de espiritualidad del WHOQOL-100 en 8 facetas. Sirve para creyentes y no creyentes: habla de sentido, paz y esperanza, no de una religión concreta.</dd>
+          <dt lang="pt">Facetas</dt><dt lang="en">Facets</dt><dt lang="es">Facetas</dt>
+          <dd lang="pt">Conexão com ser ou força espiritual · Sentido na vida · Admiração · Totalidade e integração · Força espiritual · Paz interior · Esperança e otimismo · Fé (4 itens cada)</dd><dd lang="en">Connection to a spiritual being or force · Meaning and purpose in life · Awe and wonder · Wholeness and integration · Spiritual strength · Inner peace · Hope and optimism · Faith (4 items each)</dd><dd lang="es">Conexión con un ser o fuerza espiritual · Sentido de la vida · Admiración · Totalidad e integración · Fuerza espiritual · Paz interior · Esperanza y optimismo · Fe (4 ítems cada una)</dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">Nenhum item invertido. Faceta = média de 4 itens × 4 (mínimo 3). Sozinho, o módulo dá só facetas: o domínio SRPB oficial precisa também da faceta F24 do WHOQOL-100.</dd><dd lang="en">No reversed items. Facet = mean of 4 items × 4 (minimum 3). On its own the module yields facets only: the official SRPB domain also needs WHOQOL-100 facet F24.</dd><dd lang="es">Ningún ítem invertido. Faceta = media de 4 ítems × 4 (mínimo 3). Solo, el módulo da únicamente facetas: el dominio SRPB oficial necesita también la faceta F24 del WHOQOL-100.</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Panzini et al. (2011) · en: WHOQOL SRPB Group (2006) · <code>whoqol-srpb</code></dd>
+        </dl></div></details>
+
+      <details><summary><span><span class="nm">WHOQOL-SRPB BREF</span><span class="meta">34 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">WHOQOL-BREF com um item de cada faceta SRPB (8 itens). Dá os 4 domínios habituais e um quinto domínio de espiritualidade, mantendo o questionário curto.</dd><dd lang="en">WHOQOL-BREF plus one item from each SRPB facet (8 items). It gives the usual 4 domains and a fifth spirituality domain while keeping the questionnaire short.</dd><dd lang="es">WHOQOL-BREF más un ítem de cada faceta SRPB (8 ítems). Da los 4 dominios habituales y un quinto dominio de espiritualidad, manteniendo el cuestionario corto.</dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">Domínios do BREF como de costume. Domínio SRPB = média de 9 itens (Q6 + os 8 SRPB) × 4, mínimo 8. Exclusão com menos de 28 dos 34 itens.</dd><dd lang="en">BREF domains as usual. SRPB domain = mean of 9 items (Q6 + the 8 SRPB) × 4, minimum 8. Exclusion below 28 of 34 items.</dd><dd lang="es">Dominios del BREF como de costumbre. Dominio SRPB = media de 9 ítems (Q6 + los 8 SRPB) × 4, mínimo 8. Exclusión con menos de 28 de los 34 ítems.</dd>
+          <dt lang="pt">Atenção</dt><dt lang="en">Watch out</dt><dt lang="es">Atención</dt>
+          <dd lang="pt">A Q6 (sentido da vida) conta tanto no domínio psicológico quanto no SRPB, como no manual. Nomeie as 8 colunas SRPB com os seus códigos (SP1.1, SP2.3…).</dd><dd lang="en">Q6 (meaningful life) counts in both the psychological and SRPB domains, as in the manual. Name the 8 SRPB columns with their codes (SP1.1, SP2.3…).</dd><dd lang="es">La Q6 (sentido de la vida) cuenta tanto en el dominio psicológico como en el SRPB, como en el manual. Nombre las 8 columnas SRPB con sus códigos (SP1.1, SP2.3…).</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Zimpel et al. (2019) · en: Skevington, Gunson &amp; O'Connell (2013) · <code>whoqol-srpb-bref</code></dd>
+        </dl></div></details>
+
+      <details><summary><span><span class="nm">WHOQOL-100 + SRPB</span><span class="meta">132 <span lang="pt">itens</span><span lang="en">items</span><span lang="es">ítems</span> · 1–5</span></span></summary><div>
+        <dl class="spec">
+          <dt lang="pt">O que é</dt><dt lang="en">What it is</dt><dt lang="es">Qué es</dt>
+          <dd lang="pt">A forma completa: WHOQOL-100 com o módulo SRPB, em que o domínio VI passa a ter 9 facetas em vez de uma.</dd><dd lang="en">The full form: WHOQOL-100 with the SRPB module, in which domain VI has 9 facets instead of one.</dd><dd lang="es">La forma completa: WHOQOL-100 con el módulo SRPB, en la que el dominio VI tiene 9 facetas en lugar de una.</dd>
+          <dt lang="pt">Cálculo</dt><dt lang="en">Scoring</dt><dt lang="es">Cálculo</dt>
+          <dd lang="pt">Domínios I–V como no WHOQOL-100. Domínio VI = média de F24 e das 8 facetas SRPB (mínimo 7 de 9). Exclusão com menos de 106 dos 132 itens.</dd><dd lang="en">Domains I–V as in the WHOQOL-100. Domain VI = mean of F24 and the 8 SRPB facets (minimum 7 of 9). Exclusion below 106 of 132 items.</dd><dd lang="es">Dominios I–V como en el WHOQOL-100. Dominio VI = media de F24 y las 8 facetas SRPB (mínimo 7 de 9). Exclusión con menos de 106 de los 132 ítems.</dd>
+          <dt lang="pt">Atenção</dt><dt lang="en">Watch out</dt><dt lang="es">Atención</dt>
+          <dd lang="pt">Os cabeçalhos precisam ser os códigos dos itens (F1.1…, G1…, SP1.1…), porque a ordem dos formulários combinados varia.</dd><dd lang="en">Headers must be item codes (F1.1…, G1…, SP1.1…), because the order of the combined forms varies.</dd><dd lang="es">Los encabezados deben ser los códigos de los ítems (F1.1…, G1…, SP1.1…), porque el orden de los formularios combinados varía.</dd>
+          <dt lang="pt">Versões</dt><dt lang="en">Versions</dt><dt lang="es">Versiones</dt>
+          <dd>pt-BR: Panzini et al. (2011) · en: WHOQOL SRPB Group (2006) · <code>whoqol-100-srpb</code></dd>
+        </dl></div></details>
+    </div>
+  </div>
+</section>
+
 <!-- ================================================================ OUTPUTS -->
-<section id="saidas" class="alt">
+<section id="saidas">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow"><span lang="pt">Resultados</span><span lang="en">Outputs</span><span lang="es">Resultados</span></div>
@@ -660,7 +922,7 @@ agy plugin enable whoqol-toolkit</pre></div>
 </section>
 
 <!-- ================================================================ FAQ -->
-<section id="faq">
+<section id="faq" class="alt">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow"><span lang="pt">Dúvidas</span><span lang="en">Questions</span><span lang="es">Preguntas</span></div>
@@ -682,7 +944,7 @@ agy plugin enable whoqol-toolkit</pre></div>
 </section>
 
 <!-- ================================================================ RESPONSIBLE USE -->
-<section class="alt">
+<section>
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow"><span lang="pt">Uso responsável</span><span lang="en">Responsible use</span><span lang="es">Uso responsable</span></div>
