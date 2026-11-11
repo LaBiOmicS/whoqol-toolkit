@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 from . import psychometrics as psy
-from . import scoring
+from . import scoring, sensitivity
 from .analysis import AnalysisResult, summary_dict
 from .i18n import ES_SYMBOL, LANGS, fmt, fmt_p, fmt_r, join_list, p_expr, render_flag, score_label, t
 
@@ -175,6 +175,43 @@ def build_tables(r: AnalysisResult) -> list[tuple[str, pd.DataFrame, str]]:
     return tabs
 
 
+def table_sensitivity(r: AnalysisResult) -> pd.DataFrame | None:
+    """Scoring-rule sensitivity, one row per alternative rule x score (report language)."""
+    lang, inst = r.lang, r.inst
+    rows = []
+    for res in r.extra.get("sensitivity", []):
+        for _, x in res["table"].iterrows():
+            # Report only what changes; facets whose values stay the same (only n differs) are left to results.xlsx.
+            moved = x["n_values_changed"] > 0
+            if not moved and (x["n_alternative"] == x["n_adopted"] or inst.domains[x["score"]].role == "facet"):
+                continue
+            rows.append({
+                t("sens_rule", lang): res["label"][lang],
+                t("sens_score", lang): score_label(x["score"], lang, inst),
+                t("sens_n", lang): f"{x['n_adopted']} → {x['n_alternative']}",
+                t("sens_means", lang): f"{fmt(x['mean_adopted'], 1, lang)} → {fmt(x['mean_alternative'], 1, lang)}",
+                "Δ": fmt(x["delta_mean"], 2, lang),
+                f"Δ/{t('sd', lang)}": fmt(x["delta_sd"], 2, lang),
+                t("sens_maxdiff", lang): fmt(x["max_abs_diff"], 1, lang),
+                t("sens_changed", lang): x["n_values_changed"],
+            })
+    return pd.DataFrame(rows) if rows else None
+
+
+def sensitivity_markdown(r: AnalysisResult) -> list[str]:
+    lang = r.lang
+    parts = [f"## {t('h_sensitivity', lang)}\n"]
+    if not r.extra.get("sensitivity"):
+        return parts + [t("sens_none", lang), ""]
+    tab = table_sensitivity(r)
+    if tab is None:
+        return parts + [t("sens_nochange", lang), ""]
+    parts.append(t("sens_intro", lang) + "\n")
+    for res in r.extra["sensitivity"]:
+        parts.append(f"- **{res['label'][lang]}**: {res['rule'][lang]}.")
+    return parts + ["", _md_table(tab), f"\n*{t('note', lang)}* {t('sens_note', lang)}\n"]
+
+
 # ------------------------------------------------------------------ writers
 def _md_table(df: pd.DataFrame) -> str:
     cols = [str(c) for c in df.columns]
@@ -223,6 +260,7 @@ def markdown_report(r: AnalysisResult, tables) -> str:
         parts += [f"## {t('h_reference', lang)}\n", _md_table(r.reference.round(3)), ""]
     if r.cutoff_table is not None:
         parts += [f"## {t('h_cutoff', lang, c=fmt(r.config.cutoff, 0, lang))}\n", _md_table(r.cutoff_table.round(1)), ""]
+    parts += sensitivity_markdown(r)
     parts.append(f"## {t('h_figures', lang)}\n")
     base = Path(r.extra["output_dir"])
     parts += [f"![]({Path(f).relative_to(base).as_posix()})" for f in r.figures]
@@ -330,6 +368,9 @@ def write_all(r: AnalysisResult) -> dict:
             r.reference.round(4).to_excel(xw, sheet_name="reference", index=False)
         if r.cutoff_table is not None:
             r.cutoff_table.round(2).to_excel(xw, sheet_name="cutoff", index=False)
+        if sens := r.extra.get("sensitivity"):
+            pd.concat([s["table"].assign(alternative=s["code"], rule=s["rule"]["en"]) for s in sens]
+                      ).round(4).to_excel(xw, sheet_name="scoring_sensitivity", index=False)
         q = r.quality
         pd.DataFrame({"item": list(q["pct_missing_by_item"]), "pct_missing": list(q["pct_missing_by_item"].values()),
                       "source_column": [q["mapping_used"].get(i) for i in q["pct_missing_by_item"]]}
@@ -611,6 +652,32 @@ PROSE = {
 }
 
 
+SENS_PROSE = {
+    "pt": {
+        "methods": ("Como análise de sensibilidade, os escores foram recalculados com as regras alternativas "
+                    "documentadas nas fontes ({alts}), comparando as médias e o número de participantes pontuados."),
+        "results": ("Na análise de sensibilidade das regras de pontuação, a maior diferença entre médias foi de {d} "
+                    "pontos, em {score}, com a regra “{alt}”; o número de participantes com escore variou no máximo "
+                    "{dn}, em {score_n}, com a regra “{alt_n}”."),
+    },
+    "en": {
+        "methods": ("As a sensitivity analysis, scores were recomputed with the alternative rules documented in the "
+                    "sources ({alts}), comparing means and the number of participants scored."),
+        "results": ("In the sensitivity analysis of the scoring rules, the largest difference between means was {d} "
+                    "points, in {score}, with the rule “{alt}”; the number of participants with a score changed by at "
+                    "most {dn}, in {score_n}, with the rule “{alt_n}”."),
+    },
+    "es": {
+        "methods": ("Como análisis de sensibilidad, las puntuaciones se recalcularon con las reglas alternativas "
+                    "documentadas en las fuentes ({alts}), comparando las medias y el número de participantes "
+                    "puntuados."),
+        "results": ("En el análisis de sensibilidad de las reglas de puntuación, la mayor diferencia entre medias fue "
+                    "de {d} puntos, en {score}, con la regla “{alt}”; el número de participantes con puntuación varió "
+                    "como máximo {dn}, en {score_n}, con la regla “{alt_n}”."),
+    },
+}
+
+
 def methods_text(r: AnalysisResult, lang: str) -> str:
     P, inst, cfg = PROSE[lang], r.inst, r.config
     v = inst.version_for(r.version_lang)
@@ -638,6 +705,8 @@ def methods_text(r: AnalysisResult, lang: str) -> str:
         s.append(P["reg"].format(covs=", ".join(r.extra["labels"].get(c, c) for c in cfg.covariates)))
     if r.reference is not None and not r.reference.empty:
         s.append(P["ref"])
+    if sens := r.extra.get("sensitivity"):
+        s.append(SENS_PROSE[lang]["methods"].format(alts=join_list([f"“{x['label'][lang]}”" for x in sens], lang)))
     s.append(P["software"])
     return "\n\n".join(s)
 
@@ -682,5 +751,10 @@ def results_text(r: AnalysisResult, lang: str) -> str:
                      f"{ES_SYMBOL.get(row['primary_effect_type'])} = {fmt(row['primary_effect'], 2, lang)})"
                      for _, row in sig.iterrows()]
             s.append(P["diff"].format(name=name, items="; ".join(items)))
+    if mc := sensitivity.max_change(r.extra.get("sensitivity", [])):
+        s.append(SENS_PROSE[lang]["results"].format(
+            d=fmt(mc["d"], 1, lang), score=score_label(mc["d_score"], lang, inst),
+            alt=sensitivity.label_of(mc["d_alt"], lang), dn=mc["dn"], score_n=score_label(mc["dn_score"], lang, inst),
+            alt_n=sensitivity.label_of(mc["dn_alt"], lang)))
     s.append(P["closing"])
     return "\n\n".join(s)

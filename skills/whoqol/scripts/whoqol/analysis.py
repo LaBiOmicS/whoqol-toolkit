@@ -9,7 +9,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from . import figures, quality, scoring, stats
+from . import figures, quality, scoring, sensitivity, stats
 from . import psychometrics as psy
 from .i18n import report_language
 from .instruments import Instrument, get_instrument
@@ -181,7 +181,7 @@ def run(cfg: AnalysisConfig) -> AnalysisResult:
                          fc, rel, ia, mt, mts, ht, cfa_res, rho, pmat, conv, groups, cont, reg, ref, cut)
     res.extra.update(output_dir=str(out), labels=labels, study=meta.get("study", {}),
                      metadata_source=cfg.metadata or ("embedded sheet" if meta else None),
-                     version_detection=detected)
+                     version_detection=detected, sensitivity=sensitivity.run(items, inst))
 
     fig_dir = out / "figures"
     corr_labels = [inst.domain_label(k, lang) for k in inst.reported_domains]
@@ -214,6 +214,7 @@ def interpretive_flags(r: AnalysisResult) -> list[dict]:
         f.append({"code": "small_n", "n": q["n_analyzed"]})
     if r.version_lang is None and r.config.instrument_version == "auto":
         f.append({"code": "version_unknown"})
+    f.extend(sensitivity.flags(r.extra.get("sensitivity", [])))
     for _, row in r.reliability.iterrows():
         a = row["alpha"]
         if np.isnan(a) or row["domain"] == "total":
@@ -309,6 +310,8 @@ def summary_dict(r: AnalysisResult, files: dict | None = None) -> dict:
         "regression": r.regression,
         "reference_comparison": rec(r.reference),
         "cutoff": ({"value": r.config.cutoff, "table": rec(r.cutoff_table)} if r.cutoff_table is not None else None),
+        "scoring_sensitivity": [{"alternative": s["code"], "rule": s["rule"]["en"], "results": rec(s["table"])}
+                                for s in r.extra.get("sensitivity", [])],
         "flags": [{"code": fl["code"], "message": render_flag(fl, "en", r.inst)} for fl in r.flags],
         "study_context": r.extra.get("study", {}),
         "variable_labels": r.extra.get("labels", {}),

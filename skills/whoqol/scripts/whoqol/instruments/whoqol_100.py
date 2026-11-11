@@ -200,6 +200,18 @@ _CONVENTION_100 = {
 }
 _EXTRA_HIV = {"pt": "duas no domínio meio ambiente", "en": "two in the environment domain",
               "es": "dos en el dominio ambiente"}
+_F21_NOTE = {
+    "pt": (" O item F2.1 (energia suficiente para o dia a dia) não foi invertido: {source} o inclui entre os itens "
+           "invertidos, o que contraria a redação positiva do item e a sintaxe do WHOQOL-100 (WHO, 1998)."),
+    "en": (" Item F2.1 (enough energy for everyday life) was not reversed: {source} lists it among the reversed "
+           "items, which contradicts the item's positive wording and the WHOQOL-100 syntax (WHO, 1998)."),
+    "es": (" El ítem F2.1 (energía suficiente para la vida diaria) no se invirtió: {source} lo incluye entre los ítems "
+           "invertidos, lo que contradice la redacción positiva del ítem y la sintaxis del WHOQOL-100 (WHO, 1998)."),
+}
+_UFRGS_HIV = {"pt": "a sintaxe do grupo WHOQOL brasileiro (UFRGS)", "en": "the Brazilian WHOQOL group's (UFRGS) syntax",
+              "es": "la sintaxis del grupo WHOQOL brasileño (UFRGS)"}
+_SRPB_TEXT = {"pt": "o texto de pontuação do WHOQOL-SRPB", "en": "the WHOQOL-SRPB scoring text",
+              "es": "el texto de puntuación del WHOQOL-SRPB"}
 
 WHOQOL_HIV = Instrument(
     key="whoqol-hiv",
@@ -258,8 +270,9 @@ WHOQOL_HIV = Instrument(
                "inclusión social, perdón y culpa, preocupaciones sobre el futuro, muerte y morir), agrupadas en seis "
                "dominios (WHOQOL HIV Group, 2004)"),
     },
-    references=(WHOQOL_GROUP_1998,),
-    methods_note={k: v.format(name="WHOQOL-HIV", extra=_EXTRA_HIV[k]) for k, v in _CONVENTION_100.items()},
+    references=(WHO_MANUAL, WHOQOL_GROUP_1998),
+    methods_note={k: v.format(name="WHOQOL-HIV", extra=_EXTRA_HIV[k]) + _F21_NOTE[k].format(source=_UFRGS_HIV[k])
+                  for k, v in _CONVENTION_100.items()},
     notes=(
         "Reverse coding: the UFRGS syntax reverses every item of the negatively framed facets (F1, F8, F11, F50, "
         "F52, F53, F54) and averages plainly; the toolkit reverses those facets at domain level (24 - facet), as the "
@@ -322,13 +335,16 @@ WHOQOL_100_SRPB = Instrument(
     methods_note={
         "pt": ("O domínio de espiritualidade correspondeu à média da faceta F24 do WHOQOL-100 e das oito facetas do "
                "WHOQOL-SRPB (mínimo de sete facetas válidas, convenção análoga à do domínio meio ambiente); foram "
-               "excluídos questionários com mais de 20% dos 132 itens ausentes."),
+               "excluídos questionários com mais de 20% dos 132 itens ausentes."
+               + _F21_NOTE["pt"].format(source=_SRPB_TEXT["pt"])),
         "en": ("The spirituality domain was the mean of WHOQOL-100 facet F24 and the eight WHOQOL-SRPB facets (at least "
                "seven valid facets, a convention analogous to the environment domain); questionnaires with more than "
-               "20% of the 132 items missing were excluded."),
+               "20% of the 132 items missing were excluded."
+               + _F21_NOTE["en"].format(source=_SRPB_TEXT["en"])),
         "es": ("El dominio de espiritualidad correspondió a la media de la faceta F24 del WHOQOL-100 y de las ocho "
                "facetas del WHOQOL-SRPB (mínimo de siete facetas válidas, convención análoga a la del dominio "
-               "ambiente); se excluyeron los cuestionarios con más del 20% de los 132 ítems faltantes."),
+               "ambiente); se excluyeron los cuestionarios con más del 20% de los 132 ítems faltantes."
+               + _F21_NOTE["es"].format(source=_SRPB_TEXT["es"])),
     },
     notes=(
         "The SRPB scoring text reverses 31 items and averages plainly. Its list includes F1.1-F1.4, F8.1-F8.4 and "

@@ -78,6 +78,7 @@ flowchart LR
 |---|---|
 | **Pontuação** | regras da OMS: Q3, Q4 e Q26 invertidos; domínio = média × 4 (4–20) e 0–100; mínimo de itens válidos por domínio (6/7, 5/6, 2/3, 6/8); exclusão de questionários com menos de 21 itens válidos; faceta global (Q1–Q2) relatada à parte |
 | **Qualidade dos dados** | ausentes por item e no total, respostas não reconhecidas, exclusões, duplicatas, respostas idênticas em todos os itens, efeitos piso/teto |
+| **Sensibilidade da pontuação** | onde as fontes oficiais são omissas ou divergem, os dados são repontuados com cada regra alternativa documentada (por exemplo, a sintaxe da UFRGS) e a mudança nas médias e no n é relatada |
 | **Confiabilidade** | α de Cronbach com IC 95% de Feldt, ω de McDonald, r interitem médio, EPM, MMD95, ½ DP |
 | **Validade** | análise multitraço (r item-domínio corrigido), HTMT, análise fatorial confirmatória (ML: χ², CFI, TLI, RMSEA com IC 90%, SRMR, AVE, CC) e script lavaan pronto para WLSMV |
 | **Comparações** | t de Welch / g de Hedges, Mann-Whitney / r rank-bisserial, ANOVA de Welch / ω² + Games-Howell, Kruskal-Wallis / ε² + Dunn; correção de Holm; escolha automática por Shapiro-Wilk/TLC (relatada) |

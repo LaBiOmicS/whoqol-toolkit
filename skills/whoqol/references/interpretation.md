@@ -39,6 +39,19 @@
 - Identical answers to every item (straight-lining): suggest a sensitivity analysis without them.
 - Floor/ceiling effects > 15% limit the detection of differences and change.
 
+## Scoring conventions (`scoring_sensitivity`)
+- Where the official sources are silent or disagree, the toolkit adopts one rule (instruments.md) and rescores the
+  data with each documented alternative. Read the `sensitivity` flags: a change of ≥ 0.2 SD in a mean or ≥ 5% in the
+  number of scored respondents means the conclusion may depend on the rule. Say so in the limitations.
+- WHOQOL-HIV and WHOQOL-100 + SRPB: the UFRGS syntax (and the SRPB text) reverse F2.1 by mistake. When comparing with
+  Brazilian studies that used it, warn that their energy facet and physical domain are biased downwards; the size
+  of the bias in these data is the `f21_reversed` row.
+- WHOQOL-DIS: the UFRGS and WHO rules give the same 0–100 scores whenever both compute them; they differ only in who
+  gets a score. Raw module scores (sums vs means × 4) are not comparable across studies; use 0–100.
+- EUROHIS-QOL 8: the sum (8–40) is 8 × the UFRGS mean (1–5); convert before comparing with published values.
+- WHOQOL-BREF-ID (3-point items): 0–100 domain scores are not equivalent to those of the five-point BREF; do not
+  compare them with BREF norms.
+
 ## Wording
 - Avoid "quality of life was good/poor" without a reference; prefer "scores below the normative values of X" or
   "the Y domain had the lowest scores".

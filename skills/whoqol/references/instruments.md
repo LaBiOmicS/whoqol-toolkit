@@ -101,6 +101,17 @@ reproduced. *Convention:* the syntax states no missing-data rule; the WHOQOL-100
 **WHOQOL-100 + SRPB** — WHO SRPB scoring: domain VI = mean of F24 and the eight SRPB facets. *Divergence:* that text
 reverses F2.1 (error, not reproduced). *Convention:* domain VI needs 7 of 9 facets; ≥ 106 of 132 valid items.
 
+## Sensitivity to the conventions
+
+Every analysis rescores the data with the documented alternative of each convention above and reports the change in
+means and in the number of scored respondents (report.md section, `scoring_sensitivity` sheet and JSON key; flag
+when a mean moves ≥ 0.2 SD or n ≥ 5%). Alternatives: WHOQOL-HIV-BREF and WHOQOL-HIV, the syntax without a
+missing-data rule; WHOQOL-HIV, F2.1 reversed (UFRGS); WHOQOL-100, two missing items per facet (manual prose);
+WHOQOL-SRPB, all four items per facet (SRPB instructions); WHOQOL-SRPB BREF, no questionnaire exclusion;
+WHOQOL-100 + SRPB, F2.1 reversed (SRPB text) and domain VI without a facet minimum; WHOQOL-DIS (all forms), the
+UFRGS module rules and no questionnaire exclusion. The WHOQOL-BREF, WHOQOL-OLD, EUROHIS-QOL 8 (whose UFRGS mean is
+the sum / 8) and the four-domain WHOQOL-100 scores follow their official source and have no alternative.
+
 ## Psychometrics on the long forms
 
 Reliability, multitrait scaling and HTMT use the item-based scores (facets of the WHOQOL-100/HIV; with items of

@@ -78,6 +78,7 @@ flowchart LR
 |---|---|
 | **Scoring** | WHO rules: Q3, Q4 and Q26 reversed; domain = mean × 4 (4–20) and 0–100; minimum valid items per domain (6/7, 5/6, 2/3, 6/8); questionnaires with fewer than 21 valid items excluded; global facet (Q1–Q2) reported separately |
 | **Data quality** | missingness per item and overall, unrecognised answers, exclusions, duplicates, straight-lining, floor/ceiling effects |
+| **Scoring sensitivity** | where the official sources are silent or disagree, the data are rescored with each documented alternative rule (e.g. the UFRGS syntax) and the change in means and n is reported |
 | **Reliability** | Cronbach's α with Feldt 95% CI, McDonald's ω, mean inter-item r, SEM, MDC95, ½ SD |
 | **Validity** | multitrait scaling (corrected item–domain r), HTMT, confirmatory factor analysis (ML: χ², CFI, TLI, RMSEA with 90% CI, SRMR, AVE, CR) and a ready lavaan script for WLSMV |
 | **Comparisons** | Welch t / Hedges g, Mann-Whitney / rank-biserial r, Welch ANOVA / ω² + Games-Howell, Kruskal-Wallis / ε² + Dunn; Holm correction; automatic choice by Shapiro-Wilk/CLT (reported) |

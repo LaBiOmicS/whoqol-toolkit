@@ -206,6 +206,48 @@ T: dict[str, dict[str, str]] = {
                        "es": "Correlaciones de Spearman entre puntuaciones"},
     "fig_group_title": {"pt": "Escores por {name}", "en": "Scores by {name}", "es": "Puntuaciones según {name}"},
     "fig_mean_ci": {"pt": "Média (IC 95%)", "en": "Mean (95% CI)", "es": "Media (IC 95%)"},
+    "h_sensitivity": {"pt": "Análise de sensibilidade das regras de pontuação",
+                      "en": "Sensitivity of the results to the scoring rules",
+                      "es": "Análisis de sensibilidad de las reglas de puntuación"},
+    "sens_intro": {
+        "pt": ("Onde o manual ou a sintaxe oficial são omissos ou divergem, o toolkit adota uma regra (descrita nos "
+               "métodos). Aqui os mesmos dados são pontuados com cada regra alternativa documentada. Escores 0–100; "
+               "Δ = média alternativa − média adotada; as diferenças por pessoa usam só quem tem escore pelas duas "
+               "regras. Alertas quando |Δ| ≥ 0,2 DP ou quando o número de escores muda 5% ou mais."),
+        "en": ("Where the official manual or syntax is silent or inconsistent, the toolkit adopts one rule (stated in the "
+               "methods). Here the same data are scored with each documented alternative rule. Scores 0–100; Δ = "
+               "alternative mean − adopted mean; per-person differences use respondents scored by both rules. Flagged "
+               "when |Δ| ≥ 0.2 SD or when the number of scores changes by 5% or more."),
+        "es": ("Donde el manual o la sintaxis oficial no dicen nada o difieren, el toolkit adopta una regla (descrita en "
+               "los métodos). Aquí los mismos datos se puntúan con cada regla alternativa documentada. Puntuaciones "
+               "0–100; Δ = media alternativa − media adoptada; las diferencias por persona usan solo a quienes tienen "
+               "puntuación con ambas reglas. Alertas cuando |Δ| ≥ 0,2 DE o cuando el número de puntuaciones cambia un "
+               "5% o más.")},
+    "sens_none": {
+        "pt": "A pontuação deste instrumento segue integralmente a fonte oficial: não há regra alternativa a comparar.",
+        "en": "This instrument is scored entirely by its official source: there is no alternative rule to compare.",
+        "es": "Este instrumento se puntúa íntegramente según su fuente oficial: no hay regla alternativa que comparar."},
+    "sens_nochange": {
+        "pt": "Nenhum escore mudou com as regras alternativas nestes dados.",
+        "en": "No score changed under the alternative rules in these data.",
+        "es": "Ninguna puntuación cambió con las reglas alternativas en estos datos."},
+    "sens_note": {
+        "pt": ("Só aparecem os escores que mudam; facetas cujo valor não muda (só o n) e a tabela completa estão na "
+               "aba scoring_sensitivity de results.xlsx."),
+        "en": ("Only scores that change are shown; facets whose value does not change (only n does) and the full table "
+               "are in the scoring_sensitivity sheet of results.xlsx."),
+        "es": ("Solo aparecen las puntuaciones que cambian; las facetas cuyo valor no cambia (solo el n) y la tabla "
+               "completa están en la hoja scoring_sensitivity de results.xlsx.")},
+    "sens_rule": {"pt": "Regra alternativa", "en": "Alternative rule", "es": "Regla alternativa"},
+    "sens_score": {"pt": "Escore", "en": "Score", "es": "Puntuación"},
+    "sens_n": {"pt": "n (adotada → alternativa)", "en": "n (adopted → alternative)",
+               "es": "n (adoptada → alternativa)"},
+    "sens_means": {"pt": "Média (adotada → alternativa)", "en": "Mean (adopted → alternative)",
+                   "es": "Media (adoptada → alternativa)"},
+    "sens_maxdiff": {"pt": "Máx. dif. absoluta por pessoa", "en": "Max. absolute diff. per person",
+                     "es": "Máx. dif. absoluta por persona"},
+    "sens_changed": {"pt": "Pessoas com valor alterado", "en": "People with a changed value",
+                     "es": "Personas con valor alterado"},
 }
 
 
@@ -303,6 +345,13 @@ FLAGS: dict[str, dict[str, str]] = {
         "pt": "Grupos de '{name}' com n < 3 excluídos: {groups}.",
         "en": "Groups of '{name}' with n < 3 excluded: {groups}.",
         "es": "Grupos de '{name}' con n < 3 excluidos: {groups}."},
+    "sensitivity": {
+        "pt": "Com a regra alternativa \"{alt}\", {score} muda {d} pontos na média (n {n1} → {n2}): veja a análise de "
+              "sensibilidade antes de interpretar.",
+        "en": "With the alternative rule \"{alt}\", {score} changes by {d} points on average (n {n1} → {n2}): see the "
+              "sensitivity analysis before interpreting.",
+        "es": "Con la regla alternativa \"{alt}\", {score} cambia {d} puntos en la media (n {n1} → {n2}): vea el "
+              "análisis de sensibilidad antes de interpretar."},
     "version_unknown": {
         "pt": "Não foi possível identificar a versão linguística do questionário; informe 'instrument_version' "
               "para citar a validação correta no texto de métodos.",
@@ -336,6 +385,11 @@ def render_flag(flag: dict, lang: str, inst) -> str:
             p[k] = fmt_r(p[k], lang, 3 if k != "a" else 2)
     if "v" in p:
         p["v"] = fmt(p["v"], 2, lang)
+    if "d" in p:
+        p["d"] = fmt(p["d"], 1, lang)
+    if "alt" in p:
+        from .sensitivity import label_of
+        p["alt"] = label_of(p["alt"], lang)
     if "p" in p:
         p["p"] = p_expr(p["p"], lang)
     if "test" in p:

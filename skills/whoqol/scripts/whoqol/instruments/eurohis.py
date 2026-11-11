@@ -60,6 +60,18 @@ EUROHIS_QOL_8 = Instrument(
                "de cinco puntos y sumados en una puntuación única (Schmidt et al., 2006)"),
     },
     references=(),
+    methods_note={
+        "pt": ("O índice correspondeu à soma dos oito itens (8–40; Schmidt et al., 2006), transformada para 0–100; a "
+               "sintaxe do grupo WHOQOL brasileiro (UFRGS) relata a média dos itens (1–5), que equivale à soma "
+               "dividida por oito. Como não há regra publicada para dados ausentes, os oito itens foram exigidos."),
+        "en": ("The index was the sum of the eight items (8–40; Schmidt et al., 2006), transformed to 0–100; the "
+               "Brazilian WHOQOL group's (UFRGS) syntax reports the item mean (1–5), which equals the sum divided by "
+               "eight. As no missing-data rule is published, all eight items were required."),
+        "es": ("El índice correspondió a la suma de los ocho ítems (8–40; Schmidt et al., 2006), transformada a "
+               "0–100; la sintaxis del grupo WHOQOL brasileño (UFRGS) informa la media de los ítems (1–5), que equivale "
+               "a la suma dividida entre ocho. Como no hay una regla publicada para datos faltantes, se exigieron los "
+               "ocho ítems."),
+    },
     notes=(
         "Score = sum of the eight items (8-40; Schmidt et al., 2006), also given on 0-100. The UFRGS syntax reports "
         "the mean of the eight items (1-5) = sum / 8 (its formula prints 'Q5-Q6', a typo for 'Q5+Q6').",

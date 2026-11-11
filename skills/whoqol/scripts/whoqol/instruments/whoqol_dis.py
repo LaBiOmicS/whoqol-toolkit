@@ -122,13 +122,19 @@ _COMMON_NOTES = (
 _METHODS_NOTE = {
     "pt": ("As facetas do módulo de incapacidades corresponderam à soma de seus itens (todos exigidos) e o escore total "
            "do módulo à média dos 12 itens multiplicada por 12 (mínimo de dez itens); foram excluídos questionários "
-           "com mais de 20% dos 39 itens ausentes."),
+           "com mais de 20% dos 39 itens ausentes. A pontuação seguiu o manual da OMS (2011); a sintaxe do grupo "
+           "WHOQOL brasileiro (UFRGS) calcula as facetas como média × 4, imputando até um item ausente por faceta, o "
+           "que dá os mesmos escores 0–100 quando todos os itens são respondidos."),
     "en": ("Disabilities-module facets were the sum of their items (all required) and the module total the mean of the "
            "12 items multiplied by 12 (at least ten valid); questionnaires with more than 20% of the 39 items missing "
-           "were excluded."),
+           "were excluded. Scoring followed the WHO manual (2011); the Brazilian WHOQOL group's (UFRGS) syntax "
+           "computes facets as mean × 4, imputing up to one missing item per facet, which gives the same 0–100 scores "
+           "when every item is answered."),
     "es": ("Las facetas del módulo de discapacidades correspondieron a la suma de sus ítems (todos exigidos) y la "
            "puntuación total del módulo a la media de los 12 ítems multiplicada por 12 (mínimo de diez); se excluyeron "
-           "los cuestionarios con más del 20% de los 39 ítems faltantes."),
+           "los cuestionarios con más del 20% de los 39 ítems faltantes. La puntuación siguió el manual de la OMS "
+           "(2011); la sintaxis del grupo WHOQOL brasileño (UFRGS) calcula las facetas como media × 4, imputando hasta un "
+           "ítem faltante por faceta, lo que da las mismas puntuaciones 0–100 cuando se responden todos los ítems."),
 }
 
 WHOQOL_DIS = Instrument(

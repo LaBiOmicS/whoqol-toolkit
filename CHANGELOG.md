@@ -7,6 +7,14 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 ## [Não lançado]
 
 ### Adicionado
+- Análise de sensibilidade das regras de pontuação: onde o manual ou a sintaxe oficial são omissos ou divergem, os
+  dados são repontuados com cada regra alternativa documentada (sintaxe da UFRGS, texto do manual, ausência de regra)
+  e o relatório mostra a mudança nas médias e no número de participantes pontuados (seção do `report.md`, aba
+  `scoring_sensitivity` do `results.xlsx`, chave `scoring_sensitivity` do `results.json`, frases nos textos de
+  métodos e resultados). Alerta quando uma média muda ≥ 0,2 DP ou o n muda ≥ 5%.
+- Notas de métodos que declaravam só no guia de pontuação as divergências entre fontes: EUROHIS-QOL 8 (soma, e não a
+  média da sintaxe da UFRGS; oito itens exigidos), WHOQOL-HIV e WHOQOL-100 + SRPB (F2.1 não invertido) e WHOQOL-DIS
+  (manual da OMS, não a sintaxe brasileira).
 - Página do projeto: seção "Instrumentos" (PT/EN/ES) com a definição de qualidade de vida da OMS, a importância dos
   instrumentos, tabela comparativa (quando usar cada um), explicação do cálculo do escore com exemplo trabalhado e
   ficha de cada questionário (estrutura, regra de pontuação, pontos de atenção e versões validadas).
