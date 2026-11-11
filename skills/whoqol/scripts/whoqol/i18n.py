@@ -178,7 +178,7 @@ T: dict[str, dict[str, str]] = {
     "excluded": {"pt": "Excluídos (< {m} itens válidos)", "en": "Excluded (< {m} valid items)",
                  "es": "Excluidos (< {m} ítems válidos)"},
     "analysed": {"pt": "Analisados", "en": "Analysed", "es": "Analizados"},
-    "missing_overall": {"pt": "Ausência global", "en": "Overall missingness", "es": "Datos faltantes globales"},
+    "missing_overall": {"pt": "Dados ausentes (total)", "en": "Missing data (overall)", "es": "Datos faltantes (total)"},
     "detected_version": {"pt": "Versão detectada", "en": "Detected version", "es": "Versión detectada"},
     "h_flags": {"pt": "Alertas para interpretação", "en": "Interpretation flags", "es": "Alertas para la interpretación"},
     "h_posthoc": {"pt": "Comparações post hoc — {name}", "en": "Post hoc comparisons — {name}",
@@ -223,10 +223,6 @@ T: dict[str, dict[str, str]] = {
                "0–100; Δ = media alternativa − media adoptada; las diferencias por persona usan solo a quienes tienen "
                "puntuación con ambas reglas. Alertas cuando |Δ| ≥ 0,2 DE o cuando el número de puntuaciones cambia un "
                "5% o más.")},
-    "sens_none": {
-        "pt": "A pontuação deste instrumento segue integralmente a fonte oficial: não há regra alternativa a comparar.",
-        "en": "This instrument is scored entirely by its official source: there is no alternative rule to compare.",
-        "es": "Este instrumento se puntúa íntegramente según su fuente oficial: no hay regla alternativa que comparar."},
     "sens_nochange": {
         "pt": "Nenhum escore mudou com as regras alternativas nestes dados.",
         "en": "No score changed under the alternative rules in these data.",
@@ -248,6 +244,143 @@ T: dict[str, dict[str, str]] = {
                      "es": "Máx. dif. absoluta por persona"},
     "sens_changed": {"pt": "Pessoas com valor alterado", "en": "People with a changed value",
                      "es": "Personas con valor alterado"},
+    # plain-language summary and reading aids (Markdown report)
+    "h_summary": {"pt": "Em resumo", "en": "In brief", "es": "En resumen"},
+    "sum_n": {"pt": "Foram analisados {n} de {rows} questionários", "en": "{n} of {rows} questionnaires were analysed",
+              "es": "Se analizaron {n} de {rows} cuestionarios"},
+    "sum_n_exc": {"pt": " ({exc} excluídos por terem menos de {m} itens respondidos)",
+                  "en": " ({exc} excluded for having fewer than {m} answered items)",
+                  "es": " ({exc} excluidos por tener menos de {m} ítems respondidos)"},
+    "sum_n_exc1": {"pt": " (1 excluído por ter menos de {m} itens respondidos)",
+                   "en": " (1 excluded for having fewer than {m} answered items)",
+                   "es": " (1 excluido por tener menos de {m} ítems respondidos)"},
+    "sum_profile": {"pt": "Na escala de 0 a 100 (quanto maior, melhor a qualidade de vida), as médias dos domínios "
+                          "ficaram entre {lo} ({lo_lab}) e {hi} ({hi_lab}).",
+                    "en": "On the 0–100 scale (higher means better quality of life), the domain means ranged from "
+                          "{lo} ({lo_lab}) to {hi} ({hi_lab}).",
+                    "es": "En la escala de 0 a 100 (cuanto mayor, mejor calidad de vida), las medias de los dominios "
+                          "estuvieron entre {lo} ({lo_lab}) y {hi} ({hi_lab})."},
+    "sum_similar": {"pt": " A diferença entre eles ({d} pontos) é menor que meio desvio-padrão: nenhum domínio se "
+                          "destaca dos demais.",
+                    "en": " The gap between them ({d} points) is under half a standard deviation: no domain stands out "
+                          "from the others.",
+                    "es": " La diferencia entre ellos ({d} puntos) es menor que media desviación estándar: ningún "
+                          "dominio se destaca de los demás."},
+    "sum_apart": {"pt": " A diferença entre eles ({d} pontos) passa de meio desvio-padrão, o que pode ter relevância "
+                        "prática.",
+                  "en": " The gap between them ({d} points) exceeds half a standard deviation, which may matter in "
+                        "practice.",
+                  "es": " La diferencia entre ellos ({d} puntos) supera media desviación estándar, lo que puede tener "
+                        "relevancia práctica."},
+    "sum_norms": {"pt": "A OMS não define pontos de corte: para dizer se esses valores são altos ou baixos, compare-os "
+                        "com valores normativos publicados para uma população semelhante.",
+                  "en": "The WHO defines no cut-offs: to say whether these values are high or low, compare them with "
+                        "published normative values for a similar population.",
+                  "es": "La OMS no define puntos de corte: para saber si estos valores son altos o bajos, compárelos "
+                        "con valores normativos publicados para una población similar."},
+    "sum_alpha_ok": {"pt": "A consistência interna foi adequada em todos os domínios (α ≥ 0,70).",
+                     "en": "Internal consistency was adequate in every domain (α ≥ .70).",
+                     "es": "La consistencia interna fue adecuada en todos los dominios (α ≥ 0,70)."},
+    "sum_alpha_low": {"pt": "A consistência interna ficou abaixo de 0,70 em {doms}; interprete esses escores com "
+                            "cautela.",
+                      "en": "Internal consistency was below .70 in {doms}; interpret these scores with caution.",
+                      "es": "La consistencia interna quedó por debajo de 0,70 en {doms}; interprete estas puntuaciones "
+                            "con cautela."},
+    "sum_alpha_many": {"pt": "A consistência interna ficou abaixo de 0,70 em {k} de {n} escalas (veja a Tabela 2); "
+                             "interprete esses escores com cautela.",
+                       "en": "Internal consistency was below .70 in {k} of {n} scales (see Table 2); interpret these "
+                             "scores with caution.",
+                       "es": "La consistencia interna quedó por debajo de 0,70 en {k} de {n} escalas (vea la Tabla 2); "
+                             "interprete estas puntuaciones con cautela."},
+    "sum_single": {"pt": "Na escala de 0 a 100 (quanto maior, melhor a qualidade de vida), o escore médio ({lab}) foi {m}.",
+                   "en": "On the 0–100 scale (higher means better quality of life), the mean score ({lab}) was {m}.",
+                   "es": "En la escala de 0 a 100 (cuanto mayor, mejor calidad de vida), la puntuación media ({lab}) fue {m}."},
+    "sum_fc_none": {"pt": "Não houve efeito piso nem teto (poucas pessoas no mínimo ou no máximo da escala).",
+                    "en": "There were no floor or ceiling effects (few people at the scale minimum or maximum).",
+                    "es": "No hubo efecto suelo ni techo (pocas personas en el mínimo o el máximo de la escala)."},
+    "sum_fc": {"pt": "Muitas pessoas no mínimo ou no máximo da escala (efeito piso/teto) em {scores}: o escore pode "
+                     "não captar diferenças nesses extremos.",
+               "en": "Many people at the scale minimum or maximum (floor/ceiling effect) in {scores}: the score may "
+                     "miss differences at those extremes.",
+               "es": "Muchas personas en el mínimo o el máximo de la escala (efecto suelo/techo) en {scores}: la "
+                     "puntuación puede no captar diferencias en esos extremos."},
+    "sum_group_none": {"pt": "Comparação por {name}: sem diferenças significativas após a correção de Holm.",
+                       "en": "Comparison by {name}: no significant differences after Holm correction.",
+                       "es": "Comparación según {name}: sin diferencias significativas tras la corrección de Holm."},
+    "sum_group": {"pt": "Comparação por {name}: diferença significativa em {scores} (efeito {mags}).",
+                  "en": "Comparison by {name}: significant difference in {scores} ({mags} effect).",
+                  "es": "Comparación según {name}: diferencia significativa en {scores} (efecto {mags})."},
+    "sum_flags": {"pt": "Leia os {k} alertas abaixo antes de interpretar os resultados.",
+                  "en": "Read the {k} flags below before interpreting the results.",
+                  "es": "Lea las {k} alertas de abajo antes de interpretar los resultados."},
+    "sum_flags1": {"pt": "Leia o alerta abaixo antes de interpretar os resultados.",
+                   "en": "Read the flag below before interpreting the results.",
+                   "es": "Lea la alerta de abajo antes de interpretar los resultados."},
+    "howto": {"pt": "Como ler.", "en": "How to read.", "es": "Cómo leer."},
+    "howto_desc": {"pt": "Escala 0–100: quanto maior, melhor. O IC 95% é a faixa provável da média na população "
+                         "estudada. A coluna {raw} repete a média na escala original do instrumento, útil para comparar "
+                         "com estudos que a relatam assim. α e ω ≥ 0,70 indicam que os itens do domínio medem a mesma "
+                         "coisa de forma consistente.",
+                   "en": "0–100 scale: higher is better. The 95% CI is the likely range of the mean in the population "
+                         "studied. The {raw} column repeats the mean on the instrument's original scale, useful for "
+                         "comparing with studies that report it that way. α and ω ≥ .70 mean the domain's items "
+                         "measure the same thing consistently.",
+                   "es": "Escala 0–100: cuanto mayor, mejor. El IC 95% es el rango probable de la media en la población "
+                         "estudiada. La columna {raw} repite la media en la escala original del instrumento, útil para "
+                         "comparar con estudios que la informan así. α y ω ≥ 0,70 indican que los ítems del dominio "
+                         "miden lo mismo de forma consistente."},
+    "howto_rel": {"pt": "EPM é o erro típico do escore de uma pessoa. MMD95 é a menor mudança individual que supera o "
+                        "erro de medida: no domínio {dom}, mudanças menores que {mdc} pontos podem ser só erro. ½ DP ({hs} "
+                        "pontos no domínio {dom}) é uma referência para diferenças médias entre grupos ou momentos que tendem a "
+                        "ser perceptíveis. r̄ interitem é a correlação média entre os itens do domínio.",
+                  "en": "SEM is the typical error of one person's score. MDC95 is the smallest individual change that "
+                        "exceeds measurement error: in the {dom} domain, changes under {mdc} points may be error alone. ½ SD ({hs} "
+                        "points in the {dom} domain) is a benchmark for mean differences between groups or time points that tend "
+                        "to be noticeable. Mean inter-item r is the average correlation among the domain's items.",
+                  "es": "EEM es el error típico de la puntuación de una persona. CMD95 es el menor cambio individual que "
+                        "supera el error de medida: en el dominio {dom}, cambios menores que {mdc} puntos pueden ser solo error. "
+                        "½ DE ({hs} puntos en el dominio {dom}) es una referencia para diferencias medias entre grupos o momentos "
+                        "que suelen ser perceptibles. r̄ interítem es la correlación media entre los ítems del dominio."},
+    "howto_corr": {"pt": "ρ indica quanto dois escores variam juntos (0 = nenhuma relação; 1 = relação perfeita). Como "
+                         "referência, 0,10, 0,30 e 0,50 correspondem a associações fraca, moderada e forte (Cohen, 1988).",
+                   "en": "ρ shows how closely two scores move together (0 = no relation; 1 = perfect relation). As a "
+                         "benchmark, .10, .30 and .50 correspond to weak, moderate and strong associations (Cohen, 1988).",
+                   "es": "ρ indica cuánto varían juntas dos puntuaciones (0 = ninguna relación; 1 = relación perfecta). "
+                         "Como referencia, 0,10, 0,30 y 0,50 corresponden a asociaciones débil, moderada y fuerte "
+                         "(Cohen, 1988)."},
+    "howto_cfa": {"pt": "Verifica se os itens se agrupam nos domínios previstos. CFI e TLI próximos de 1 e RMSEA e SRMR "
+                        "próximos de 0 indicam bom ajuste; os limites estão na nota.",
+                  "en": "Checks whether the items group into the expected domains. CFI and TLI near 1 and RMSEA and "
+                        "SRMR near 0 indicate good fit; the thresholds are in the note.",
+                  "es": "Verifica si los ítems se agrupan en los dominios previstos. CFI y TLI cercanos a 1 y RMSEA y "
+                        "SRMR cercanos a 0 indican buen ajuste; los límites están en la nota."},
+    "howto_group": {"pt": "p (Holm) < 0,05 indica uma diferença pouco provável de ser obra do acaso; o tamanho de efeito "
+                          "diz se ela é grande o bastante para importar na prática.",
+                    "en": "p (Holm) < .05 marks a difference unlikely to be due to chance; the effect size tells whether "
+                          "it is large enough to matter in practice.",
+                    "es": "p (Holm) < 0,05 indica una diferencia poco probable por azar; el tamaño del efecto dice si es "
+                          "lo bastante grande para importar en la práctica."},
+    "h_validity": {"pt": "Validade de constructo", "en": "Construct validity", "es": "Validez de constructo"},
+    "val_mt": {"pt": "Análise multitraço ({n} questionários completos): {pct}% dos itens correlacionaram mais com o "
+                     "próprio domínio do que com os demais (ideal: 100%). Itens com correlação corrigida < 0,40 com o "
+                     "próprio domínio: {low}.",
+               "en": "Multitrait scaling ({n} complete questionnaires): {pct}% of the items correlated more with their "
+                     "own domain than with the others (ideal: 100%). Items with corrected correlation < .40 with their "
+                     "own domain: {low}.",
+               "es": "Análisis multirrasgo ({n} cuestionarios completos): el {pct}% de los ítems correlacionó más con su "
+                     "propio dominio que con los demás (ideal: 100%). Ítems con correlación corregida < 0,40 con su "
+                     "propio dominio: {low}."},
+    "val_htmt": {"pt": "HTMT máximo: {v}, entre {a} e {b}. Valores < 0,85 indicam que os domínios medem aspectos "
+                       "distintos (Henseler et al., 2015). A matriz completa está na aba htmt de results.xlsx.",
+                 "en": "Highest HTMT: {v}, between {a} and {b}. Values < .85 indicate that the domains measure distinct "
+                       "aspects (Henseler et al., 2015). The full matrix is in the htmt sheet of results.xlsx.",
+                 "es": "HTMT máximo: {v}, entre {a} y {b}. Valores < 0,85 indican que los dominios miden aspectos "
+                       "distintos (Henseler et al., 2015). La matriz completa está en la hoja htmt de results.xlsx."},
+    "none": {"pt": "nenhum", "en": "none", "es": "ninguno"},
+    "fig_corr_caption": {"pt": "Correlações de Spearman entre os escores (cores mais intensas, associação mais forte)",
+                         "en": "Spearman correlations between scores (stronger colours, stronger association)",
+                         "es": "Correlaciones de Spearman entre las puntuaciones (colores más intensos, asociación más "
+                               "fuerte)"},
 }
 
 
@@ -260,11 +393,11 @@ def t(key: str, lang: str, **kw) -> str:
 # Flags are produced as {"code": ..., **params} by analysis.py and rendered here.
 FLAGS: dict[str, dict[str, str]] = {
     "excluded": {
-        "pt": "{n} questionário(s) excluído(s) por terem menos de {m} itens válidos (regra da OMS).",
-        "en": "{n} questionnaire(s) excluded for having fewer than {m} valid items (WHO rule).",
-        "es": "{n} cuestionario(s) excluido(s) por tener menos de {m} ítems válidos (regla de la OMS)."},
+        "pt": "{n} questionários excluídos por terem menos de {m} itens válidos (regra da OMS).",
+        "en": "{n} questionnaires excluded for having fewer than {m} valid items (WHO rule).",
+        "es": "{n} cuestionarios excluidos por tener menos de {m} ítems válidos (regla de la OMS)."},
     "items_missing": {
-        "pt": "Itens com mais de 5% de ausência: {items}.",
+        "pt": "Itens com mais de 5% de dados ausentes: {items}.",
         "en": "Items with more than 5% missing: {items}.",
         "es": "Ítems con más del 5% de datos faltantes: {items}."},
     "unrecognized": {
@@ -272,16 +405,16 @@ FLAGS: dict[str, dict[str, str]] = {
         "en": "Some answers were not recognized and were treated as missing: check 'unrecognized_values'.",
         "es": "Hay respuestas no reconocidas, tratadas como faltantes: revise 'unrecognized_values'."},
     "straightlining": {
-        "pt": "{n} respondente(s) com a mesma resposta em todos os itens (possível resposta descuidada; "
+        "pt": "{n} respondentes deram a mesma resposta em todos os itens (possível resposta descuidada; "
               "considere análise de sensibilidade).",
-        "en": "{n} respondent(s) gave the same answer to every item (possible careless responding; "
+        "en": "{n} respondents gave the same answer to every item (possible careless responding; "
               "consider a sensitivity analysis).",
-        "es": "{n} encuestado(s) con la misma respuesta en todos los ítems (posible respuesta descuidada; "
+        "es": "{n} encuestados dieron la misma respuesta en todos los ítems (posible respuesta descuidada; "
               "considere un análisis de sensibilidad)."},
     "duplicates": {
-        "pt": "{n} linha(s) com padrão de resposta idêntico a outra (verificar envio duplicado).",
-        "en": "{n} row(s) with a response pattern identical to another row (check for duplicate submissions).",
-        "es": "{n} fila(s) con un patrón de respuesta idéntico a otra (verificar envíos duplicados)."},
+        "pt": "{n} linhas com padrão de resposta idêntico a outra (verificar envio duplicado).",
+        "en": "{n} rows with a response pattern identical to another row (check for duplicate submissions).",
+        "es": "{n} filas con un patrón de respuesta idéntico a otra (verificar envíos duplicados)."},
     "small_n": {
         "pt": "Amostra pequena (n = {n}): estimativas imprecisas; priorize os intervalos de confiança.",
         "en": "Small sample (n = {n}): imprecise estimates; focus on the confidence intervals.",
@@ -362,8 +495,35 @@ FLAGS: dict[str, dict[str, str]] = {
 }
 
 
+FLAGS_ONE: dict[str, dict[str, str]] = {
+    "excluded": {
+        "pt": "1 questionário excluído por ter menos de {m} itens válidos (regra da OMS).",
+        "en": "1 questionnaire excluded for having fewer than {m} valid items (WHO rule).",
+        "es": "1 cuestionario excluido por tener menos de {m} ítems válidos (regla de la OMS)."},
+    "straightlining": {
+        "pt": "1 respondente deu a mesma resposta em todos os itens (possível resposta descuidada; "
+              "considere análise de sensibilidade).",
+        "en": "1 respondent gave the same answer to every item (possible careless responding; "
+              "consider a sensitivity analysis).",
+        "es": "1 encuestado dio la misma respuesta en todos los ítems (posible respuesta descuidada; "
+              "considere un análisis de sensibilidad)."},
+    "duplicates": {
+        "pt": "1 linha com padrão de resposta idêntico a outra (verificar envio duplicado).",
+        "en": "1 row with a response pattern identical to another row (check for duplicate submissions).",
+        "es": "1 fila con un patrón de respuesta idéntico a otra (verificar envíos duplicados)."},
+}
+
+
 ES_SYMBOL = {"hedges_g": "g", "rank_biserial_r": "r_rb", "omega2": "ω²", "epsilon2": "ε²",
              "cohen_d": "d", "spearman_rho": "ρ"}
+
+
+def lower_label(label: str, lang: str) -> str:
+    """Label for use mid-sentence: lower case in Portuguese/Spanish, keeping acronyms and codes (QV, Q1–Q2, F2.1)."""
+    if lang == "en":
+        return label
+    return " ".join(w if sum(c.isupper() for c in w) > 1 or any(c.isdigit() for c in w) else w.lower()
+                    for w in label.split(" "))
 
 
 def score_label(key_or_col: str, lang: str, inst) -> str:
@@ -375,7 +535,8 @@ def score_label(key_or_col: str, lang: str, inst) -> str:
 
 def render_flag(flag: dict, lang: str, inst) -> str:
     """Localizes a flag {code, **params}: domain keys -> labels, numbers -> local format, codes -> words."""
-    tpl = FLAGS[flag["code"]].get(lang) or FLAGS[flag["code"]][FALLBACK]
+    table = FLAGS_ONE if flag.get("n") == 1 and flag["code"] in FLAGS_ONE else FLAGS
+    tpl = table[flag["code"]].get(lang) or table[flag["code"]][FALLBACK]
     p = {k: v for k, v in flag.items() if k != "code"}
     for k in ("domain", "score"):
         if k in p:

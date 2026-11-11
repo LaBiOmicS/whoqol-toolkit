@@ -21,6 +21,27 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 - Página do projeto: seção "Instrumentos" (PT/EN/ES) com a definição de qualidade de vida da OMS, a importância dos
   instrumentos, tabela comparativa (quando usar cada um), explicação do cálculo do escore com exemplo trabalhado e
   ficha de cada questionário (estrutura, regra de pontuação, pontos de atenção e versões validadas).
+- Relatório (`report.md`) mais fácil de ler para quem não é da psicometria: seção "Em resumo" em linguagem simples
+  no início (amostra, perfil dos domínios, lembrete sobre normas, consistência interna, piso/teto, comparações e
+  número de alertas), notas "Como ler" sob cada tabela (com exemplo de MMD95 e ½ DP tirado dos dados), seção
+  "Validade de constructo" (multitraço e HTMT, já descritos nos métodos) e figuras com número e legenda, também no
+  `tables.docx`.
+
+### Alterado
+- Texto de resultados: lista a média de todos os domínios e só aponta o maior e o menor quando a diferença passa de
+  meio DP (Norman et al., 2003); antes elegia um "mais alto" mesmo com médias praticamente iguais. Frase própria
+  quando nenhum questionário é excluído, e frase sobre multitraço e HTMT.
+- Alertas no singular ou no plural conforme a contagem, sem "(s)"; "Ausência global" passou a "Dados ausentes
+  (total)".
+- A seção de sensibilidade das regras de pontuação só aparece quando o instrumento tem regra alternativa.
+- Página do projeto: o título da seção de saídas passou de "Pronto para colar no manuscrito" a "Um ponto de partida
+  para o manuscrito", com a lembrança de que a interpretação e o texto final são responsabilidade dos autores.
+
+### Corrigido
+- Siglas e códigos em minúsculas no meio das frases dos textos de métodos e resultados ("qv geral e saúde
+  (q1–q2)"); agora "QV geral e saúde (Q1–Q2)".
+- Seção de multitraço não aparece quando não há questionários completos para calculá-la; matriz HTMT vazia não
+  interrompe a geração do relatório.
 
 ## [0.3.0] — 2026-11-11
 

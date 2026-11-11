@@ -75,3 +75,26 @@ def test_template_roundtrip(examples, tmp_path, lang, sheet):
 def test_guides():
     for topic in service.GUIDE_TOPICS:
         assert len(service.guide(topic)) > 200
+
+
+def test_report_is_readable_for_non_specialists(examples, tmp_path):
+    """Plain-language summary, reading aids, figure captions and the construct-validity section in report.md;
+    acronyms kept and near-equal domain means not ranked in the results draft."""
+    service.analyze(str(examples / "sample_google_forms_pt.xlsx"), output_dir=str(tmp_path), lang="pt", run_cfa=False)
+    report = (tmp_path / "report.md").read_text(encoding="utf-8")
+    assert report.index("## Em resumo") < report.index("## Amostra")
+    assert report.count("*Como ler.*") == 3
+    assert "## Validade de constructo" in report and "HTMT máximo" in report
+    assert "**Figura 1.** Distribuição dos escores" in report and "![](" not in report
+    assert "## Análise de sensibilidade" not in report  # WHOQOL-BREF has no alternative scoring rule
+    assert "(s)" not in report
+    results = (tmp_path / "methods_results_pt.md").read_text(encoding="utf-8").split("## Resultados")[1]
+    assert "QV geral e saúde (Q1–Q2)" in results and "qv geral" not in results
+    assert "perfil semelhante entre os domínios" in results and "A média mais alta" not in results
+
+
+def test_lower_label_keeps_acronyms():
+    from whoqol.i18n import lower_label
+    assert lower_label("QV geral e saúde (Q1–Q2)", "pt") == "QV geral e saúde (Q1–Q2)"
+    assert lower_label("Relações sociais", "pt") == "relações sociais"
+    assert lower_label("Social relationships", "en") == "Social relationships"

@@ -216,7 +216,7 @@ Gravadas em `<arquivo>_whoqol/` (ou `-o/--output-dir`):
 
 | Arquivo | Conteúdo |
 |---|---|
-| `report.md` | relatório completo com alertas, tabelas, sensibilidade das regras de pontuação e figuras (no idioma do relatório) |
+| `report.md` | relatório completo que abre com um resumo em linguagem simples, seguido de alertas, tabelas com notas "como ler", validade de constructo, sensibilidade das regras de pontuação (quando o instrumento tem regras alternativas) e figuras com legenda (no idioma do relatório) |
 | `tables.docx` | tabelas no estilo APA, figuras e referências, para revisar e adaptar ao manuscrito |
 | `results.xlsx` | escores por participante e todas as tabelas, uma aba cada (`scoring_sensitivity`: cada escore com cada regra alternativa) |
 | `methods_results_{pt,en,es}.md` | rascunho das seções de análise estatística e resultados nos três idiomas |

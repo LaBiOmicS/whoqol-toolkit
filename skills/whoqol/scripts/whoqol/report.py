@@ -12,7 +12,7 @@ import pandas as pd
 from . import psychometrics as psy
 from . import scoring, sensitivity
 from .analysis import AnalysisResult, summary_dict
-from .i18n import ES_SYMBOL, LANGS, fmt, fmt_p, fmt_r, join_list, p_expr, render_flag, score_label, t
+from .i18n import ES_SYMBOL, LANGS, fmt, fmt_p, fmt_r, join_list, lower_label, p_expr, render_flag, score_label, t
 
 METHOD_REFERENCES = [
     "Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. "
@@ -153,15 +153,28 @@ def table_cfa(r: AnalysisResult) -> pd.DataFrame | None:
     }])
 
 
-def build_tables(r: AnalysisResult) -> list[tuple[str, pd.DataFrame, str]]:
+def _howto_rel(r: AnalysisResult) -> str:
+    rows = r.reliability[(r.reliability["domain"] != "total") & r.reliability["mdc95_0_100"].notna()]
+    if rows.empty:
+        return ""
+    x = rows.iloc[0]
+    return t("howto_rel", r.lang, dom=lower_label(r.inst.domain_label(x["domain"], r.lang), r.lang), mdc=fmt(x["mdc95_0_100"], 1, r.lang),
+             hs=fmt(x["half_sd_0_100"], 1, r.lang))
+
+
+def build_tables(r: AnalysisResult) -> list[tuple[str, pd.DataFrame, str, str]]:
+    """(title, table, APA note, plain-language reading aid). The reading aid goes only into report.md."""
     lang, inst = r.lang, r.inst
-    tabs = [(t("t_desc", lang, n=1, inst=inst.name), table_descriptives(r), t("n_desc", lang)),
-            (t("t_rel", lang, n=2), table_reliability(r), t("n_rel", lang)),
-            (t("t_corr", lang, n=3), table_correlations(r), t("n_corr", lang))]
+    desc = table_descriptives(r)
+    raw_col = str(desc.columns[5])  # "Média 4–20 (DP)": score, n, mean (SD), CI, median, raw mean
+    tabs = [(t("t_desc", lang, n=1, inst=inst.name), desc, t("n_desc", lang), t("howto_desc", lang, raw=raw_col)),
+            (t("t_rel", lang, n=2), table_reliability(r), t("n_rel", lang), _howto_rel(r)),
+            (t("t_corr", lang, n=3), table_correlations(r), t("n_corr", lang), t("howto_corr", lang))]
     n = 4
     if (cfa_t := table_cfa(r)) is not None:
         key = "t_cfa_facet" if r.cfa.get("level") == "facet" else "t_cfa"
-        tabs.append((t(key, lang, n=n, k=r.cfa["n_factors"], i=r.cfa["n_items"]), cfa_t, t("n_cfa", lang)))
+        tabs.append((t(key, lang, n=n, k=r.cfa["n_factors"], i=r.cfa["n_items"]), cfa_t, t("n_cfa", lang),
+                     t("howto_cfa", lang)))
         n += 1
     for gr in r.group_results:
         if "error" in gr or gr["table"].empty:
@@ -170,7 +183,8 @@ def build_tables(r: AnalysisResult) -> list[tuple[str, pd.DataFrame, str]]:
         test = t(f"test_{gr['table']['primary_test'].iloc[0]}", lang)
         tabs.append((t("t_group", lang, n=n, inst=inst.name, name=gr.get("label", gr["group_var"])),
                      table_group(gr, r),
-                     t("n_group", lang, desc=desc, test=test, reason=t(f"reason_{gr['method_reason']}", lang))))
+                     t("n_group", lang, desc=desc, test=test, reason=t(f"reason_{gr['method_reason']}", lang)),
+                     t("howto_group", lang)))
         n += 1
     return tabs
 
@@ -200,9 +214,9 @@ def table_sensitivity(r: AnalysisResult) -> pd.DataFrame | None:
 
 def sensitivity_markdown(r: AnalysisResult) -> list[str]:
     lang = r.lang
+    if not r.extra.get("sensitivity"):  # scored entirely by the official source: nothing to compare
+        return []
     parts = [f"## {t('h_sensitivity', lang)}\n"]
-    if not r.extra.get("sensitivity"):
-        return parts + [t("sens_none", lang), ""]
     tab = table_sensitivity(r)
     if tab is None:
         return parts + [t("sens_nochange", lang), ""]
@@ -220,10 +234,108 @@ def _md_table(df: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
+def domain_profile(r: AnalysisResult) -> dict | None:
+    """Domain means on 0–100, ties at the reported precision, and whether the highest and lowest means differ by
+    less than half a standard deviation (Norman et al., 2003) — then no domain is singled out."""
+    d = r.descriptives.set_index("score")
+    doms = [k for k in r.inst.primary_domains if f"{k}_0_100" in d.index]
+    if not doms:
+        return None
+    means = {k: float(d.loc[f"{k}_0_100", "mean"]) for k in doms}
+    sds = [float(d.loc[f"{k}_0_100", "sd"]) for k in doms]
+    hi, lo = max(means.values()), min(means.values())
+    shown = {k: fmt(m, 1) for k, m in means.items()}
+    return {"doms": doms, "means": means, "hi": hi, "lo": lo, "gap": hi - lo,
+            "hi_doms": [k for k in doms if shown[k] == fmt(hi, 1)],
+            "lo_doms": [k for k in doms if shown[k] == fmt(lo, 1)],
+            "similar": len(doms) < 2 or hi - lo < 0.5 * float(np.nanmean(sds))}
+
+
+def summary_markdown(r: AnalysisResult) -> list[str]:
+    """Plain-language summary for readers without a psychometrics background; every number comes from the analysis."""
+    lang, q, inst = r.lang, r.quality, r.inst
+    out = []
+    s = t("sum_n", lang, n=q["n_analyzed"], rows=q["n_rows"])
+    if q["n_excluded"] == 1:
+        s += t("sum_n_exc1", lang, m=inst.min_valid_total)
+    elif q["n_excluded"] > 1:
+        s += t("sum_n_exc", lang, exc=q["n_excluded"], m=inst.min_valid_total)
+    out.append(s + ".")
+    if (pf := domain_profile(r)) and len(pf["doms"]) > 1:
+        labs = lambda ks: join_list([inst.domain_label(k, lang) for k in ks], lang)  # noqa: E731
+        s = t("sum_profile", lang, lo=fmt(pf["lo"], 1, lang), lo_lab=labs(pf["lo_doms"]),
+              hi=fmt(pf["hi"], 1, lang), hi_lab=labs(pf["hi_doms"]))
+        s += t("sum_similar" if pf["similar"] else "sum_apart", lang, d=fmt(pf["gap"], 1, lang))
+        out.append(s)
+    elif pf:
+        k = pf["doms"][0]
+        out.append(t("sum_single", lang, lab=inst.domain_label(k, lang), m=fmt(pf["means"][k], 1, lang)))
+    if r.reference is None or r.reference.empty:
+        out.append(t("sum_norms", lang))
+    rel = r.reliability[r.reliability["domain"].isin(inst.model_domains) & r.reliability["alpha"].notna()]
+    if not rel.empty:
+        low = [inst.domain_label(k, lang) for k in rel.loc[rel["alpha"] < 0.70, "domain"]]
+        out.append(t("sum_alpha_ok", lang) if not low else
+                   t("sum_alpha_low", lang, doms=join_list(low, lang)) if len(low) <= 3 else
+                   t("sum_alpha_many", lang, k=len(low), n=len(rel)))
+    fc = list(dict.fromkeys(score_label(f["score"], lang, inst) for f in r.flags if f["code"] in ("floor", "ceiling")))
+    out.append(t("sum_fc", lang, scores=join_list(fc, lang)) if fc else t("sum_fc_none", lang))
+    for gr in r.group_results:
+        if "error" in gr or gr["table"].empty:
+            continue
+        name = gr.get("label", gr["group_var"])
+        sig = [f for f in r.flags if f["code"] == "group_sig" and f["name"] == name]
+        if not sig:
+            out.append(t("sum_group_none", lang, name=name))
+        else:
+            out.append(t("sum_group", lang, name=name,
+                         scores=join_list([score_label(f["score"], lang, inst) for f in sig], lang),
+                         mags=join_list(list(dict.fromkeys(t(f"mag_{f['mag']}", lang) for f in sig)), lang)))
+    if r.flags:
+        out.append(t("sum_flags1", lang) if len(r.flags) == 1 else t("sum_flags", lang, k=len(r.flags)))
+    return [f"## {t('h_summary', lang)}\n", *[f"- {x}" for x in out], ""]
+
+
+def validity_markdown(r: AnalysisResult) -> list[str]:
+    lang, inst, ms = r.lang, r.inst, r.multitrait_summary
+    out = []
+    if ms and ms.get("n_complete", 0) > 0 and not pd.isna(ms.get("scaling_success_rate_pct", np.nan)):
+        low = ms.get("items_r_own_lt_0_40") or []
+        out.append(t("val_mt", lang, n=ms["n_complete"], pct=fmt(ms["scaling_success_rate_pct"], 0, lang),
+                     low=", ".join(map(str, low)) if low else t("none", lang)))
+    if r.htmt is not None and len(r.htmt) > 1:
+        hv = r.htmt.where(~np.eye(len(r.htmt), dtype=bool)).stack().dropna()
+        if len(hv):
+            a, b = hv.idxmax()
+            out.append(t("val_htmt", lang, v=fmt_r(hv.max(), lang), a=inst.domain_label(a, lang),
+                         b=inst.domain_label(b, lang)))
+    return [f"## {t('h_validity', lang)}\n", *[f"- {x}" for x in out], ""] if out else []
+
+
+def figure_caption(r: AnalysisResult, path: str) -> str:
+    lang, inst, stem = r.lang, r.inst, Path(path).stem
+    if stem.startswith("fig1_"):
+        note = t("fig_dist_note", lang)
+        return f"{t('fig_dist_title', lang)} ({note[0].lower()}{note[1:]})"
+    if stem.startswith("fig2_"):
+        key = stem.removeprefix("fig2_item_responses").lstrip("_")
+        cap = t("fig_items_title", lang)
+        return f"{cap}: {inst.domain_label(key, lang)}" if key in inst.domains else cap
+    if stem.startswith("fig3_"):
+        return t("fig_corr_caption", lang)
+    for gr in r.group_results:
+        safe = "".join(ch if ch.isalnum() else "_" for ch in gr["group_var"])
+        if stem.endswith(f"_groups_{safe}"):
+            mci = t("fig_mean_ci", lang)
+            return f"{t('fig_group_title', lang, name=gr.get('label', gr['group_var']))}: {mci[0].lower()}{mci[1:]}"
+    return ""
+
+
 def markdown_report(r: AnalysisResult, tables) -> str:
     lang, q, inst = r.lang, r.quality, r.inst
     v = inst.version_for(r.version_lang)
     parts = [f"# {t('report_title', lang, inst=inst.name)}\n", f"{t('file', lang)}: `{r.config.path}`\n",
+             *summary_markdown(r),
              f"## {t('h_sample', lang)}\n",
              f"- {t('rows', lang)}: {q['n_rows']}",
              f"- {t('complete', lang, k=len(inst.items))}: {q['n_complete']}",
@@ -233,8 +345,12 @@ def markdown_report(r: AnalysisResult, tables) -> str:
              f"- {t('detected_version', lang)}: {v.code + ' (' + v.citation + ')' if v else '—'}\n"]
     if r.flags:
         parts += [f"## {t('h_flags', lang)}\n", *[f"- {render_flag(fl, lang, inst)}" for fl in r.flags], ""]
-    for title, df, note in tables:
+    for i, (title, df, note, howto) in enumerate(tables):
         parts += [f"## {title}\n", _md_table(df), f"\n*{t('note', lang)}* {note}\n"]
+        if howto:
+            parts.append(f"*{t('howto', lang)}* {howto}\n")
+        if i == 2:  # after the correlations: multitrait scaling and HTMT (described in the methods text)
+            parts += validity_markdown(r)
     for gr in r.group_results:
         if "error" in gr or not gr["posthoc"]:
             continue
@@ -263,7 +379,9 @@ def markdown_report(r: AnalysisResult, tables) -> str:
     parts += sensitivity_markdown(r)
     parts.append(f"## {t('h_figures', lang)}\n")
     base = Path(r.extra["output_dir"])
-    parts += [f"![]({Path(f).relative_to(base).as_posix()})" for f in r.figures]
+    for i, f in enumerate(r.figures, 1):
+        cap = figure_caption(r, f)
+        parts += [f"**{t('figure', lang)} {i}.** {cap}\n", f"![{cap}]({Path(f).relative_to(base).as_posix()})\n"]
     return "\n".join(parts) + "\n"
 
 
@@ -299,7 +417,7 @@ def docx_report(r: AnalysisResult, tables, path: str) -> None:
     doc.styles["Normal"].font.name = "Times New Roman"
     doc.styles["Normal"].font.size = Pt(10)
     doc.add_heading(t("docx_title", lang, inst=r.inst.name), 1)
-    for title, df, note in tables:
+    for title, df, note, _howto in tables:
         doc.add_paragraph().add_run(title).bold = True
         tb = doc.add_table(rows=1, cols=len(df.columns))
         for i, c in enumerate(df.columns):
@@ -321,7 +439,9 @@ def docx_report(r: AnalysisResult, tables, path: str) -> None:
         p.add_run(note).font.size = Pt(8.5)
     doc.add_page_break()
     for i, f in enumerate(r.figures, 1):
-        doc.add_paragraph().add_run(f"{t('figure', lang)} {i}").bold = True
+        par = doc.add_paragraph()
+        par.add_run(f"{t('figure', lang)} {i}. ").bold = True
+        par.add_run(figure_caption(r, f)).italic = True
         doc.add_picture(f, width=Inches(6.0))
     doc.add_page_break()
     doc.add_heading(t("references", lang), 2)
@@ -486,8 +606,7 @@ def _missing_rule(r: AnalysisResult, lang: str) -> str:
         out += [f"{', '.join(names)} ({rule})" for rule, names in groups.items()]
         return "; ".join(out)
     allowed = {k: len(d.items) - d.min_valid for k, d in r.inst.domains.items() if d.in_measurement_model}
-    parts = "; ".join(f"{r.inst.domain_label(k, lang).lower() if lang != 'en' else r.inst.domain_label(k, lang)}: "
-                      f"{v}" for k, v in allowed.items())
+    parts = "; ".join(f"{lower_label(r.inst.domain_label(k, lang), lang)}: {v}" for k, v in allowed.items())
     return {"pt": f"número máximo de itens ausentes por domínio — {parts}",
             "en": f"maximum number of missing items per domain — {parts}",
             "es": f"número máximo de ítems faltantes por dominio — {parts}"}[lang]
@@ -536,8 +655,14 @@ PROSE = {
                      "statsmodels, semopy) com o whoqol-toolkit."),
         "h_results": "## Resultados (rascunho para edição)",
         "sample": ("Dos {rows} questionários, {exc} foram excluídos por terem menos de {minv} itens válidos, resultando "
-                   "em {n} participantes analisados. A média mais alta foi observada no domínio {hi} [{hi_ms}] e a mais "
-                   "baixa no domínio {lo} [{lo_ms}] (Tabela 1)."),
+                   "em {n} participantes analisados."),
+        "sample_all": "Todos os {rows} questionários tinham ao menos {minv} itens válidos e foram analisados.",
+        "profile": " As médias dos escores na escala 0–100 foram: {doms} (Tabela 1).",
+        "similar": (" A diferença entre a maior e a menor média ({d} pontos) foi inferior a meio desvio-padrão (Norman "
+                    "et al., 2003), indicando um perfil semelhante entre os domínios."),
+        "hi_lo": " A média mais alta foi observada em {hi} e a mais baixa em {lo}.",
+        "validity": ("Na análise multitraço, {pct}% dos itens correlacionaram mais com o próprio domínio do que com os "
+                     "demais, e a maior razão HTMT foi {v} ({a} e {b})."),
         "overall": " O escore {name} foi {ms}.",
         "alpha": "A consistência interna (α de Cronbach) foi: {alphas} (Tabela 2).",
         "cfa_res": ("A AFC apresentou χ²/gl = {chi}, CFI = {cfi}, TLI = {tli}, RMSEA = {rmsea} (IC 90%: {lo}–{hi}) "
@@ -585,8 +710,14 @@ PROSE = {
                      "statsmodels, semopy) with whoqol-toolkit."),
         "h_results": "## Results (draft for editing)",
         "sample": ("Of the {rows} questionnaires, {exc} were excluded for having fewer than {minv} valid items, leaving "
-                   "{n} participants for analysis. The highest mean was observed in the {hi} domain [{hi_ms}] and the "
-                   "lowest in the {lo} domain [{lo_ms}] (Table 1)."),
+                   "{n} participants for analysis."),
+        "sample_all": "All {rows} questionnaires had at least {minv} valid items and were analysed.",
+        "profile": " Mean scores on the 0–100 scale were: {doms} (Table 1).",
+        "similar": (" The difference between the highest and lowest means ({d} points) was below half a standard "
+                    "deviation (Norman et al., 2003), indicating a similar profile across domains."),
+        "hi_lo": " The highest mean was observed in {hi} and the lowest in {lo}.",
+        "validity": ("In the multitrait scaling analysis, {pct}% of the items correlated more with their own domain than "
+                     "with the others, and the highest HTMT ratio was {v} ({a} and {b})."),
         "overall": " The {name} score was {ms}.",
         "alpha": "Internal consistency (Cronbach's α) was: {alphas} (Table 2).",
         "cfa_res": "CFA yielded χ²/df = {chi}, CFI = {cfi}, TLI = {tli}, RMSEA = {rmsea} (90% CI: {lo}–{hi}) and SRMR = {srmr}.",
@@ -639,8 +770,14 @@ PROSE = {
                      "statsmodels, semopy) con whoqol-toolkit."),
         "h_results": "## Resultados (borrador para editar)",
         "sample": ("De los {rows} cuestionarios, {exc} se excluyeron por tener menos de {minv} ítems válidos, quedando {n} "
-                   "participantes para el análisis. La media más alta se observó en el dominio {hi} [{hi_ms}] y la más "
-                   "baja en el dominio {lo} [{lo_ms}] (Tabla 1)."),
+                   "participantes para el análisis."),
+        "sample_all": "Los {rows} cuestionarios tenían al menos {minv} ítems válidos y se analizaron todos.",
+        "profile": " Las medias de las puntuaciones en la escala 0–100 fueron: {doms} (Tabla 1).",
+        "similar": (" La diferencia entre la media más alta y la más baja ({d} puntos) fue inferior a media desviación "
+                    "estándar (Norman et al., 2003), lo que indica un perfil similar entre los dominios."),
+        "hi_lo": " La media más alta se observó en {hi} y la más baja en {lo}.",
+        "validity": ("En el análisis multirrasgo, el {pct}% de los ítems correlacionó más con su propio dominio que con "
+                     "los demás, y la mayor razón HTMT fue {v} ({a} y {b})."),
         "overall": " La puntuación de {name} fue {ms}.",
         "alpha": "La consistencia interna (α de Cronbach) fue: {alphas} (Tabla 2).",
         "cfa_res": ("El AFC mostró χ²/gl = {chi}, CFI = {cfi}, TLI = {tli}, RMSEA = {rmsea} (IC 90%: {lo}–{hi}) y "
@@ -719,20 +856,35 @@ def results_text(r: AnalysisResult, lang: str) -> str:
     alpha_doms = [k for k in inst.model_domains if k in rel.index]
 
     def lab(k):
-        x = inst.domain_label(k, lang)
-        return x if lang == "en" else x.lower()
+        return lower_label(inst.domain_label(k, lang), lang)
 
     def ms(k):
         row = d.loc[f"{k}_0_100"]
         return f"{fmt(row['mean'], 1, lang)} ({t('sd', lang)} = {fmt(row['sd'], 1, lang)})"
 
-    order = sorted(doms, key=lambda k: d.loc[f"{k}_0_100", "mean"], reverse=True)
+    pf = domain_profile(r)
+    profile = ""
+    if pf:
+        profile = P["profile"].format(doms="; ".join(f"{lab(k)}, {ms(k)}" for k in doms))
+        if len(doms) > 1:
+            profile += (P["similar"].format(d=fmt(pf["gap"], 1, lang)) if pf["similar"] else
+                        P["hi_lo"].format(hi=join_list([lab(k) for k in pf["hi_doms"]], lang),
+                                          lo=join_list([lab(k) for k in pf["lo_doms"]], lang)))
     s = [P["h_results"],
-         P["sample"].format(rows=q["n_rows"], exc=q["n_excluded"], minv=inst.min_valid_total, n=q["n_analyzed"],
-                            hi=lab(order[0]), hi_ms=ms(order[0]), lo=lab(order[-1]), lo_ms=ms(order[-1]))
+         P["sample" if q["n_excluded"] else "sample_all"].format(rows=q["n_rows"], exc=q["n_excluded"],
+                                                                  minv=inst.min_valid_total, n=q["n_analyzed"])
+         + profile
          + "".join(P["overall"].format(name=lab(k), ms=ms(k)) for k, dm in inst.domains.items()
                    if dm.role in ("global", "total") and f"{k}_0_100" in d.index),
          P["alpha"].format(alphas=", ".join(f"{lab(k)} = {fmt_r(rel.loc[k, 'alpha'], lang)}" for k in alpha_doms))]
+    mts = r.multitrait_summary or {}
+    hv = pd.Series(dtype=float)
+    if r.htmt is not None and len(r.htmt) > 1:
+        hv = r.htmt.where(~np.eye(len(r.htmt), dtype=bool)).stack().dropna()
+    if mts.get("n_complete", 0) > 0 and not pd.isna(mts.get("scaling_success_rate_pct", np.nan)) and len(hv):
+        a, b = hv.idxmax()
+        s.append(P["validity"].format(pct=fmt(mts["scaling_success_rate_pct"], 0, lang), v=fmt_r(hv.max(), lang),
+                                      a=lab(a), b=lab(b)))
     if r.cfa and "fit" in r.cfa:
         f = r.cfa["fit"]
         lo90, hi90 = r.cfa["rmsea_ci90"]

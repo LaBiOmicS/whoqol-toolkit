@@ -111,7 +111,7 @@ def test_instrument_without_alternatives_says_so(tmp_path, examples):
     summary = service.analyze(str(examples / "sample_numeric.csv"), instrument="whoqol-bref", output_dir=str(out),
                               lang="en")
     assert summary["scoring_sensitivity"] == []
-    assert "scored entirely by its official source" in (out / "report.md").read_text(encoding="utf-8")
+    assert "## Sensitivity of the results to the scoring rules" not in (out / "report.md").read_text(encoding="utf-8")
     assert "sensitivity analysis" not in (out / "methods_results_en.md").read_text(encoding="utf-8")
 
 

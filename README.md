@@ -216,7 +216,7 @@ Written to `<file>_whoqol/` (or `-o/--output-dir`):
 
 | File | Content |
 |---|---|
-| `report.md` | full report with alerts, tables, scoring-rule sensitivity and figures (report language) |
+| `report.md` | full report opening with a plain-language summary, then alerts, tables with "how to read" notes, construct validity, scoring-rule sensitivity (when the instrument has alternative rules) and captioned figures (report language) |
 | `tables.docx` | APA-style tables, figures and references, to review and adapt for the manuscript |
 | `results.xlsx` | scores per participant and every table, one sheet each (`scoring_sensitivity`: every score under each alternative rule) |
 | `methods_results_{pt,en,es}.md` | draft of the statistical-analysis and results sections in three languages |
