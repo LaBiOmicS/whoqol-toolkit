@@ -220,7 +220,7 @@ Se guardan en `<archivo>_whoqol/` (o `-o/--output-dir`):
 | Archivo | Contenido |
 |---|---|
 | `report.md` | informe completo con alertas, tablas, sensibilidad de las reglas de puntuación y figuras (en el idioma del informe) |
-| `tables.docx` | tablas en estilo APA, figuras y referencias, listas para el manuscrito |
+| `tables.docx` | tablas en estilo APA, figuras y referencias, para revisar y adaptar al manuscrito |
 | `results.xlsx` | puntuaciones por participante y todas las tablas, una hoja cada una (`scoring_sensitivity`: cada puntuación con cada regla alternativa) |
 | `methods_results_{pt,en,es}.md` | borrador de las secciones de análisis estadístico y resultados en los tres idiomas |
 | `figures/` | distribución de los dominios, respuestas por ítem, correlaciones, medias por grupo (PNG 300 dpi + PDF) |
