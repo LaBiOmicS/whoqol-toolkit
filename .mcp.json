@@ -1,1 +1,0 @@
-{"mcpServers": {"whoqol": {"command": "uv", "args": ["run", "--quiet", "--directory", "${CLAUDE_PLUGIN_ROOT}", "whoqol-mcp"]}}}

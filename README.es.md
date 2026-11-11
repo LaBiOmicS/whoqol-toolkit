@@ -15,14 +15,14 @@
 > **Beta.** La herramienta todavía puede contener errores. Revise cada resultado antes de publicarlo e
 > [informe de los problemas](https://github.com/LaBiOmicS/whoqol-toolkit/issues).
 
-Plugin para **Claude Code**, **Antigravity (`agy`)** y **Gemini CLI** que puntúa y analiza cuestionarios de calidad
+Plugin para **Claude Code** y **Antigravity (`agy`)** que puntúa y analiza cuestionarios de calidad
 de vida WHOQOL para publicación. Usted proporciona la hoja de cálculo exportada de Google Forms, REDCap, LimeSurvey,
 SPSS o Excel; la herramienta aplica las reglas oficiales de puntuación de la OMS, revisa la calidad de los datos,
 estima la fiabilidad y la validez, compara grupos y genera tablas en estilo APA, figuras y un borrador de las
 secciones de métodos y resultados.
 
-Todas las cifras provienen de un paquete Python determinista y probado, expuesto como servidor MCP. El agente hace las
-preguntas adecuadas, ejecuta las herramientas e interpreta la salida; nunca calcula puntuaciones por su cuenta.
+Todas las cifras provienen de un paquete Python determinista y probado, que la skill ejecuta con `uv run`. El agente
+hace las preguntas adecuadas, ejecuta los scripts e interpreta la salida; nunca calcula puntuaciones por su cuenta.
 
 El primer instrumento es el **WHOQOL-BREF**. El paquete se organiza en torno a un registro de instrumentos, de modo
 que otros instrumentos WHOQOL (WHOQOL-100, WHOQOL-OLD, WHOQOL-HIV-BREF, …) puedan añadirse sin cambiar el código de
@@ -52,7 +52,7 @@ análisis.
 
 | | |
 |---|---|
-| **Hosts** | Claude Code (plugin + MCP) · Antigravity CLI (plugin + MCP) · Gemini CLI (extensión + MCP) · línea de comandos |
+| **Hosts** | Claude Code (plugin) · Antigravity CLI (plugin) · línea de comandos |
 | **Instrumentos** | WHOQOL-BREF (26 ítems, 4 dominios + faceta global) |
 | **Formatos de entrada** | .xlsx, .xls, .ods, .csv, .tsv, .sav |
 | **Detección de ítems** | por número (`Q1`, `1.`, `item_1`, `pergunta 1`, `pregunta 1`) o por el texto de la pregunta en portugués, inglés o español; respuestas numéricas (1–5) o de texto |
@@ -64,10 +64,10 @@ análisis.
 
 ```mermaid
 flowchart LR
-    A["Hoja de cálculo"] --> B["1 · whoqol_inspect<br/>columnas de ítems, versión<br/>lingüística, otras variables"]
+    A["Hoja de cálculo"] --> B["1 · inspect<br/>columnas de ítems, versión<br/>lingüística, otras variables"]
     M["Diccionario de datos<br/>(opcional, prerrellenado)"] -.-> C
     B --> C["2 · acordar el plan<br/>grupos, covariables,<br/>valores de referencia"]
-    C --> D["3 · whoqol_analyze<br/>puntuación OMS, calidad,<br/>psicometría, estadística"]
+    C --> D["3 · analyze<br/>puntuación OMS, calidad,<br/>psicometría, estadística"]
     D --> E["4 · interpretación<br/>por el agente, en el<br/>idioma del usuario"]
     D --> F["report.md · tables.docx<br/>results.xlsx · figuras<br/>methods_results_pt/en/es.md"]
 ```
@@ -87,18 +87,35 @@ flowchart LR
 ## Seguridad y confidencialidad
 
 - Todo se ejecuta en local: el código de análisis no hace llamadas de red y la herramienta nunca envía la hoja de
-  cálculo. El agente que usa (Claude, Gemini) ve las salidas de las herramientas, que son estadísticas agregadas;
+  cálculo. El agente que usa (Claude, Antigravity) ve las salidas de los scripts, que son estadísticas agregadas;
   evite pegar filas en bruto en el chat.
 - Las respuestas a los cuestionarios son datos personales de salud (LGPD, RGPD). Use identificadores seudonimizados,
   mantenga los archivos fuera del repositorio (el `.gitignore` excluye `data/`, `*_whoqol/` y hojas de cálculo) y
   siga la aprobación del comité de ética.
 - Los valores de las celdas y los nombres de columnas se tratan como datos, nunca como instrucciones para el agente.
+  `inspect` los muestra limpios (sin caracteres ocultos, con longitud limitada) y lista en `security_flags` los
+  encabezados o celdas que parecen instrucciones a una IA.
+- La interpretación y el texto de métodos y resultados son borradores asistidos por IA: revíselos, asuma la
+  responsabilidad por ellos y declare el uso de IA según lo exija la revista.
 - La puntuación, la estadística y los informes provienen de código probado; el agente tiene instrucciones de no
   calcular ni inventar cifras, normas ni puntos de corte (`rules/AGENTS.md`).
 
 ## Instalación
 
-Requisitos: [`uv`](https://docs.astral.sh/uv/) y al menos uno de los CLI.
+**Requisitos:** [`uv`](https://docs.astral.sh/uv/) y Claude Code o Antigravity CLI, instalados y autenticados. `uv`
+instala las dependencias de Python la primera vez que se ejecuta la skill.
+
+### Claude Code
+
+```text
+/plugin marketplace add LaBiOmicS/whoqol-toolkit
+/plugin install whoqol-toolkit@labiomics
+```
+
+El marketplace `labiomics` reúne todos los plugins de LaBiOmicS (academic-peer-review, congress-abstract-review,
+whoqol-toolkit).
+
+### Script de instalación (Claude Code y Antigravity)
 
 ```bash
 git clone https://github.com/LaBiOmicS/whoqol-toolkit.git
@@ -106,63 +123,66 @@ cd whoqol-toolkit
 ./install.sh
 ```
 
-`install.sh` sincroniza el entorno Python, instala y valida el plugin en Antigravity (`agy`) y lo registra en Claude
-Code mediante el marketplace local `labiomics-whoqol`.
+El script sincroniza el entorno de Python y registra el plugin en los CLI que estén instalados.
 
-**Claude Code**, directamente desde GitHub:
+### Antigravity CLI
 
-```
-/plugin install whoqol-toolkit --marketplace LaBiOmicS/whoqol-toolkit
-```
-
-o, en versiones anteriores:
-
-```
-/plugin marketplace add LaBiOmicS/whoqol-toolkit
-/plugin install whoqol-toolkit@labiomics-whoqol
+```bash
+agy plugin validate ./whoqol-toolkit --strict
+agy plugin install ./whoqol-toolkit
+agy plugin enable whoqol-toolkit
 ```
 
-**Antigravity:** `agy plugin install /ruta/a/whoqol-toolkit && agy plugin enable whoqol-toolkit`
-
-**Gemini CLI:** `gemini extensions install https://github.com/LaBiOmicS/whoqol-toolkit`
+Reinicie la sesión después de instalar. En la [página del proyecto](https://labiomics.github.io/whoqol-toolkit/) hay
+una guía paso a paso para principiantes.
 
 ## Uso
 
-Pida en cualquiera de los tres idiomas o use el comando `/whoqol`:
+### Interactivo
 
-```
-/whoqol ~/datos/encuesta.xlsx compara los dominios por sexo y nivel educativo
-Analiza esta hoja del WHOQOL-BREF y genera tablas para publicación: ~/datos/whoqol.xlsx
-Evalúa la fiabilidad y la validez del WHOQOL-BREF en ~/datos/encuesta.csv
-```
+> Analiza esta hoja del WHOQOL-BREF y compara los dominios por sexo y nivel educativo: `~/datos/encuesta.xlsx`
 
-El agente inspecciona el archivo, confirma con usted las columnas detectadas y el plan de análisis, ejecuta el análisis
-e interpreta los resultados. Sin agente, use la línea de comandos:
+> Analiza la fiabilidad y validez del WHOQOL-BREF en `~/datos/encuesta.csv` y genera tablas para publicación.
+
+> Analyse the WHOQOL-BREF answers in `~/data/qol_survey.xlsx`.
+
+En Claude Code la skill también puede llamarse directamente: `/whoqol-toolkit:whoqol ~/datos/encuesta.xlsx`. El
+agente inspecciona el archivo, confirma con usted las columnas detectadas y el plan de análisis, ejecuta el análisis e
+interpreta los resultados.
+
+### Sin agente
+
+Los mismos scripts funcionan sin agente:
 
 ```bash
-uv run whoqol inspect examples/sample_forms_es.xlsx
-uv run whoqol analyze examples/sample_forms_es.xlsx -g Sexo -g "Nivel educativo" -c Edad
-uv run whoqol analyze examples/sample_numeric.csv -g Sexo --lang es --instrument-version es
-uv run whoqol guide interpretation
+WHOQOL="uv run skills/whoqol/scripts/whoqol_cli.py"
+$WHOQOL inspect examples/sample_forms_es.xlsx
+$WHOQOL template examples/sample_forms_es.xlsx --lang es -o diccionario.xlsx
+$WHOQOL analyze examples/sample_forms_es.xlsx -g Sexo -g "Nivel educativo" -c Edad
+$WHOQOL analyze examples/sample_numeric.csv -g Sexo --lang es --instrument-version es
+$WHOQOL guide scoring
 ```
 
-### Herramientas MCP
-
-| Herramienta | Función |
+| Comando | Función |
 |---|---|
-| `whoqol_instruments` | lista los instrumentos y versiones lingüísticas disponibles |
-| `whoqol_inspect` | detecta las columnas de ítems, la versión lingüística, respuestas no reconocidas y el papel de las demás columnas |
-| `whoqol_template` | crea un diccionario de datos prerrellenado (.xlsx) en PT, EN o ES |
-| `whoqol_score` | solo puntúa, una fila por participante |
-| `whoqol_analyze` | análisis completo y todos los archivos de salida |
-| `whoqol_guide` | flujo de trabajo, reglas de puntuación, criterios psicométricos, interpretación, lista de verificación, referencias |
+| `instruments` | lista los instrumentos y versiones lingüísticas disponibles |
+| `inspect` | detecta las columnas de ítems, la versión lingüística, respuestas no reconocidas, el papel de las demás columnas y contenido sospechoso |
+| `template` | crea un diccionario de datos prerrellenado (.xlsx) en PT, EN o ES |
+| `score` | solo puntúa, una fila por participante |
+| `analyze` | análisis completo y todos los archivos de salida |
+| `guide` | flujo de trabajo, reglas de puntuación, criterios psicométricos, interpretación, lista de verificación, referencias |
+
+### Costo
+
+El análisis se ejecuta en local y no consume llamadas al modelo. La parte del agente son pocos turnos: inspeccionar,
+acordar el plan e interpretar el resumen en JSON.
 
 ## Diccionario de datos (opcional)
 
 El archivo de metadatos **nunca es obligatorio**: una hoja con encabezados claros se analiza tal cual. Es útil cuando
 hay variables codificadas (`1`/`2` en lugar de etiquetas), categorías ordinales (nivel educativo, ingresos), códigos de
-faltante (`99`, `-9`) o cuando quiere registrar el contexto del estudio. `whoqol_template` lo genera ya rellenado con
-los papeles detectados; usted revisa dos hojas y lo indica en `metadata=`:
+faltante (`99`, `-9`) o cuando quiere registrar el contexto del estudio. El comando `template` lo genera ya rellenado
+con los papeles detectados; usted revisa dos hojas y lo indica en `--metadata`:
 
 - **variables** – columna, rol (`item`, `id`, `grupo`, `continua`, `covariable`, `ignorar`), ítem, etiqueta,
   etiquetas de valores (`1=Mujer; 2=Hombre`), orden de niveles, códigos de faltante;
@@ -173,23 +193,26 @@ libro de datos se lee automáticamente.
 
 ## Parámetros
 
-| Parámetro | Predeterminado | Descripción |
+Opciones de `whoqol_cli.py analyze`:
+
+| Opción | Predeterminado | Descripción |
 |---|---|---|
-| `instrument` | `whoqol-bref` | clave del instrumento (`whoqol_instruments`) |
-| `mapping` | automático | `{"Q1": "columna", …}` cuando la detección falla |
-| `group_vars`, `continuous_vars`, `covariates` | — | variables para comparaciones, correlaciones y regresión |
-| `method` | `auto` | `parametric`, `nonparametric` o `auto` (Shapiro-Wilk / TLC) |
-| `reference` | — | `{"physical": {"mean": …, "sd": …, "n": …, "source": "…"}}` |
-| `cutoff` | — | proporción igual o superior a un punto de corte (p. ej., 60, solo personas mayores) |
-| `include_total` | `false` | añade una puntuación total de 24 ítems (no prevista en el manual de la OMS) |
-| `run_cfa` | `true` | análisis factorial confirmatorio |
-| `lang` | `auto` | idioma del informe: `auto`, `pt`, `en`, `es` |
-| `instrument_version` | `auto` | versión lingüística administrada, citada en el texto de métodos |
-| `metadata` | — | diccionario de datos; los argumentos explícitos tienen prioridad |
+| `-i/--instrument` | `whoqol-bref` | clave del instrumento (`instruments`) |
+| `--mapping` | automático | `{"Q1": "columna", …}` (JSON o archivo .json) cuando la detección falla; la columna puede indicarse como `#n` |
+| `-g/--group`, `-c/--continuous`, `--covariate` | — | variables para comparaciones, correlaciones y regresión (repetibles) |
+| `--method` | `auto` | `parametric`, `nonparametric` o `auto` (Shapiro-Wilk / TLC) |
+| `--reference` | — | `{"physical": {"mean": …, "sd": …, "n": …, "source": "…"}}` |
+| `--cutoff` | — | proporción igual o superior a un punto de corte (p. ej., 60, solo personas mayores) |
+| `--include-total` | desactivado | añade una puntuación total de 24 ítems (no prevista en el manual de la OMS) |
+| `--no-cfa` | desactivado | omite el análisis factorial confirmatorio |
+| `--lang` | `auto` | idioma del informe: `auto`, `pt`, `en`, `es` |
+| `--instrument-version` | `auto` | versión lingüística administrada, citada en el texto de métodos |
+| `--metadata` | — | diccionario de datos; las opciones explícitas tienen prioridad |
+| `-o/--output-dir` | `<archivo>_whoqol/` | carpeta de salida |
 
 ## Salidas
 
-Se guardan en `<archivo>_whoqol/` (u `output_dir`):
+Se guardan en `<archivo>_whoqol/` (o `-o/--output-dir`):
 
 | Archivo | Contenido |
 |---|---|
@@ -218,12 +241,12 @@ Se guardan en `<archivo>_whoqol/` (u `output_dir`):
 ```bash
 uv sync --group dev
 uv run pytest -q
-uvx ruff check src tests examples
+uvx ruff check skills tests examples
 uv run python examples/generate_examples.py   # datos de ejemplo sintéticos
 claude plugin validate . && agy plugin validate . --strict
 ```
 
-Para añadir un instrumento, cree `src/whoqol/instruments/<nombre>.py` con un `Instrument` (ítems, ítems invertidos,
+Para añadir un instrumento, cree `skills/whoqol/scripts/whoqol/instruments/<nombre>.py` con un `Instrument` (ítems, ítems invertidos,
 dominios con mínimo de ítems válidos, textos y patrones de los ítems en PT/EN/ES, versiones lingüísticas) y regístrelo
 en `instruments/__init__.py`. La puntuación, la psicometría, los informes y la guía de puntuación se derivan de esa
 definición.
@@ -235,12 +258,12 @@ definición.
   author  = {Menegidio, Fabiano Bezerra},
   title   = {whoqol-toolkit: scoring, psychometrics and publication-grade statistics for WHOQOL questionnaires},
   year    = {2026},
-  version = {0.1.0},
+  version = {0.2.0},
   url     = {https://github.com/LaBiOmicS/whoqol-toolkit}
 }
 ```
 
-Cite también el instrumento y la versión lingüística validada que utilizó (véase `whoqol_guide("references")`).
+Cite también el instrumento y la versión lingüística validada que utilizó (véase [references.md](skills/whoqol/references/references.md)).
 
 ## Licencia y autoría
 

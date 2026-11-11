@@ -187,7 +187,7 @@ def cfa(rev_items: pd.DataFrame, inst: Instrument) -> dict:
     try:
         import contextlib
         import sys
-        with contextlib.redirect_stdout(sys.stderr):  # semopy prints on import (would corrupt MCP stdio)
+        with contextlib.redirect_stdout(sys.stderr):  # semopy prints on import (would corrupt the JSON on stdout)
             import semopy
     except ImportError:
         return {"error": "semopy not installed"}

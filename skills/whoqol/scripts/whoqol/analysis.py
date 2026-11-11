@@ -15,6 +15,7 @@ from .i18n import report_language
 from .instruments import Instrument, get_instrument
 from .io import build_item_frame, detect_mapping, detect_version_language, load_table, parse_mapping
 from .metadata import apply_to_raw, find_embedded, load_metadata
+from .security import column_ref
 
 
 @dataclass
@@ -99,7 +100,13 @@ def run(cfg: AnalysisConfig) -> AnalysisResult:
         cfg.covariates = cfg.covariates or meta["covariates"]
     meta = meta or {}
     labels = meta.get("labels", {})
-    mapping = resolve_mapping(raw, cfg.mapping, inst)
+    # '#n' (column position printed by `inspect`) stands for a column whose header is long or unsafe to echo.
+    cols = list(raw.columns)
+    cfg.id_column = column_ref(cols, cfg.id_column) if cfg.id_column else cfg.id_column
+    cfg.group_vars = [column_ref(cols, c) for c in cfg.group_vars]
+    cfg.continuous_vars = [column_ref(cols, c) for c in cfg.continuous_vars]
+    cfg.covariates = [column_ref(cols, c) for c in cfg.covariates]
+    mapping = {it: column_ref(cols, c) for it, c in resolve_mapping(raw, cfg.mapping, inst).items()}
 
     detected = detect_version_language(raw, mapping, inst)
     version_lang = cfg.instrument_version if cfg.instrument_version != "auto" else detected["language"]

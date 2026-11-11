@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>whoqol-toolkit · LaBiOmicS</title>
-<meta name="description" content="Pontuação pelas regras da OMS, psicometria e estatística para publicação de questionários WHOQOL, a partir da planilha, com Claude Code, Antigravity ou Gemini CLI.">
+<meta name="description" content="Pontuação pelas regras da OMS, psicometria e estatística para publicação de questionários WHOQOL, a partir da planilha, com Claude Code ou Antigravity.">
 <meta property="og:title" content="whoqol-toolkit — análise de questionários WHOQOL para publicação">
 <meta property="og:description" content="Da planilha do Google Forms às tabelas APA, figuras e texto de métodos em português, inglês e espanhol.">
 <meta property="og:image" content="https://labiomics.github.io/whoqol-toolkit/assets/logo-180.png">
@@ -378,7 +378,6 @@ footer a { color: var(--ink-2); }
 .card .eyebrow { margin-bottom: 6px; }
 .pipe4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: step; }
 @media (max-width: 900px) { .pipe4 { grid-template-columns: 1fr; } }
-html[data-ai="claude"] .ai-gem, html[data-ai="agy"] .ai-gem, html[data-ai="gem"] .ai-claude, html[data-ai="gem"] .ai-agy { display: none !important; }
 </style>
 
 </head>
@@ -408,7 +407,7 @@ html[data-ai="claude"] .ai-gem, html[data-ai="agy"] .ai-gem, html[data-ai="gem"]
 <section class="hero">
   <div class="wrap">
     <div>
-      <div class="eyebrow"><span lang="pt">Plugin para Claude Code, Antigravity e Gemini CLI</span><span lang="en">Plugin for Claude Code, Antigravity and Gemini CLI</span><span lang="es">Plugin para Claude Code, Antigravity y Gemini CLI</span></div>
+      <div class="eyebrow"><span lang="pt">Plugin para Claude Code e Antigravity</span><span lang="en">Plugin for Claude Code and Antigravity</span><span lang="es">Plugin para Claude Code y Antigravity</span></div>
       <h1 lang="pt">Da planilha ao <em>artigo</em>, sem errar a pontuação.</h1><h1 lang="en">From spreadsheet to <em>paper</em>, with the scoring right.</h1><h1 lang="es">De la hoja de cálculo al <em>artículo</em>, sin errores de puntuación.</h1>
       <p class="lede" lang="pt">Análise de questionários de qualidade de vida WHOQOL com assistência de IA. Você entrega a planilha do Google Forms, REDCap ou Excel; a ferramenta aplica as regras oficiais da OMS, confere a qualidade dos dados, estima confiabilidade e validade, compara grupos e gera tabelas no estilo APA, figuras e o rascunho de métodos e resultados. Todos os números vêm de código testado; a IA conduz, pergunta e interpreta. Não é preciso saber programar.</p><p class="lede" lang="en">AI-assisted analysis of WHOQOL quality-of-life questionnaires. You hand over the Google Forms, REDCap or Excel spreadsheet; the tool applies the official WHO rules, checks data quality, estimates reliability and validity, compares groups and writes APA tables, figures and a draft of the methods and results. Every number comes from tested code; the AI guides, asks and interprets. No programming needed.</p><p class="lede" lang="es">Análisis de cuestionarios de calidad de vida WHOQOL con asistencia de IA. Usted entrega la hoja de Google Forms, REDCap o Excel; la herramienta aplica las reglas oficiales de la OMS, revisa la calidad de los datos, estima fiabilidad y validez, compara grupos y genera tablas en estilo APA, figuras y el borrador de métodos y resultados. Todas las cifras vienen de código probado; la IA guía, pregunta e interpreta. No hace falta saber programar.</p>
       <div class="cta">
@@ -417,7 +416,7 @@ html[data-ai="claude"] .ai-gem, html[data-ai="agy"] .ai-gem, html[data-ai="gem"]
       </div>
       <div class="beta-note" role="note"><b>BETA</b>
         <span lang="pt">A ferramenta ainda está em versão beta e pode conter erros. Confira cada resultado antes de publicar e <a href="https://github.com/LaBiOmicS/whoqol-toolkit/issues">relate problemas</a>.</span><span lang="en">The tool is still in beta and may contain errors. Check every result before publishing and <a href="https://github.com/LaBiOmicS/whoqol-toolkit/issues">report problems</a>.</span><span lang="es">La herramienta todavía está en versión beta y puede contener errores. Verifique cada resultado antes de publicar e <a href="https://github.com/LaBiOmicS/whoqol-toolkit/issues">informe los problemas</a>.</span></div>
-      <div class="meta-row"><span class="tag beta">BETA</span><span class="tag">v0.1.0</span><span class="tag">MIT</span><span class="tag">WHOQOL-BREF</span><span class="tag">Windows · macOS · Linux</span><span class="tag">PT · EN · ES</span></div>
+      <div class="meta-row"><span class="tag beta">BETA</span><span class="tag">v0.2.0</span><span class="tag">MIT</span><span class="tag">WHOQOL-BREF</span><span class="tag">Windows · macOS · Linux</span><span class="tag">PT · EN · ES</span></div>
     </div>
     <div class="term" aria-label="Exemplo de uso no terminal">
       <div class="bar"><i></i><i></i><i></i><span>~/Documentos/pesquisa — claude</span></div>
@@ -481,7 +480,7 @@ html[data-ai="claude"] .ai-gem, html[data-ai="agy"] .ai-gem, html[data-ai="gem"]
       <div><label><span lang="pt">Sistema</span><span lang="en">System</span><span lang="es">Sistema</span></label>
         <div class="seg" role="group" aria-label="Operating system"><button type="button" data-set="os" data-val="win">Windows</button><button type="button" data-set="os" data-val="mac">macOS</button><button type="button" data-set="os" data-val="linux">Linux</button></div></div>
       <div><label><span lang="pt">IA</span><span lang="en">AI</span><span lang="es">IA</span></label>
-        <div class="seg" role="group" aria-label="AI"><button type="button" data-set="ai" data-val="claude">Claude Code</button><button type="button" data-set="ai" data-val="agy">Antigravity</button><button type="button" data-set="ai" data-val="gem">Gemini CLI</button></div></div>
+        <div class="seg" role="group" aria-label="AI"><button type="button" data-set="ai" data-val="claude">Claude Code</button><button type="button" data-set="ai" data-val="agy">Antigravity</button></div></div>
     </div>
     <ol class="steps">
       <li>
@@ -509,10 +508,8 @@ html[data-ai="claude"] .ai-gem, html[data-ai="agy"] .ai-gem, html[data-ai="gem"]
           <div class="code ai-claude os-unix"><button class="copy" type="button">copy</button><pre>curl -fsSL https://claude.ai/install.sh | bash</pre></div>
           <div class="code ai-agy os-win"><button class="copy" type="button">copy</button><pre>irm https://antigravity.google/cli/install.ps1 | iex</pre></div>
           <div class="code ai-agy os-unix"><button class="copy" type="button">copy</button><pre>curl -fsSL https://antigravity.google/cli/install.sh | bash</pre></div>
-          <div class="code ai-gem"><button class="copy" type="button">copy</button><pre>npm install -g @google/gemini-cli</pre></div>
-          <p class="ai-gem" lang="pt">O Gemini CLI precisa do <a href='https://nodejs.org'>Node.js</a> instalado antes.</p><p class="ai-gem" lang="en">Gemini CLI needs <a href='https://nodejs.org'>Node.js</a> installed first.</p><p class="ai-gem" lang="es">Gemini CLI necesita tener <a href='https://nodejs.org'>Node.js</a> instalado antes.</p>
           <p lang="pt">Abra um terminal novo, digite o nome do assistente e entre na sua conta pelo navegador:</p><p lang="en">Open a new terminal, type the assistant's name and sign in through the browser:</p><p lang="es">Abra una terminal nueva, escriba el nombre del asistente e inicie sesión en el navegador:</p>
-          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre>claude</pre></div><div class="code ai-agy"><button class="copy" type="button">copy</button><pre>agy</pre></div><div class="code ai-gem"><button class="copy" type="button">copy</button><pre>gemini</pre></div>
+          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre>claude</pre></div><div class="code ai-agy"><button class="copy" type="button">copy</button><pre>agy</pre></div>
         </div>
       </li>
       <li>
@@ -520,13 +517,11 @@ html[data-ai="claude"] .ai-gem, html[data-ai="agy"] .ai-gem, html[data-ai="gem"]
         <div class="txt">
           <p class="ai-claude" lang="pt">Com o Claude Code aberto, cole as duas linhas, <b>uma de cada vez</b>, e depois digite <code>/exit</code>:</p><p class="ai-claude" lang="en">With Claude Code open, paste the two lines <b>one at a time</b>, then type <code>/exit</code>:</p><p class="ai-claude" lang="es">Con Claude Code abierto, pegue las dos líneas <b>una a la vez</b> y luego escriba <code>/exit</code>:</p>
           <div class="code ai-claude"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>/plugin marketplace add LaBiOmicS/whoqol-toolkit</pre></div>
-          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>/plugin install whoqol-toolkit@labiomics-whoqol</pre></div>
+          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>/plugin install whoqol-toolkit@labiomics</pre></div>
           <p class="ai-agy" lang="pt">Fora do assistente, baixe o plugin com o git e instale-o:</p><p class="ai-agy" lang="en">Outside the assistant, download the plugin with git and install it:</p><p class="ai-agy" lang="es">Fuera del asistente, descargue el plugin con git e instálelo:</p>
           <div class="code ai-agy"><button class="copy" type="button">copy</button><pre>git clone https://github.com/LaBiOmicS/whoqol-toolkit.git
 agy plugin install whoqol-toolkit
 agy plugin enable whoqol-toolkit</pre></div>
-          <p class="ai-gem" lang="pt">Fora do assistente:</p><p class="ai-gem" lang="en">Outside the assistant:</p><p class="ai-gem" lang="es">Fuera del asistente:</p>
-          <div class="code ai-gem"><button class="copy" type="button">copy</button><pre>gemini extensions install https://github.com/LaBiOmicS/whoqol-toolkit</pre></div>
           <div class="tip" lang="pt">O plugin passa a funcionar na próxima vez que você abrir o assistente.</div><div class="tip" lang="en">The plugin is active the next time you open the assistant.</div><div class="tip" lang="es">El plugin funciona la próxima vez que abra el asistente.</div>
         </div>
       </li>
@@ -726,7 +721,7 @@ agy plugin enable whoqol-toolkit</pre></div>
   var root = document.documentElement;
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-  var CHOICES = { lang: ["pt", "en", "es"], os: ["win", "mac", "linux"], ai: ["claude", "agy", "gem"] };
+  var CHOICES = { lang: ["pt", "en", "es"], os: ["win", "mac", "linux"], ai: ["claude", "agy"] };
   var HTML_LANG = { pt: "pt-BR", en: "en", es: "es" };
   function set(kind, val) {
     if (CHOICES[kind].indexOf(val) < 0) val = CHOICES[kind][0];

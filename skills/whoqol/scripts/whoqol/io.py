@@ -13,6 +13,7 @@ import pandas as pd
 
 from .anchors import AMBIGUOUS_ANCHORS, ANCHOR_LANGS, MISSING_TOKENS, RESPONSE_ANCHORS, normalize_text
 from .instruments import Instrument, get_instrument
+from .security import column_ref
 
 SPREADSHEET_SUFFIXES = {".xlsx", ".xlsm", ".xls", ".ods"}
 
@@ -190,6 +191,7 @@ def parse_mapping(mapping: str | dict | None, instrument: str | Instrument | Non
 def build_item_frame(df: pd.DataFrame, mapping: dict[str, str],
                      instrument: str | Instrument | None = None) -> tuple[pd.DataFrame, dict]:
     inst = get_instrument(instrument)
+    mapping = {it: column_ref(list(df.columns), c) for it, c in mapping.items()}
     missing_cols = [c for c in mapping.values() if c not in df.columns]
     if missing_cols:
         raise KeyError(f"Mapped columns not found in the spreadsheet: {missing_cols}")

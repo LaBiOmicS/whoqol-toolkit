@@ -4,10 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "whoqol-toolkit"
-version = "0.1.0"
-description = "Scoring, psychometrics and publication-grade statistics for WHOQOL questionnaires (WHOQOL-BREF first), as an MCP server and CLI for Claude Code, Antigravity and Gemini CLI"
+version = "0.2.0"
+description = "Scoring, psychometrics and publication-grade statistics for WHOQOL questionnaires (WHOQOL-BREF first), as a plugin for Claude Code and Antigravity"
 readme = "README.md"
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
     { name = "Prof. Dr. Fabiano Bezerra Menegidio", email = "fabianomenegidio@umc.br" }
@@ -18,10 +18,8 @@ keywords = [
     "quality-of-life",
     "psychometrics",
     "patient-reported-outcomes",
-    "mcp",
     "claude-code",
     "antigravity",
-    "gemini",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -36,6 +34,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Medical Science Apps.",
 ]
 dependencies = [
@@ -47,7 +46,6 @@ dependencies = [
     "python-docx>=1.1",
     "semopy>=2.3",
     "statsmodels>=0.14",
-    "mcp>=1.2",
 ]
 
 [project.urls]
@@ -55,26 +53,27 @@ Homepage = "https://github.com/LaBiOmicS/whoqol-toolkit"
 Repository = "https://github.com/LaBiOmicS/whoqol-toolkit.git"
 Issues = "https://github.com/LaBiOmicS/whoqol-toolkit/issues"
 
+# Development CLI; the plugin runs skills/whoqol/scripts/whoqol_cli.py with `uv run` (PEP 723).
 [project.scripts]
 whoqol = "whoqol.cli:main"
-whoqol-mcp = "whoqol.mcp_server:main"
 
 [dependency-groups]
 dev = ["pytest>=8"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/whoqol"]
+packages = ["skills/whoqol/scripts/whoqol"]
 
 [tool.ruff]
 target-version = "py310"
 line-length = 120
-src = ["src", "tests"]
+src = ["skills/whoqol/scripts", "tests"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I", "B", "UP"]
 
 [tool.ruff.lint.per-file-ignores]
-"src/whoqol/figures.py" = ["E402"]
+"skills/whoqol/scripts/whoqol/figures.py" = ["E402"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["skills/whoqol/scripts"]

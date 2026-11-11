@@ -17,8 +17,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Lint
-        run: uvx ruff check src tests examples
+        run: uvx ruff check skills tests examples
       - name: Tests
         run: uv run --group dev pytest -q
       - name: Validate plugin manifests
-        run: python -c "import json; [json.load(open(f)) for f in ('plugin.json', 'mcp_config.json', '.mcp.json', 'gemini-extension.json', '.claude-plugin/plugin.json', '.claude-plugin/marketplace.json')]"
+        run: python -c "import json; [json.load(open(f)) for f in ('plugin.json', '.claude-plugin/plugin.json', '.claude-plugin/marketplace.json')]"
