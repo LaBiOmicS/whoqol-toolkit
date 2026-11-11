@@ -15,6 +15,9 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 - Notas de métodos que declaravam só no guia de pontuação as divergências entre fontes: EUROHIS-QOL 8 (soma, e não a
   média da sintaxe da UFRGS; oito itens exigidos), WHOQOL-HIV e WHOQOL-100 + SRPB (F2.1 não invertido) e WHOQOL-DIS
   (manual da OMS, não a sintaxe brasileira).
+- Documentação da sensibilidade e das convenções: READMEs (saídas e limitações, incluindo a não comparabilidade do
+  0–100 do WHOQOL-BREF-ID com normas do BREF), `SKILL.md`, `reporting.md` e página do projeto (bloco "Quando as
+  fontes divergem" e avisos nas fichas do WHOQOL-HIV e do WHOQOL-DIS).
 - Página do projeto: seção "Instrumentos" (PT/EN/ES) com a definição de qualidade de vida da OMS, a importância dos
   instrumentos, tabela comparativa (quando usar cada um), explicação do cálculo do escore com exemplo trabalhado e
   ficha de cada questionário (estrutura, regra de pontuação, pontos de atenção e versões validadas).

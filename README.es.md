@@ -219,9 +219,9 @@ Se guardan en `<archivo>_whoqol/` (o `-o/--output-dir`):
 
 | Archivo | Contenido |
 |---|---|
-| `report.md` | informe completo con alertas, tablas y figuras (en el idioma del informe) |
+| `report.md` | informe completo con alertas, tablas, sensibilidad de las reglas de puntuación y figuras (en el idioma del informe) |
 | `tables.docx` | tablas en estilo APA, figuras y referencias, listas para el manuscrito |
-| `results.xlsx` | puntuaciones por participante y todas las tablas, una hoja cada una |
+| `results.xlsx` | puntuaciones por participante y todas las tablas, una hoja cada una (`scoring_sensitivity`: cada puntuación con cada regla alternativa) |
 | `methods_results_{pt,en,es}.md` | borrador de las secciones de análisis estadístico y resultados en los tres idiomas |
 | `figures/` | distribución de los dominios, respuestas por ítem, correlaciones, medias por grupo (PNG 300 dpi + PDF) |
 | `cfa_wlsmv_lavaan.R` + `items_reversed.csv` | AFC con WLSMV en R (lavaan, semTools) |
@@ -236,7 +236,12 @@ Se guardan en `<archivo>_whoqol/` (o `-o/--output-dir`):
 - La detección de la versión lingüística requiere respuestas de texto o enunciados; con datos numéricos, indique la versión.
 - Las reglas de datos faltantes que las fuentes no definen, y la puntuación de la versión por representante (proxy)
   del WHOQOL-DIS, son convenciones del toolkit, listadas en [instruments.md](skills/whoqol/references/instruments.md)
-  y declaradas en el borrador de métodos.
+  y declaradas en el borrador de métodos. Cada análisis vuelve a puntuar los datos con las alternativas documentadas
+  y muestra cuánto cambian las medias y el n; lea esa sección antes de comparar con estudios puntuados con la sintaxis
+  de la UFRGS (invierte por error el ítem F2.1 del WHOQOL-HIV, lo que rebaja la faceta energía y el dominio físico).
+- WHOQOL-BREF-ID (discapacidades intelectuales, ítems de 3 puntos): ninguna fuente define la transformación 0–100 de
+  los dominios del BREF; la transformación lineal usada es una convención, y esas puntuaciones no son comparables con
+  normas del BREF de cinco puntos.
 - En el WHOQOL-100, el WHOQOL-HIV y el WHOQOL-SRPB, la numeración de las preguntas sigue el formulario brasileño (el
   formulario genérico de la OMS no tiene numeración); use los códigos de los ítems (`F1.1`, `SP1.1`) o el texto de la
   pregunta en los encabezados.

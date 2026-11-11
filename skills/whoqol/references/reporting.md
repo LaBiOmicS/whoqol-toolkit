@@ -2,7 +2,10 @@
 
 ## Methods
 - Instrument, validated language version and citation; administration mode (self-report, interview, online).
-- WHO scoring rules (reversed items, 0–100 transformation, missing-data handling, exclusion rule).
+- WHO scoring rules (reversed items, 0–100 transformation, missing-data handling, exclusion rule), and the
+  conventions adopted where the sources are silent or disagree (stated in the methods draft).
+- Sensitivity of the results to those conventions (report section "scoring-rule sensitivity"; one sentence is in
+  the methods and results drafts): report it, at least as supplementary material, when it raises a flag.
 - Analysis plan: descriptives, normality, tests, effect sizes, multiple-comparison correction, significance level, software.
 - Psychometrics (when an aim): α with CI, ω, CFA (estimator, indices and criteria), convergent/discriminant validity.
 - A ready draft is in `methods_results_{pt,en,es}.md`; adapt it to the study.
@@ -21,4 +24,5 @@
 
 ## Typical limitations
 - Cross-sectional design; convenience sampling; self-report and social desirability; no comparison group or local
-  norms; more missing answers on sex life; 3-item social domain; ML CFA on ordinal data (if WLSMV was not run).
+  norms; more missing answers on sex life; 3-item social domain; ML CFA on ordinal data (if WLSMV was not run); scoring conventions that change a result (sensitivity flags);
+  comparison with studies scored by another syntax (e.g. UFRGS WHOQOL-HIV, F2.1 reversed).

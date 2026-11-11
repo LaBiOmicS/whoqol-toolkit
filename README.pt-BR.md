@@ -216,9 +216,9 @@ Gravadas em `<arquivo>_whoqol/` (ou `-o/--output-dir`):
 
 | Arquivo | Conteúdo |
 |---|---|
-| `report.md` | relatório completo com alertas, tabelas e figuras (no idioma do relatório) |
+| `report.md` | relatório completo com alertas, tabelas, sensibilidade das regras de pontuação e figuras (no idioma do relatório) |
 | `tables.docx` | tabelas no estilo APA, figuras e referências, prontas para o manuscrito |
-| `results.xlsx` | escores por participante e todas as tabelas, uma aba cada |
+| `results.xlsx` | escores por participante e todas as tabelas, uma aba cada (`scoring_sensitivity`: cada escore com cada regra alternativa) |
 | `methods_results_{pt,en,es}.md` | rascunho das seções de análise estatística e resultados nos três idiomas |
 | `figures/` | distribuição dos domínios, respostas por item, correlações, médias por grupo (PNG 300 dpi + PDF) |
 | `cfa_wlsmv_lavaan.R` + `items_reversed.csv` | AFC com WLSMV no R (lavaan, semTools) |
@@ -233,7 +233,12 @@ Gravadas em `<arquivo>_whoqol/` (ou `-o/--output-dir`):
 - A detecção da versão linguística depende de respostas em texto ou dos enunciados; com dados numéricos, informe a versão.
 - Regras de dados ausentes que as fontes não definem, e a pontuação da versão por representante (proxy) do
   WHOQOL-DIS, são convenções do toolkit, listadas em [instruments.md](skills/whoqol/references/instruments.md) e
-  declaradas no rascunho de métodos.
+  declaradas no rascunho de métodos. Toda análise repontua os dados com as alternativas documentadas e mostra quanto
+  mudam as médias e o n; leia essa seção antes de comparar com estudos pontuados pela sintaxe da UFRGS (ela inverte
+  por engano o item F2.1 do WHOQOL-HIV, o que rebaixa a faceta energia e o domínio físico).
+- WHOQOL-BREF-ID (incapacidades intelectuais, itens de 3 pontos): nenhuma fonte define a transformação 0–100 dos
+  domínios do BREF; a transformação linear usada é uma convenção, e esses escores não são comparáveis com normas do
+  BREF de cinco pontos.
 - No WHOQOL-100, no WHOQOL-HIV e no WHOQOL-SRPB, a numeração das questões segue o formulário brasileiro (o formulário
   genérico da OMS não tem numeração); use os códigos dos itens (`F1.1`, `SP1.1`) ou o texto da questão nos cabeçalhos.
 - Na família WHOQOL-100, a AFC em Python é feita por facetas; o modelo de segunda ordem por itens está no script lavaan.

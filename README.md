@@ -216,9 +216,9 @@ Written to `<file>_whoqol/` (or `-o/--output-dir`):
 
 | File | Content |
 |---|---|
-| `report.md` | full report with alerts, tables and figures (report language) |
+| `report.md` | full report with alerts, tables, scoring-rule sensitivity and figures (report language) |
 | `tables.docx` | APA-style tables, figures and references, ready for the manuscript |
-| `results.xlsx` | scores per participant and every table, one sheet each |
+| `results.xlsx` | scores per participant and every table, one sheet each (`scoring_sensitivity`: every score under each alternative rule) |
 | `methods_results_{pt,en,es}.md` | draft of the statistical-analysis and results sections in three languages |
 | `figures/` | domain distribution, item responses, correlations, group means (PNG 300 dpi + PDF) |
 | `cfa_wlsmv_lavaan.R` + `items_reversed.csv` | CFA with WLSMV in R (lavaan, semTools) |
@@ -233,6 +233,11 @@ Written to `<file>_whoqol/` (or `-o/--output-dir`):
 - Language-version detection needs text answers or question headers; with numeric data, state the version.
 - Missing-data rules that the sources do not give, and the scoring of the WHOQOL-DIS proxy form, are toolkit
   conventions, listed in [instruments.md](skills/whoqol/references/instruments.md) and stated in the methods draft.
+  Every analysis rescores the data with the documented alternatives and reports how much means and n change; read
+  that section before comparing with studies scored with the UFRGS syntax (it reverses item F2.1 of the WHOQOL-HIV by
+  mistake, which lowers the energy facet and the physical domain).
+- WHOQOL-BREF-ID (intellectual disabilities, 3-point items): no source gives a 0–100 rule for the BREF domains; the
+  linear transformation used is a convention, and these scores are not comparable with five-point BREF norms.
 - For the WHOQOL-100, WHOQOL-HIV and WHOQOL-SRPB, question numbers follow the Brazilian form (the WHO generic form
   has none); use item codes (`F1.1`, `SP1.1`) or the question text as headers.
 - On the WHOQOL-100 family the Python CFA is facet-level; the item-level second-order model is in the lavaan script.

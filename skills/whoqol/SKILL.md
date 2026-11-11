@@ -122,6 +122,8 @@ Read [interpretation.md](./references/interpretation.md) (and [psychometrics.md]
   domains.
 - **Psychometric properties**: α/ω (3-item social domain), CFA, HTMT, multitrait scaling.
 - **Comparisons/associations**: effect size + CI, Holm p, practical relevance (½ SD, MDC).
+- **Scoring conventions**: from `scoring_sensitivity` and the `sensitivity` flags - whether any conclusion depends
+  on a rule the sources leave open (interpretation.md, "Scoring conventions").
 - **Alerts and limitations**: from `flags`.
 - **Files**: the paths in `files` (report.md, tables.docx, results.xlsx, figures, methods_results_{pt,en,es}.md,
   cfa_wlsmv_lavaan.R).
