@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 
 from . import psychometrics as psy
+from . import scoring
 from .analysis import AnalysisResult, summary_dict
 from .i18n import ES_SYMBOL, LANGS, fmt, fmt_p, fmt_r, join_list, p_expr, render_flag, score_label, t
 
@@ -43,11 +44,20 @@ def references(r: AnalysisResult) -> list[str]:
 
 
 # ------------------------------------------------------------------ tables
+def _range_note(inst, key: str) -> str:
+    if key in inst.domains:
+        lo, hi = inst.domain_range(key)
+    else:  # unofficial total
+        lo, hi = 4, 4 * inst.scale_max
+    return f" [{lo:g}–{hi:g}]"
+
+
 def table_descriptives(r: AnalysisResult) -> pd.DataFrame:
     lang, inst = r.lang, r.inst
     rel = r.reliability.set_index("domain")
     fc = r.floor_ceiling.set_index("score")
     draw = r.descriptives_raw.set_index("score")
+    single = inst.single_range
     lo, hi = inst.raw_range()
     rows = []
     for _, d in r.descriptives.iterrows():
@@ -61,7 +71,9 @@ def table_descriptives(r: AnalysisResult) -> pd.DataFrame:
             t("mean_sd", lang): f"{fmt(d['mean'], 1, lang)} ({fmt(d['sd'], 1, lang)})",
             t("ci95", lang): f"{fmt(d['ci95_low'], 1, lang)}–{fmt(d['ci95_high'], 1, lang)}",
             t("median_iqr", lang): f"{fmt(d['median'], 1, lang)} [{fmt(d['q1'], 1, lang)}–{fmt(d['q3'], 1, lang)}]",
-            t("raw_mean_sd", lang, range=f"{lo}–{hi}"): f"{fmt(dr['mean'], 2, lang)} ({fmt(dr['sd'], 2, lang)})",
+            t("raw_mean_sd", lang, range=f"{lo:g}–{hi:g}" if single
+                   else {"pt": "bruta", "en": "raw", "es": "bruta"}[lang]):
+                f"{fmt(dr['mean'], 2, lang)} ({fmt(dr['sd'], 2, lang)})" + ("" if single else _range_note(inst, key)),
             t("floor", lang): fmt(fc.loc[d["score"], "floor_pct"], 1, lang),
             t("ceiling", lang): fmt(fc.loc[d["score"], "ceiling_pct"], 1, lang),
             "α": fmt_r(a, lang), "ω": fmt_r(om, lang),
@@ -148,7 +160,8 @@ def build_tables(r: AnalysisResult) -> list[tuple[str, pd.DataFrame, str]]:
             (t("t_corr", lang, n=3), table_correlations(r), t("n_corr", lang))]
     n = 4
     if (cfa_t := table_cfa(r)) is not None:
-        tabs.append((t("t_cfa", lang, n=n, k=r.cfa["n_factors"], i=r.cfa["n_items"]), cfa_t, t("n_cfa", lang)))
+        key = "t_cfa_facet" if r.cfa.get("level") == "facet" else "t_cfa"
+        tabs.append((t(key, lang, n=n, k=r.cfa["n_factors"], i=r.cfa["n_items"]), cfa_t, t("n_cfa", lang)))
         n += 1
     for gr in r.group_results:
         if "error" in gr or gr["table"].empty:
@@ -322,10 +335,8 @@ def write_all(r: AnalysisResult) -> dict:
                       "source_column": [q["mapping_used"].get(i) for i in q["pct_missing_by_item"]]}
                      ).to_excel(xw, sheet_name="missing_by_item", index=False)
 
-    rev = r.items.copy()
-    for it in r.inst.reversed_items:
-        rev[it] = 6 - rev[it]
-    rev.loc[~r.scores["excluded"]].to_csv(out / "items_reversed.csv", index=False)
+    scoring.reversed_items_frame(r.items.loc[~r.scores["excluded"]], r.inst).to_csv(out / "items_reversed.csv",
+                                                                                    index=False)
     (out / "cfa_wlsmv_lavaan.R").write_text(psy.lavaan_script(r.inst), encoding="utf-8")
     files["lavaan_script"] = str(out / "cfa_wlsmv_lavaan.R")
 
@@ -345,7 +356,94 @@ def write_all(r: AnalysisResult) -> dict:
 
 
 # ------------------------------------------------------------------ prose
+def _simple_scoring(inst) -> bool:
+    """WHOQOL-BREF-like: item means x 4 on one five-point scale, no facets or official totals."""
+    return (not inst.hierarchical and not inst.item_scale and inst.scale_max == 5
+            and all(d.multiplier == 4 and d.role in ("domain", "global") for d in inst.domains.values()))
+
+
+SCORING_WORDS = {
+    "pt": {"mean": "média dos itens × {m}", "sum": "soma dos itens", "meansum": "média dos itens × {m} (soma)",
+           "comp": "média dos escores das facetas", "revf": ", com {f} invertida(s) (mínimo + máximo − escore)",
+           "facets": "cada faceta: mínimo de {v} de {n} itens", "dom_items": "mínimo de {v} de {n} itens",
+           "dom_facets": "mínimo de {v} de {n} facetas", "all": "todos os itens",
+           "all_facets": "todas as facetas", "one_facet": "a faceta válida"},
+    "en": {"mean": "mean of the items × {m}", "sum": "sum of the items", "meansum": "mean of the items × {m} (sum)",
+           "comp": "mean of the facet scores", "revf": ", with {f} reversed (minimum + maximum − score)",
+           "facets": "each facet: at least {v} of {n} items", "dom_items": "at least {v} of {n} items",
+           "dom_facets": "at least {v} of {n} facets", "all": "all items",
+           "all_facets": "all facets", "one_facet": "a valid facet"},
+    "es": {"mean": "media de los ítems × {m}", "sum": "suma de los ítems", "meansum": "media de los ítems × {m} (suma)",
+           "comp": "media de las puntuaciones de las facetas", "revf": ", con {f} invertida(s) (mínimo + máximo − puntuación)",
+           "facets": "cada faceta: al menos {v} de {n} ítems", "dom_items": "al menos {v} de {n} ítems",
+           "dom_facets": "al menos {v} de {n} facetas", "all": "todos los ítems",
+           "all_facets": "todas las facetas", "one_facet": "la faceta válida"},
+}
+
+GENERIC_SCORING = {
+    "pt": ("Os escores foram calculados conforme o manual e a sintaxe oficiais do instrumento: os itens {rev} foram "
+           "invertidos (valor = máximo da escala + 1 − resposta). {rules}. Todos os escores foram transformados para "
+           "a escala 0–100 [(escore − mínimo) × 100/(máximo − mínimo)], na qual valores mais altos indicam melhor "
+           "qualidade de vida. Questionários com menos de {minv} itens válidos foram excluídos. Respostas válidas "
+           "exigidas por escore: {rule}; quando permitido calcular com itens ausentes, usou-se a média dos itens "
+           "respondidos do próprio escore."),
+    "en": ("Scores were computed following the instrument's official manual and syntax: items {rev} were "
+           "reverse-coded (value = scale maximum + 1 − answer). {rules}. All scores were transformed to a 0–100 "
+           "scale [(score − minimum) × 100/(maximum − minimum)], with higher values indicating better quality of "
+           "life. Questionnaires with fewer than {minv} valid items were excluded. Valid answers required per score: "
+           "{rule}; where missing items were allowed, the mean of the answered items of that score was used."),
+    "es": ("Las puntuaciones se calcularon según el manual y la sintaxis oficiales del instrumento: los ítems {rev} se "
+           "invirtieron (valor = máximo de la escala + 1 − respuesta). {rules}. Todas las puntuaciones se "
+           "transformaron a una escala de 0–100 [(puntuación − mínimo) × 100/(máximo − mínimo)], en la que los valores "
+           "más altos indican mejor calidad de vida. Se excluyeron los cuestionarios con menos de {minv} ítems "
+           "válidos. Respuestas válidas exigidas por puntuación: {rule}; cuando se permitieron ítems faltantes, se "
+           "usó la media de los ítems respondidos de la propia puntuación."),
+}
+
+
+def _score_rules(inst, lang: str) -> str:
+    W = SCORING_WORDS[lang]
+    parts = []
+    facets = [k for k, d in inst.domains.items() if d.role == "facet"]
+    if facets:
+        d0 = inst.domains[facets[0]]
+        lo, hi = inst.domain_range(facets[0])
+        parts.append({"pt": "Facetas", "en": "Facets", "es": "Facetas"}[lang] + ": "
+                     + W["mean"].format(m=d0.multiplier) + f" ({lo:g}–{hi:g})")
+    for k in inst.reported_domains:
+        d = inst.domains[k]
+        lo, hi = inst.domain_range(k)
+        if d.composite:
+            rule = W["comp"] + (W["revf"].format(f=", ".join(inst.domain_label(f, lang) for f in d.reversed_facets))
+                                if d.reversed_facets else "")
+        elif d.multiplier == len(d.items) > 1 and d.min_valid == len(d.items):
+            rule = W["sum"]
+        elif d.multiplier == len(d.items) > 4:
+            rule = W["meansum"].format(m=d.multiplier)
+        else:
+            rule = W["mean"].format(m=d.multiplier)
+        parts.append(f"{inst.domain_label(k, lang)}: {rule} ({lo:g}–{hi:g})")
+    return "; ".join(parts)
+
+
 def _missing_rule(r: AnalysisResult, lang: str) -> str:
+    if not _simple_scoring(r.inst):
+        W, inst, out = SCORING_WORDS[lang], r.inst, []
+        facets = [d for d in inst.domains.values() if d.role == "facet"]
+        if facets and len({(d.min_valid, len(d.items)) for d in facets}) == 1:
+            out.append(W["facets"].format(v=facets[0].min_valid, n=len(facets[0].items)))
+        groups: dict[str, list[str]] = {}
+        for d in inst.domains.values():
+            if d.role == "facet" and out:
+                continue
+            n = len(d.facets or d.items)
+            if d.min_valid == n:
+                rule = W["one_facet"] if d.composite and n == 1 else W["all_facets"] if d.composite else W["all"]
+            else:
+                rule = W["dom_facets" if d.composite else "dom_items"].format(v=d.min_valid, n=n)
+            groups.setdefault(rule, []).append(d.label(lang))
+        out += [f"{', '.join(names)} ({rule})" for rule, names in groups.items()]
+        return "; ".join(out)
     allowed = {k: len(d.items) - d.min_valid for k, d in r.inst.domains.items() if d.in_measurement_model}
     parts = "; ".join(f"{r.inst.domain_label(k, lang).lower() if lang != 'en' else r.inst.domain_label(k, lang)}: "
                       f"{v}" for k, v in allowed.items())
@@ -375,6 +473,10 @@ PROSE = {
                   "Ware & Gandek, 1998) e pela razão heterotraço-monotraço (HTMT < 0,85; Henseler et al., 2015)"),
         "cfa": (", e por análise fatorial confirmatória do modelo de domínios correlacionados, estimada por máxima "
                 "verossimilhança, com ajuste avaliado por χ²/gl, CFI, TLI, RMSEA (IC 90%) e SRMR (Hu & Bentler, 1999)"),
+        "cfa_facet": (", e por análise fatorial confirmatória do modelo de domínios correlacionados com os escores das "
+                      "facetas como indicadores (facetas de conteúdo negativo invertidas), estimada por máxima "
+                      "verossimilhança, com ajuste avaliado por χ²/gl, CFI, TLI, RMSEA (IC 90%) e SRMR (Hu & Bentler, "
+                      "1999)"),
         "corr": ("As associações entre escores foram avaliadas pelo coeficiente de correlação de Spearman (ρ), com IC 95% "
                  "pela transformação de Fisher (Bonett & Wright, 2000)."),
         "par": ("teste t de Welch (dois grupos) ou ANOVA de Welch com post hoc de Games-Howell (três ou mais grupos), "
@@ -422,6 +524,9 @@ PROSE = {
                   "Ware & Gandek, 1998) and the heterotrait-monotrait ratio (HTMT < .85; Henseler et al., 2015)"),
         "cfa": (", and through confirmatory factor analysis of the correlated-domains model, estimated by maximum "
                 "likelihood, with fit assessed by χ²/df, CFI, TLI, RMSEA (90% CI) and SRMR (Hu & Bentler, 1999)"),
+        "cfa_facet": (", and through confirmatory factor analysis of the correlated-domains model with the facet scores "
+                      "as indicators (negatively framed facets reversed), estimated by maximum likelihood, with fit "
+                      "assessed by χ²/df, CFI, TLI, RMSEA (90% CI) and SRMR (Hu & Bentler, 1999)"),
         "corr": ("Associations between scores were assessed with Spearman's correlation coefficient (ρ), with 95% CI "
                  "via Fisher's transformation (Bonett & Wright, 2000)."),
         "par": ("Welch's t-test (two groups) or Welch's ANOVA with Games-Howell post hoc tests (three or more groups), "
@@ -470,6 +575,10 @@ PROSE = {
         "cfa": (", y mediante análisis factorial confirmatorio del modelo de dominios correlacionados, estimado por "
                 "máxima verosimilitud, con el ajuste evaluado por χ²/gl, CFI, TLI, RMSEA (IC 90%) y SRMR (Hu & "
                 "Bentler, 1999)"),
+        "cfa_facet": (", y mediante análisis factorial confirmatorio del modelo de dominios correlacionados con las "
+                      "puntuaciones de las facetas como indicadores (facetas de contenido negativo invertidas), estimado "
+                      "por máxima verosimilitud, con el ajuste evaluado por χ²/gl, CFI, TLI, RMSEA (IC 90%) y SRMR (Hu "
+                      "& Bentler, 1999)"),
         "corr": ("Las asociaciones entre puntuaciones se evaluaron con el coeficiente de correlación de Spearman (ρ), con "
                  "IC 95% mediante la transformación de Fisher (Bonett & Wright, 2000)."),
         "par": ("la prueba t de Welch (dos grupos) o el ANOVA de Welch con pruebas post hoc de Games-Howell (tres o más "
@@ -506,12 +615,20 @@ def methods_text(r: AnalysisResult, lang: str) -> str:
     P, inst, cfg = PROSE[lang], r.inst, r.config
     v = inst.version_for(r.version_lang)
     lo, hi = inst.raw_range()
-    rev = join_list([i.lstrip("Q") for i in inst.reversed_items], lang)
+    if _simple_scoring(inst):
+        rev = join_list([i.lstrip("Q") for i in inst.reversed_items], lang)
+        scoring_text = P["scoring"].format(rev=rev, lo=lo, hi=hi, span=hi - lo, minv=inst.min_valid_total,
+                                           rule=_missing_rule(r, lang))
+    else:
+        scoring_text = GENERIC_SCORING[lang].format(rev=join_list(list(inst.reversed_items), lang),
+                                                    rules=_score_rules(inst, lang), minv=inst.min_valid_total,
+                                                    rule=_missing_rule(r, lang))
     s = [P["h_methods"],
          P["instrument"].format(name=inst.name, desc=inst.description[lang],
                                 version=v.description[lang] if v else P["no_version"]),
-         P["scoring"].format(rev=rev, lo=lo, hi=hi, span=hi - lo, minv=inst.min_valid_total, rule=_missing_rule(r, lang)),
-         P["descr"] + (P["cfa"] if r.cfa and "fit" in r.cfa else "") + ".",
+         scoring_text + (" " + inst.methods_note[lang] if lang in inst.methods_note else ""),
+         P["descr"] + ((P["cfa_facet"] if r.cfa.get("level") == "facet" else P["cfa"]) if r.cfa and "fit" in r.cfa
+                       else "") + ".",
          P["corr"]]
     ok = [g for g in r.group_results if "error" not in g]
     if ok:
@@ -529,7 +646,8 @@ def results_text(r: AnalysisResult, lang: str) -> str:
     P, inst, q = PROSE[lang], r.inst, r.quality
     d = r.descriptives.set_index("score")
     rel = r.reliability.set_index("domain")
-    doms = [k for k in inst.model_domains if f"{k}_0_100" in d.index]
+    doms = [k for k in inst.primary_domains if f"{k}_0_100" in d.index]
+    alpha_doms = [k for k in inst.model_domains if k in rel.index]
 
     def lab(k):
         x = inst.domain_label(k, lang)
@@ -544,8 +662,8 @@ def results_text(r: AnalysisResult, lang: str) -> str:
          P["sample"].format(rows=q["n_rows"], exc=q["n_excluded"], minv=inst.min_valid_total, n=q["n_analyzed"],
                             hi=lab(order[0]), hi_ms=ms(order[0]), lo=lab(order[-1]), lo_ms=ms(order[-1]))
          + "".join(P["overall"].format(name=lab(k), ms=ms(k)) for k, dm in inst.domains.items()
-                   if not dm.in_measurement_model and f"{k}_0_100" in d.index),
-         P["alpha"].format(alphas=", ".join(f"{lab(k)} = {fmt_r(rel.loc[k, 'alpha'], lang)}" for k in doms))]
+                   if dm.role in ("global", "total") and f"{k}_0_100" in d.index),
+         P["alpha"].format(alphas=", ".join(f"{lab(k)} = {fmt_r(rel.loc[k, 'alpha'], lang)}" for k in alpha_doms))]
     if r.cfa and "fit" in r.cfa:
         f = r.cfa["fit"]
         lo90, hi90 = r.cfa["rmsea_ci90"]

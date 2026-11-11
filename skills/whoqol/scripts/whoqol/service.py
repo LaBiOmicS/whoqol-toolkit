@@ -26,7 +26,7 @@ from .security import COLUMN_LIMIT, clean, risk
 
 # Static guides live in the skill's references/ folder (skills/whoqol/references/<topic>.md).
 REFERENCES_DIR = Path(__file__).resolve().parents[2] / "references"
-GUIDE_TOPICS = ["workflow", "scoring", "psychometrics", "interpretation", "reporting", "references"]
+GUIDE_TOPICS = ["workflow", "instruments", "scoring", "psychometrics", "interpretation", "reporting", "references"]
 _META_KEYS = ("mapping", "id_column", "group_vars", "continuous_vars", "covariates", "labels", "level_order",
               "study", "warnings")
 

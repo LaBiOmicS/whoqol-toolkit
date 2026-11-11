@@ -24,9 +24,11 @@ secciones de métodos y resultados.
 Todas las cifras provienen de un paquete Python determinista y probado, que la skill ejecuta con `uv run`. El agente
 hace las preguntas adecuadas, ejecuta los scripts e interpreta la salida; nunca calcula puntuaciones por su cuenta.
 
-El primer instrumento es el **WHOQOL-BREF**. El paquete se organiza en torno a un registro de instrumentos, de modo
-que otros instrumentos WHOQOL (WHOQOL-100, WHOQOL-OLD, WHOQOL-HIV-BREF, …) puedan añadirse sin cambiar el código de
-análisis.
+Instrumentos disponibles: **WHOQOL-BREF, WHOQOL-OLD, EUROHIS-QOL 8, WHOQOL-HIV-BREF, WHOQOL-SRPB BREF, WHOQOL-SRPB,
+WHOQOL-DIS (discapacidades físicas e intelectuales), WHOQOL-100, WHOQOL-HIV y WHOQOL-100 + SRPB**. Cada uno se puntúa
+con las reglas del manual de la OMS o de la sintaxis oficial; donde las fuentes no dicen nada o discrepan, la
+convención adoptada está documentada y figura en el borrador de métodos
+([instruments.md](skills/whoqol/references/instruments.md)).
 
 ---
 
@@ -53,7 +55,7 @@ análisis.
 | | |
 |---|---|
 | **Hosts** | Claude Code (plugin) · Antigravity CLI (plugin) · línea de comandos |
-| **Instrumentos** | WHOQOL-BREF (26 ítems, 4 dominios + faceta global) |
+| **Instrumentos** | WHOQOL-BREF, WHOQOL-OLD, EUROHIS-QOL 8, WHOQOL-HIV-BREF, WHOQOL-SRPB BREF, WHOQOL-SRPB, WHOQOL-DIS (físicas, intelectuales, ítems nacionales, proxy), WHOQOL-100 (6 dominios o los 4 del BREF), WHOQOL-HIV, WHOQOL-100 + SRPB ([detalles](skills/whoqol/references/instruments.md)) |
 | **Formatos de entrada** | .xlsx, .xls, .ods, .csv, .tsv, .sav |
 | **Detección de ítems** | por número (`Q1`, `1.`, `item_1`, `pergunta 1`, `pregunta 1`) o por el texto de la pregunta en portugués, inglés o español; respuestas numéricas (1–5) o de texto |
 | **Idiomas** | Portugués, inglés y español. El informe sigue el idioma del cuestionario (inglés para cualquier otro); el borrador de métodos/resultados se genera siempre en los tres |
@@ -231,7 +233,14 @@ Se guardan en `<archivo>_whoqol/` (o `-o/--output-dir`):
 - El AFC integrado usa máxima verosimilitud, que trata los ítems Likert como continuos. Para un artículo psicométrico,
   ejecute el script WLSMV y pruebe la invarianza de medida.
 - La detección de la versión lingüística requiere respuestas de texto o enunciados; con datos numéricos, indique la versión.
-- Por ahora solo está implementado el WHOQOL-BREF.
+- Las reglas de datos faltantes que las fuentes no definen, y la puntuación de la versión por representante (proxy)
+  del WHOQOL-DIS, son convenciones del toolkit, listadas en [instruments.md](skills/whoqol/references/instruments.md)
+  y declaradas en el borrador de métodos.
+- En el WHOQOL-100, el WHOQOL-HIV y el WHOQOL-SRPB, la numeración de las preguntas sigue el formulario brasileño (el
+  formulario genérico de la OMS no tiene numeración); use los códigos de los ítems (`F1.1`, `SP1.1`) o el texto de la
+  pregunta en los encabezados.
+- En la familia WHOQOL-100, el AFC en Python se hace por facetas; el modelo de segundo orden por ítems está en el
+  script de lavaan.
 - El uso de los instrumentos WHOQOL debe seguir los términos de la OMS; el toolkit no distribuye el cuestionario.
 - Las respuestas a los cuestionarios son datos personales de salud: manténgalos en local y seudonimizados (véase
   `rules/AGENTS.md`).
@@ -246,10 +255,11 @@ uv run python examples/generate_examples.py   # datos de ejemplo sintéticos
 claude plugin validate . && agy plugin validate . --strict
 ```
 
-Para añadir un instrumento, cree `skills/whoqol/scripts/whoqol/instruments/<nombre>.py` con un `Instrument` (ítems, ítems invertidos,
-dominios con mínimo de ítems válidos, textos y patrones de los ítems en PT/EN/ES, versiones lingüísticas) y regístrelo
-en `instruments/__init__.py`. La puntuación, la psicometría, los informes y la guía de puntuación se derivan de esa
-definición.
+Para añadir un instrumento, cree `skills/whoqol/scripts/whoqol/instruments/<nombre>.py` con un `Instrument` (ítems,
+ítems invertidos, puntuaciones con mínimo de ítems válidos, multiplicador o facetas, escala de respuesta, textos y
+códigos de los ítems, versiones lingüísticas, notas sobre las fuentes) y regístrelo en `instruments/__init__.py`. La
+puntuación, la psicometría, los informes y la guía de puntuación se derivan de esa definición. Añada una prueba en
+`tests/test_reference_instruments.py` con las reglas transcritas del manual y un respondiente calculado a mano.
 
 ## Cita
 
@@ -258,7 +268,7 @@ definición.
   author  = {Menegidio, Fabiano Bezerra},
   title   = {whoqol-toolkit: scoring, psychometrics and publication-grade statistics for WHOQOL questionnaires},
   year    = {2026},
-  version = {0.2.0},
+  version = {0.3.0},
   url     = {https://github.com/LaBiOmicS/whoqol-toolkit}
 }
 ```

@@ -194,11 +194,12 @@ def parse_variables(vars_df: pd.DataFrame, study: dict | None = None,
             meta["warnings"].append(f"Unknown role for '{col}': {role_raw!r} (use one of {list(ROLES)}).")
             continue
         if role == "item":
-            m = re.search(r"(\d{1,3})", str(cell(r, "item") or ""))
-            if not m or not 1 <= int(m.group(1)) <= len(inst.items):
-                meta["warnings"].append(f"'{col}' has role 'item' but no valid item id (Q1..Q{len(inst.items)}).")
+            from .io import resolve_item_key
+            item = resolve_item_key(cell(r, "item") or "", inst)
+            if item is None:
+                meta["warnings"].append(f"'{col}' has role 'item' but no valid item id of {inst.name} "
+                                        f"({inst.items[0]} ... {inst.items[-1]}).")
                 continue
-            item = inst.items[int(m.group(1)) - 1]
             if item in meta["mapping"]:
                 meta["warnings"].append(f"Item {item} assigned to more than one column.")
             meta["mapping"][item] = col

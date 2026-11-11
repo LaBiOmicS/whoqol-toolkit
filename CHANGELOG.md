@@ -4,6 +4,41 @@ Todas as mudanças relevantes deste projeto são documentadas aqui.
 O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o projeto adota o
 [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.3.0] — 2026-11-11
+
+### Adicionado
+- Catorze chaves de instrumento além do WHOQOL-BREF, entre elas: WHOQOL-OLD, EUROHIS-QOL 8 (também a partir de uma planilha do
+  WHOQOL-BREF), WHOQOL-HIV-BREF, WHOQOL-SRPB BREF, módulo WHOQOL-SRPB, WHOQOL-DIS para incapacidades físicas e
+  intelectuais (escalas de 3 pontos), WHOQOL-100, WHOQOL-HIV (120 itens) e WHOQOL-100 + SRPB. Regras transcritas dos
+  manuais da OMS e das sintaxes oficiais (distribuídas pelo grupo WHOQOL da UFRGS); textos dos itens em português
+  dos formulários brasileiros.
+- Modelo de instrumento generalizado: escores como média × multiplicador (soma no WHOQOL-OLD, DIS e EUROHIS),
+  domínios compostos pela média de facetas com facetas invertidas (24 − faceta), escores totais oficiais, escalas de
+  resposta por item (1–3 na versão ID do DIS), códigos de itens nos cabeçalhos (`F1.1`, `F11`, `old_01`, `HBREF_1`,
+  `SP1.1`, `dis_01`) e numeração do formulário.
+- `guide instruments` (`references/instruments.md`): qual chave usar, fontes de cada regra, convenções adotadas onde
+  as fontes são omissas e divergências entre fontes (EUROHIS soma × média; F2.1 invertido por engano nas sintaxes
+  do WHOQOL-HIV e do SRPB; pontuação do DIS na sintaxe brasileira × manual da OMS; regra de ausentes do WHOQOL-100
+  no texto × na sintaxe). O guia `scoring` de cada instrumento traz as notas, e o rascunho de métodos declara as
+  convenções.
+- WHOQOL-DIS nos formulários brasileiros: itens nacionais Q40–Q43 pontuados como na sintaxe da UFRGS
+  (`whoqol-dis-br`, `whoqol-dis-id-br`) e versão por representante (proxy) para incapacidade intelectual
+  (`whoqol-dis-id-proxy`, escalas de 5 pontos, textos em terceira pessoa; Schmidt et al., 2010).
+- `whoqol-100-bref`: os quatro domínios do WHOQOL-BREF calculados a partir de uma planilha do WHOQOL-100 ou do
+  WHOQOL-HIV (códigos do apêndice 8 do manual da OMS), para comparação com estudos que usaram o WHOQOL-BREF.
+- Textos em inglês das 100 questões do WHOQOL-100 (apêndice 4 do manual), reconhecidos nos cabeçalhos também no
+  WHOQOL-HIV e no WHOQOL-100 + SRPB.
+- AFC em Python por facetas nos instrumentos longos (escores das facetas como indicadores dos domínios) e figura de
+  respostas por item desenhada por domínio acima de 40 itens.
+- Testes de referência para cada instrumento, com as regras transcritas das fontes e respondentes calculados à mão.
+
+### Alterado
+- O texto de métodos descreve a pontuação de cada instrumento (somas, facetas, mínimos por escore); o do
+  WHOQOL-BREF não muda.
+- Psicometria dos instrumentos longos: confiabilidade, análise multitraço e HTMT por faceta; AFC de segunda ordem
+  por itens no script lavaan.
+- `results.json`: `descriptives_raw_4_20` passa a ser `descriptives_raw`, com a amplitude de cada escore.
+
 ## [0.2.0] — 2026-11-11
 
 ### Alterado

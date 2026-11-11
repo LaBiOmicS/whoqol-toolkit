@@ -39,15 +39,15 @@ def describe(scores: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
 
 
 def item_descriptives(items: pd.DataFrame, inst: Instrument) -> pd.DataFrame:
-    """Original answers (not reversed), 1-5."""
+    """Original answers (not reversed), 1-k; pct_k is empty for items on shorter scales."""
     rows = []
     for it in inst.items:
         s = items[it]
         v = s.dropna()
         row = {"item": it, "n": len(v), "missing_pct": s.isna().mean() * 100,
                "mean": v.mean(), "sd": v.std(ddof=1), "median": v.median()}
-        for k in range(1, 6):
-            row[f"pct_{k}"] = (v == k).mean() * 100 if len(v) else np.nan
+        for k in range(1, max(inst.item_max(i) for i in inst.items) + 1):
+            row[f"pct_{k}"] = (v == k).mean() * 100 if len(v) and k <= inst.item_max(it) else np.nan
         rows.append(row)
     return pd.DataFrame(rows)
 
@@ -298,6 +298,8 @@ def correlate(data: pd.DataFrame, xs: list[str], ys: list[str]) -> pd.DataFrame:
 
 
 def correlation_matrix(data: pd.DataFrame, cols: list[str]) -> tuple[pd.DataFrame, pd.DataFrame]:
+    if len(cols) < 2:  # single score (EUROHIS-QOL 8)
+        return (pd.DataFrame(1.0, index=cols, columns=cols), pd.DataFrame(0.0, index=cols, columns=cols))
     d = data[cols].dropna()
     rho, p = stats.spearmanr(d.values)
     if np.isscalar(rho):

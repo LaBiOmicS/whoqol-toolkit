@@ -2,9 +2,10 @@
 name: whoqol
 description: >-
   Use this skill when the user provides a spreadsheet, CSV or Google Forms export of WHOQOL questionnaire answers
-  (WHOQOL-BREF; more WHOQOL instruments later) or asks to score, analyse, interpret or report WHOQOL quality-of-life
-  results, in Portuguese, English or Spanish (qualidade de vida, calidad de vida). Scores domains with the official
-  WHO rules (physical, psychological, social relationships, environment), checks data quality, estimates reliability
+  (WHOQOL-BREF, WHOQOL-OLD, EUROHIS-QOL 8, WHOQOL-HIV-BREF, WHOQOL-HIV, WHOQOL-SRPB, WHOQOL-SRPB BREF, WHOQOL-DIS,
+  WHOQOL-100) or asks to score, analyse, interpret or report WHOQOL quality-of-life results, in Portuguese, English
+  or Spanish (qualidade de vida, calidad de vida). Scores domains and facets with the official WHO rules, checks
+  data quality, estimates reliability
   (Cronbach's alpha with CI, McDonald's omega, SEM/MDC) and validity (CFA, HTMT, multitrait scaling), compares groups
   with effect sizes and Holm correction, and writes APA tables (DOCX), figures, an XLSX workbook and a methods/results
   draft in PT, EN and ES for publication.
@@ -42,7 +43,7 @@ Every command except `guide` prints a JSON object on stdout.
 | Argument | Default | Notes |
 |---|---|---|
 | `path` | — | Spreadsheet: `.xlsx`, `.xls`, `.ods`, `.csv`, `.tsv`, `.sav`. `--sheet` picks a sheet by name or index. |
-| `--instrument` / `-i` | `whoqol-bref` | `$WHOQOL instruments` lists the supported ones. |
+| `--instrument` / `-i` | `whoqol-bref` | `$WHOQOL instruments` lists them; `$WHOQOL guide instruments` says which key fits. |
 | `--mapping` | detected | JSON or `.json` file `{"Q1": "column", ...}` when detection fails or is positional. |
 | `--metadata` | none | Data dictionary from `template` (`.xlsx`/`.json`), or a `variables`/`variaveis` sheet in the workbook. |
 | `-g/--group`, `-c/--continuous`, `--covariate` | none | Repeatable. Grouping, continuous and adjustment variables. |
@@ -56,6 +57,19 @@ Every command except `guide` prints a JSON object on stdout.
 
 ## Workflow
 
+### Step 0. Instrument
+
+Identify the questionnaire before anything else (item count, module names, headers such as `old_01`, `HBREF_1`,
+`F1.1`, `SP1.1`). Ask when unsure: the WHOQOL-HIV-BREF, the WHOQOL-SRPB BREF and the WHOQOL-DIS all contain BREF-like
+items. A module given **with** the WHOQOL-BREF (WHOQOL-OLD, WHOQOL-SRPB) is a second run on the same file
+(`-i whoqol-bref`, then `-i whoqol-old`). The EUROHIS-QOL 8 can be scored from a WHOQOL-BREF sheet
+(`-i eurohis-qol-8`), and the four WHOQOL-BREF domains from a WHOQOL-100/WHOQOL-HIV sheet (`-i whoqol-100-bref`, for
+comparison with BREF studies). Intellectual-disability forms (3-point scales) are `whoqol-dis-id`; Brazilian DIS
+forms with items 40–43 are `whoqol-dis-br`/`whoqol-dis-id-br`; the proxy form answered by a relative or carer is
+`whoqol-dis-id-proxy` (report proxy and self-report separately). `$WHOQOL guide scoring -i
+<key>` gives the exact rules and the notes on conventions the toolkit adopted where the sources are silent or
+disagree: mention those notes to the user when they apply (they are also stated in the methods draft).
+
 ### Step 1. Inspect
 
 ```bash
@@ -65,7 +79,8 @@ $WHOQOL inspect "<path>" [--sheet <name>] [--metadata "<dictionary>"]
 - All items detected (`items_detected == items_expected`)? If not, show `missing_items`/`conflicts` and get the
   right mapping (`--mapping '{"Q1": "column"}'`).
 - Unrecognized answers (`unrecognized`)? Ask how to handle them before going on.
-- A positional mapping (warning in `conflicts`) must be confirmed by the user.
+- A positional mapping (warning in `conflicts`) must be confirmed by the user, and so must items matched by question
+  number when `conflicts._note` says the numbering follows the Brazilian form (WHOQOL-100, WHOQOL-HIV, WHOQOL-SRPB).
 - `version_language` null (numeric data)? Ask which validated version was administered → `--instrument-version`.
 
 ### Step 2. Data dictionary (optional)
@@ -118,7 +133,10 @@ comparison with cited norms.
 
 ## Rules
 
-- 0-100 scores are not percentages. Higher = better QoL (reverse-coded items already handled).
+- 0-100 scores are not percentages. Higher = better QoL (reverse-coded items already handled), except the WHOQOL-100
+  and WHOQOL-HIV facet scores of pain, negative feelings, dependence on medication, symptoms, forgiveness and blame,
+  concerns about the future and death and dying, which keep the direction of the facet (higher = more pain, …), as
+  in the WHO manual; their domains are already reversed.
 - No official WHO cut-offs; the cut-off of 60 (Silva et al., 2014) applies to older adults only.
 - Normative values only from a verifiable source given by the user or checked in the original paper.
 - Cross-sectional designs show association, not causation.
@@ -127,6 +145,8 @@ comparison with cited norms.
 ## Files
 
 - [workflow.md](./references/workflow.md) — the agent workflow in short form.
+- [instruments.md](./references/instruments.md) — supported instruments, sources, conventions and source
+  divergences (`$WHOQOL guide instruments`).
 - [interpretation.md](./references/interpretation.md), [psychometrics.md](./references/psychometrics.md),
   [reporting.md](./references/reporting.md), [references.md](./references/references.md) — methodological guides.
 - `$WHOQOL guide scoring` — scoring rules, generated from the instrument definition.

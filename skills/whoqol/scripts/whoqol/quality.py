@@ -20,6 +20,8 @@ def data_quality(raw_df: pd.DataFrame, items: pd.DataFrame, mapping: dict[str, s
 
     dom_missing = {}
     for key, d in inst.domains.items():
+        if d.composite:  # computed from facet scores; see the facet entries
+            continue
         valid = items[list(d.items)].notna().sum(axis=1)
         dom_missing[key] = int(((valid < d.min_valid) & (n_valid >= inst.min_valid_total)).sum())
 

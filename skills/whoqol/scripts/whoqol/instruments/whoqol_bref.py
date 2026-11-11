@@ -173,7 +173,7 @@ DOMAINS = {
     # Q1 and Q2 belong to no domain; many studies report them as "overall QoL and general health".
     "overall": Domain("overall", ("Q1", "Q2"), 2,
                       {"pt": "QV geral e saúde (Q1–Q2)", "en": "Overall QoL and general health (Q1–Q2)",
-                       "es": "CV global y salud general (Q1–Q2)"}, in_measurement_model=False),
+                       "es": "CV global y salud general (Q1–Q2)"}, role="global"),
 }
 
 VERSIONS = (

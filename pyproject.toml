@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "whoqol-toolkit"
-version = "0.2.0"
+version = "0.3.0"
 description = "Scoring, psychometrics and publication-grade statistics for WHOQOL questionnaires (WHOQOL-BREF first), as a plugin for Claude Code and Antigravity"
 readme = "README.md"
 requires-python = ">=3.10"

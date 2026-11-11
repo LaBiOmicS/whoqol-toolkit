@@ -1,8 +1,8 @@
 {
   "name": "whoqol-toolkit",
   "displayName": "WHOQOL Toolkit",
-  "version": "0.2.0",
-  "description": "Scoring (WHO rules), psychometrics and publication-grade statistics for WHOQOL questionnaires (WHOQOL-BREF first) from spreadsheets in Portuguese, English or Spanish: APA tables, figures, XLSX and a methods/results draft in PT, EN and ES.",
+  "version": "0.3.0",
+  "description": "Scoring (WHO rules), psychometrics and publication-grade statistics for WHOQOL questionnaires (WHOQOL-BREF, -OLD, -100, -HIV, -HIV-BREF, -SRPB, -SRPB BREF, -DIS, EUROHIS-QOL 8) from spreadsheets in Portuguese, English or Spanish: APA tables, figures, XLSX and a methods/results draft in PT, EN and ES.",
   "logo": "assets/logo.jpg",
   "author": {
     "name": "Prof. Dr. Fabiano Bezerra Menegidio (LaBiOmicS / UMC)",

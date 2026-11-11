@@ -147,6 +147,11 @@ T: dict[str, dict[str, str]] = {
     "t_cfa": {"pt": "Tabela {n}. Índices de ajuste da análise fatorial confirmatória ({k} fatores, {i} itens)",
               "en": "Table {n}. Confirmatory factor analysis fit indices ({k} factors, {i} items)",
               "es": "Tabla {n}. Índices de ajuste del análisis factorial confirmatorio ({k} factores, {i} ítems)"},
+    "t_cfa_facet": {"pt": "Tabela {n}. Índices de ajuste da análise fatorial confirmatória por facetas ({k} fatores, "
+                          "{i} facetas)",
+                    "en": "Table {n}. Facet-level confirmatory factor analysis fit indices ({k} factors, {i} facets)",
+                    "es": "Tabla {n}. Índices de ajuste del análisis factorial confirmatorio por facetas ({k} factores, "
+                          "{i} facetas)"},
     "n_cfa": {"pt": "Estimador de máxima verossimilhança. Critérios: CFI/TLI ≥ 0,90 (aceitável) ou ≥ 0,95 (bom); "
                     "RMSEA ≤ 0,08; SRMR ≤ 0,08 (Hu & Bentler, 1999).",
               "en": "Maximum likelihood estimator. Criteria: CFI/TLI ≥ .90 (acceptable) or ≥ .95 (good); "

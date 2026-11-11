@@ -23,8 +23,10 @@ validity, compares groups and writes APA tables, figures and a draft of the meth
 All numbers come from a tested, deterministic Python package that the skill runs with `uv run`. The agent's job is to
 ask the right questions, run the scripts and interpret the output; it never computes scores itself.
 
-The first instrument is the **WHOQOL-BREF**. The package is organised around an instrument registry so other WHOQOL
-instruments (WHOQOL-100, WHOQOL-OLD, WHOQOL-HIV-BREF, …) can be added without changing the analysis code.
+Supported instruments: **WHOQOL-BREF, WHOQOL-OLD, EUROHIS-QOL 8, WHOQOL-HIV-BREF, WHOQOL-SRPB BREF, WHOQOL-SRPB,
+WHOQOL-DIS (physical and intellectual disabilities), WHOQOL-100, WHOQOL-HIV and WHOQOL-100 + SRPB**. Each one is
+scored by the rules of its WHO manual or official syntax; where the sources are silent or disagree, the convention
+adopted is documented and stated in the methods draft ([instruments.md](skills/whoqol/references/instruments.md)).
 
 ---
 
@@ -51,7 +53,7 @@ instruments (WHOQOL-100, WHOQOL-OLD, WHOQOL-HIV-BREF, …) can be added without 
 | | |
 |---|---|
 | **Hosts** | Claude Code (plugin) · Antigravity CLI (plugin) · plain command line |
-| **Instruments** | WHOQOL-BREF (26 items, 4 domains + global facet) |
+| **Instruments** | WHOQOL-BREF, WHOQOL-OLD, EUROHIS-QOL 8, WHOQOL-HIV-BREF, WHOQOL-SRPB BREF, WHOQOL-SRPB, WHOQOL-DIS (PD, ID, Brazilian national items, proxy), WHOQOL-100 (6 domains or the 4 BREF domains), WHOQOL-HIV, WHOQOL-100 + SRPB ([details](skills/whoqol/references/instruments.md)) |
 | **Input formats** | .xlsx, .xls, .ods, .csv, .tsv, .sav |
 | **Item detection** | by number (`Q1`, `1.`, `item_1`, `pergunta 1`, `pregunta 1`) or by the question text in Portuguese, English or Spanish; numeric (1–5) or text answers |
 | **Languages** | Portuguese, English and Spanish. The report follows the language of the questionnaire (English for any other); the methods/results draft is always written in all three |
@@ -228,7 +230,11 @@ Written to `<file>_whoqol/` (or `-o/--output-dir`):
 - The built-in CFA uses maximum likelihood, which treats Likert items as continuous. For a psychometric paper, run the
   WLSMV script and test measurement invariance.
 - Language-version detection needs text answers or question headers; with numeric data, state the version.
-- Only the WHOQOL-BREF is implemented so far.
+- Missing-data rules that the sources do not give, and the scoring of the WHOQOL-DIS proxy form, are toolkit
+  conventions, listed in [instruments.md](skills/whoqol/references/instruments.md) and stated in the methods draft.
+- For the WHOQOL-100, WHOQOL-HIV and WHOQOL-SRPB, question numbers follow the Brazilian form (the WHO generic form
+  has none); use item codes (`F1.1`, `SP1.1`) or the question text as headers.
+- On the WHOQOL-100 family the Python CFA is facet-level; the item-level second-order model is in the lavaan script.
 - Use of WHOQOL instruments must follow the WHO's terms; the toolkit does not distribute the questionnaire.
 - Questionnaire answers are personal health data: keep them local and pseudonymised (see `rules/AGENTS.md`).
 
@@ -242,9 +248,11 @@ uv run python examples/generate_examples.py   # synthetic example data
 claude plugin validate . && agy plugin validate . --strict
 ```
 
-To add an instrument, create `skills/whoqol/scripts/whoqol/instruments/<name>.py` with an `Instrument` (items, reversed items, domains
-with minimum valid items, item texts and patterns in PT/EN/ES, language versions) and register it in
-`instruments/__init__.py`. Scoring, psychometrics, reports and the scoring guide follow from that definition.
+To add an instrument, create `skills/whoqol/scripts/whoqol/instruments/<name>.py` with an `Instrument` (items, reversed
+items, scores with their minimum valid items, multiplier or facets, response scale, item texts and codes, language
+versions, notes on the sources) and register it in `instruments/__init__.py`. Scoring, psychometrics, reports and the
+scoring guide follow from that definition. Add a test to `tests/test_reference_instruments.py` with the rules
+transcribed from the manual and a respondent calculated by hand.
 
 ## Citation
 
@@ -253,7 +261,7 @@ with minimum valid items, item texts and patterns in PT/EN/ES, language versions
   author  = {Menegidio, Fabiano Bezerra},
   title   = {whoqol-toolkit: scoring, psychometrics and publication-grade statistics for WHOQOL questionnaires},
   year    = {2026},
-  version = {0.2.0},
+  version = {0.3.0},
   url     = {https://github.com/LaBiOmicS/whoqol-toolkit}
 }
 ```

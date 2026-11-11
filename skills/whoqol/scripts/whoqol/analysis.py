@@ -131,12 +131,12 @@ def run(cfg: AnalysisConfig) -> AnalysisResult:
     rel, ia = psy.reliability_table(rev, data, inst)
     mt, mts = psy.multitrait_scaling(rev, inst)
     ht = psy.htmt(rev, inst)
-    cfa_res = psy.cfa(rev, inst) if cfg.run_cfa else None
+    cfa_res = psy.cfa(rev, inst, data) if cfg.run_cfa else None
 
-    corr_cols = [f"{k}_0_100" for k in inst.domains]
+    corr_cols = [f"{k}_0_100" for k in inst.reported_domains]
     rho, pmat = stats.correlation_matrix(data, corr_cols)
     # convergent validity: domains x global items (when the instrument has a global facet)
-    global_items = [it for d in inst.domains.values() if not d.in_measurement_model for it in d.items]
+    global_items = [it for d in inst.domains.values() if d.role == "global" for it in d.items]
     conv = pd.DataFrame()
     if global_items:
         conv = stats.correlate(pd.concat([data, items.loc[keep][global_items].add_suffix("_item")], axis=1),
@@ -184,10 +184,11 @@ def run(cfg: AnalysisConfig) -> AnalysisResult:
                      version_detection=detected)
 
     fig_dir = out / "figures"
-    corr_labels = [inst.domain_label(k, lang) for k in inst.domains]
-    res.figures = [figures.domain_distribution(data, inst, fig_dir, lang),
-                   figures.item_responses(items.loc[keep], inst, fig_dir, lang),
-                   figures.correlation_heatmap(rho, corr_labels, fig_dir, lang)]
+    corr_labels = [inst.domain_label(k, lang) for k in inst.reported_domains]
+    res.figures = [f for f in (figures.domain_distribution(data, inst, fig_dir, lang),
+                               *figures.item_responses(items.loc[keep], inst, fig_dir, lang),
+                               figures.correlation_heatmap(rho, corr_labels, fig_dir, lang)
+                               if len(corr_labels) > 1 else None) if f]
     for i, gr in enumerate(g for g in groups if "error" not in g):
         res.figures.append(figures.group_means(data, gr["group_var"], gr["levels"], inst, fig_dir, lang,
                                                idx=4 + i, label=gr.get("label")))
@@ -255,6 +256,13 @@ def interpretive_flags(r: AnalysisResult) -> list[dict]:
     return f
 
 
+def _raw_range(inst, col: str) -> list[float] | None:
+    key = col.replace("_raw", "")
+    if key in inst.domains:
+        return list(inst.domain_range(key))
+    return [4, 4 * inst.scale_max] if key == "total" else None
+
+
 def summary_dict(r: AnalysisResult, files: dict | None = None) -> dict:
     """Compact JSON summary (English keys and codes) for the LLM to interpret."""
     from .i18n import render_flag
@@ -287,7 +295,8 @@ def summary_dict(r: AnalysisResult, files: dict | None = None) -> dict:
         "data_quality": {k: v for k, v in r.quality.items() if k not in ("pct_missing_by_item", "mapping_used")},
         "descriptives_0_100": rec(r.descriptives, ["score", "n", "mean", "sd", "ci95_low", "ci95_high", "median",
                                                    "q1", "q3", "skewness", "shapiro_p"], 2),
-        "descriptives_raw_4_20": rec(r.descriptives_raw, ["score", "mean", "sd"], 2),
+        "descriptives_raw": [{**row, "range": _raw_range(r.inst, row["score"])}
+                             for row in rec(r.descriptives_raw, ["score", "mean", "sd"], 2)],
         "floor_ceiling": rec(r.floor_ceiling),
         "reliability": rec(r.reliability),
         "multitrait_summary": r.multitrait_summary,

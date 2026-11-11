@@ -1,7 +1,11 @@
 # How to interpret the results
 
 ## Scores
-- 0–100 (or 4–20): **higher = better quality of life** in every domain (negative items are already reversed).
+- 0–100 (or the raw range of each score: 4–20 for WHOQOL domains and facets, sums for the WHOQOL-OLD total, WHOQOL-DIS
+  module and EUROHIS index): **higher = better quality of life** in every domain (negative items are already
+  reversed). Exception: WHOQOL-100/WHOQOL-HIV facet scores of negatively framed facets (pain, negative feelings,
+  dependence on medication, symptoms, forgiveness and blame, concerns about the future, death and dying) keep the
+  direction of the facet, as in the WHO manual; the domains that contain them are reversed.
 - 0–100 is **not a percentage**; it is a linear transformation. Write "a score of 62.5 (0–100)", not "62.5% quality of life".
 - **There are no official WHO cut-offs.** Options, always citing the source:
   - Silva et al. (2014, Rev Saúde Pública): cut-off 60 for "good QoL" in Brazilian **older adults**; do not
