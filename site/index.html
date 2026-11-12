@@ -147,6 +147,7 @@ nav.links a:hover { color: var(--ink); }
 /* Sections */
 section { padding: 80px 0; }
 section.alt { background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+section.alt :not(pre) > code { background: var(--surface); }
 .sec-head { max-width: 48em; margin-bottom: 38px; }
 .sec-head p { color: var(--ink-2); margin-top: 14px; font-size: 1.04rem; }
 @media (max-width: 600px) { section { padding: 54px 0; } }
@@ -421,11 +422,11 @@ dl.spec dd li { margin: 2px 0; }
   <div class="wrap">
     <a class="brand" href="#"><img src="assets/logo-180.png" alt="" width="30" height="30"><span>whoqol-toolkit</span></a>
     <nav class="links">
-      <a href="#guia"><span lang="pt">Guia</span><span lang="en">Guide</span><span lang="es">Guía</span></a>
-      <a href="#prompts">Prompts</a>
       <a href="#como"><span lang="pt">Como funciona</span><span lang="en">How it works</span><span lang="es">Cómo funciona</span></a>
       <a href="#instrumentos"><span lang="pt">Instrumentos</span><span lang="en">Instruments</span><span lang="es">Instrumentos</span></a>
       <a href="#saidas"><span lang="pt">Resultados</span><span lang="en">Outputs</span><span lang="es">Resultados</span></a>
+      <a href="#guia"><span lang="pt">Guia</span><span lang="en">Guide</span><span lang="es">Guía</span></a>
+      <a href="#prompts">Prompts</a>
       <a href="#faq"><span lang="pt">Dúvidas</span><span lang="en">FAQ</span><span lang="es">Preguntas</span></a>
       <a href="https://github.com/LaBiOmicS/whoqol-toolkit">GitHub</a>
     </nav>
@@ -498,125 +499,6 @@ dl.spec dd li { margin: 2px 0; }
           <li><span lang="pt">AFC, HTMT e análise multitraço; script WLSMV para o R</span><span lang="en">CFA, HTMT and multitrait scaling; WLSMV script for R</span><span lang="es">AFC, HTMT y análisis multirrasgo; script WLSMV para R</span></li>
           <li><span lang="pt">Alertas de qualidade dos dados e limitações explícitas</span><span lang="en">Data-quality alerts and explicit limitations</span><span lang="es">Alertas de calidad de datos y limitaciones explícitas</span></li>
         </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================================================================ GUIDE -->
-<section id="guia">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow"><span lang="pt">Guia passo a passo</span><span lang="en">Step-by-step guide</span><span lang="es">Guía paso a paso</span></div>
-      <h2 lang="pt">Da instalação à primeira análise, em sete passos.</h2><h2 lang="en">From installation to the first analysis, in seven steps.</h2><h2 lang="es">De la instalación al primer análisis, en siete pasos.</h2>
-      <p lang="pt">Escolha o seu sistema e a IA que vai usar; o guia mostra só os comandos certos. Em cada caixa escura, clique em <b>copy</b> e cole no terminal.</p><p lang="en">Choose your system and the AI you will use; the guide shows only the right commands. In each dark box, click <b>copy</b> and paste into the terminal.</p><p lang="es">Elija su sistema y la IA que va a usar; la guía muestra solo los comandos adecuados. En cada caja oscura, haga clic en <b>copy</b> y pegue en la terminal.</p>
-    </div>
-    <div class="pickers">
-      <div><label><span lang="pt">Sistema</span><span lang="en">System</span><span lang="es">Sistema</span></label>
-        <div class="seg" role="group" aria-label="Operating system"><button type="button" data-set="os" data-val="win">Windows</button><button type="button" data-set="os" data-val="mac">macOS</button><button type="button" data-set="os" data-val="linux">Linux</button></div></div>
-      <div><label><span lang="pt">IA</span><span lang="en">AI</span><span lang="es">IA</span></label>
-        <div class="seg" role="group" aria-label="AI"><button type="button" data-set="ai" data-val="claude">Claude Code</button><button type="button" data-set="ai" data-val="agy">Antigravity</button></div></div>
-    </div>
-    <ol class="steps">
-      <li>
-        <h3 lang="pt">Abra o terminal</h3><h3 lang="en">Open the terminal</h3><h3 lang="es">Abra la terminal</h3>
-        <div class="txt">
-          <p lang="pt">O terminal é uma janela onde você digita comandos. Você vai usá-lo só para colar o que está nas caixas escuras.</p><p lang="en">The terminal is a window where you type commands. You will only use it to paste what is in the dark boxes.</p><p lang="es">La terminal es una ventana donde se escriben comandos. Solo la usará para pegar lo que está en las cajas oscuras.</p>
-          <p class="os-win" lang="pt">No Windows, aperte <kbd>⊞ Win</kbd>, digite <b>PowerShell</b> e abra o <b>Windows PowerShell</b>.</p><p class="os-win" lang="en">On Windows, press <kbd>⊞ Win</kbd>, type <b>PowerShell</b> and open <b>Windows PowerShell</b>.</p><p class="os-win" lang="es">En Windows, pulse <kbd>⊞ Win</kbd>, escriba <b>PowerShell</b> y abra <b>Windows PowerShell</b>.</p>
-          <p class="os-mac" lang="pt">No Mac, aperte <kbd>⌘ Cmd</kbd> + <kbd>Espaço</kbd>, digite <b>Terminal</b> e aperte <kbd>Enter</kbd>.</p><p class="os-mac" lang="en">On a Mac, press <kbd>⌘ Cmd</kbd> + <kbd>Space</kbd>, type <b>Terminal</b> and press <kbd>Enter</kbd>.</p><p class="os-mac" lang="es">En Mac, pulse <kbd>⌘ Cmd</kbd> + <kbd>Espacio</kbd>, escriba <b>Terminal</b> y pulse <kbd>Enter</kbd>.</p>
-          <p class="os-linux" lang="pt">No Linux, aperte <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</p><p class="os-linux" lang="en">On Linux, press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</p><p class="os-linux" lang="es">En Linux, pulse <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</p>
-        </div>
-      </li>
-      <li>
-        <h3 lang="pt">Instale o uv</h3><h3 lang="en">Install uv</h3><h3 lang="es">Instale uv</h3>
-        <div class="txt">
-          <p lang="pt">O <b>uv</b> é um programa gratuito que baixa sozinho as peças em Python que fazem os cálculos. Cole, aperte <kbd>Enter</kbd> e espere terminar.</p><p lang="en"><b>uv</b> is a free program that downloads the Python pieces that do the calculations. Paste, press <kbd>Enter</kbd> and wait.</p><p lang="es"><b>uv</b> es un programa gratuito que descarga las piezas en Python que hacen los cálculos. Pegue, pulse <kbd>Enter</kbd> y espere.</p>
-          <div class="code os-win"><button class="copy" type="button">copy</button><pre>powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"</pre></div>
-          <div class="code os-unix"><button class="copy" type="button">copy</button><pre>curl -LsSf https://astral.sh/uv/install.sh | sh</pre></div>
-          <div class="tip" lang="pt">Ao terminar, <b>feche o terminal e abra outro</b>. Isso vale para todos os passos de instalação.</div><div class="tip" lang="en">When it finishes, <b>close the terminal and open a new one</b>. This applies to every installation step.</div><div class="tip" lang="es">Al terminar, <b>cierre la terminal y abra otra</b>. Esto vale para todos los pasos de instalación.</div>
-        </div>
-      </li>
-      <li>
-        <h3 lang="pt">Instale o assistente de IA</h3><h3 lang="en">Install the AI assistant</h3><h3 lang="es">Instale el asistente de IA</h3>
-        <div class="txt">
-          <div class="code ai-claude os-win"><button class="copy" type="button">copy</button><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
-          <div class="code ai-claude os-unix"><button class="copy" type="button">copy</button><pre>curl -fsSL https://claude.ai/install.sh | bash</pre></div>
-          <div class="code ai-agy os-win"><button class="copy" type="button">copy</button><pre>irm https://antigravity.google/cli/install.ps1 | iex</pre></div>
-          <div class="code ai-agy os-unix"><button class="copy" type="button">copy</button><pre>curl -fsSL https://antigravity.google/cli/install.sh | bash</pre></div>
-          <p lang="pt">Abra um terminal novo, digite o nome do assistente e entre na sua conta pelo navegador:</p><p lang="en">Open a new terminal, type the assistant's name and sign in through the browser:</p><p lang="es">Abra una terminal nueva, escriba el nombre del asistente e inicie sesión en el navegador:</p>
-          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre>claude</pre></div><div class="code ai-agy"><button class="copy" type="button">copy</button><pre>agy</pre></div>
-        </div>
-      </li>
-      <li>
-        <h3 lang="pt">Instale o plugin</h3><h3 lang="en">Install the plugin</h3><h3 lang="es">Instale el plugin</h3>
-        <div class="txt">
-          <p class="ai-claude" lang="pt">Com o Claude Code aberto, cole as duas linhas, <b>uma de cada vez</b>, e depois digite <code>/exit</code>:</p><p class="ai-claude" lang="en">With Claude Code open, paste the two lines <b>one at a time</b>, then type <code>/exit</code>:</p><p class="ai-claude" lang="es">Con Claude Code abierto, pegue las dos líneas <b>una a la vez</b> y luego escriba <code>/exit</code>:</p>
-          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>/plugin marketplace add LaBiOmicS/whoqol-toolkit</pre></div>
-          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>/plugin install whoqol-toolkit@labiomics</pre></div>
-          <p class="ai-agy" lang="pt">Fora do assistente, baixe o plugin com o git e instale-o:</p><p class="ai-agy" lang="en">Outside the assistant, download the plugin with git and install it:</p><p class="ai-agy" lang="es">Fuera del asistente, descargue el plugin con git e instálelo:</p>
-          <div class="code ai-agy"><button class="copy" type="button">copy</button><pre>git clone https://github.com/LaBiOmicS/whoqol-toolkit.git
-agy plugin install whoqol-toolkit
-agy plugin enable whoqol-toolkit</pre></div>
-          <div class="tip" lang="pt">O plugin passa a funcionar na próxima vez que você abrir o assistente.</div><div class="tip" lang="en">The plugin is active the next time you open the assistant.</div><div class="tip" lang="es">El plugin funciona la próxima vez que abra el asistente.</div>
-        </div>
-      </li>
-      <li>
-        <h3 lang="pt">Prepare a pasta com a planilha</h3><h3 lang="en">Prepare the folder with the spreadsheet</h3><h3 lang="es">Prepare la carpeta con la hoja de cálculo</h3>
-        <div class="txt">
-          <p lang="pt">Crie uma pasta, por exemplo <b>pesquisa</b> em <b>Documentos</b>, e coloque nela a planilha exportada (.xlsx, .csv, .ods ou .sav). No terminal, digite <code>cd </code> com um espaço, <b>arraste a pasta para a janela</b> e aperte <kbd>Enter</kbd>.</p><p lang="en">Create a folder, for example <b>research</b> in <b>Documents</b>, and put the exported spreadsheet in it (.xlsx, .csv, .ods or .sav). In the terminal, type <code>cd </code> with a space, <b>drag the folder into the window</b> and press <kbd>Enter</kbd>.</p><p lang="es">Cree una carpeta, por ejemplo <b>investigacion</b> en <b>Documentos</b>, y ponga en ella la hoja exportada (.xlsx, .csv, .ods o .sav). En la terminal, escriba <code>cd </code> con un espacio, <b>arrastre la carpeta a la ventana</b> y pulse <kbd>Enter</kbd>.</p>
-          <div class="tip" lang="pt">As colunas podem ter o número da pergunta (<code>Q1</code>, <code>1.</code>) ou o próprio texto da pergunta, e as respostas podem ser números (1–5) ou texto ("Muito satisfeito"). Não é preciso arrumar a planilha.</div><div class="tip" lang="en">Columns can carry the question number (<code>Q1</code>, <code>1.</code>) or the question text itself, and answers can be numbers (1–5) or text ("Very satisfied"). There is no need to tidy the spreadsheet.</div><div class="tip" lang="es">Las columnas pueden tener el número de la pregunta (<code>Q1</code>, <code>1.</code>) o el texto de la pregunta, y las respuestas pueden ser números (1–5) o texto ("Muy satisfecho"). No hace falta ordenar la hoja.</div>
-        </div>
-      </li>
-      <li>
-        <h3 lang="pt">Peça a análise</h3><h3 lang="en">Ask for the analysis</h3><h3 lang="es">Pida el análisis</h3>
-        <div class="txt">
-          <p lang="pt">Abra o assistente nessa pasta e escreva o pedido com as suas palavras, ou use um dos <a href='#prompts'>prompts prontos</a>.</p><p lang="en">Open the assistant in that folder and write the request in your own words, or use one of the <a href='#prompts'>ready prompts</a>.</p><p lang="es">Abra el asistente en esa carpeta y escriba la solicitud con sus palabras, o use uno de los <a href='#prompts'>prompts listos</a>.</p>
-          <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Analise a planilha <span class="ph">whoqol.xlsx</span> e compare os domínios por <span class="ph">sexo</span>.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Analyse <span class="ph">whoqol.xlsx</span> and compare the domains by <span class="ph">sex</span>.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Analiza <span class="ph">whoqol.xlsx</span> y compara los dominios por <span class="ph">sexo</span>.</pre></div>
-          <div class="tip warn" lang="pt"><b>O assistente vai mostrar as colunas que reconheceu</b> e perguntar o que você quer comparar. Confira: a análise depende disso. Ele também pede permissão para rodar programas; escolha <b>Yes</b>.</div><div class="tip warn" lang="en"><b>The assistant will show the columns it recognised</b> and ask what you want to compare. Check them: the analysis depends on it. It will also ask permission to run programs; choose <b>Yes</b>.</div><div class="tip warn" lang="es"><b>El asistente mostrará las columnas que reconoció</b> y preguntará qué quiere comparar. Revíselas: el análisis depende de ello. También pedirá permiso para ejecutar programas; elija <b>Yes</b>.</div>
-        </div>
-      </li>
-      <li>
-        <h3 lang="pt">Confira os resultados</h3><h3 lang="en">Check the results</h3><h3 lang="es">Revise los resultados</h3>
-        <div class="txt">
-          <p lang="pt">Os arquivos ficam na pasta <code>&lt;planilha&gt;_whoqol</code>. Comece pelo <b>report.md</b> (alertas e tabelas) e pelo <b>tables.docx</b> (tabelas prontas para o Word).</p><p lang="en">Files are written to the <code>&lt;spreadsheet&gt;_whoqol</code> folder. Start with <b>report.md</b> (alerts and tables) and <b>tables.docx</b> (tables ready for Word).</p><p lang="es">Los archivos quedan en la carpeta <code>&lt;hoja&gt;_whoqol</code>. Empiece por <b>report.md</b> (alertas y tablas) y <b>tables.docx</b> (tablas listas para Word).</p>
-          <div class="tip" lang="pt">A IA pode errar na interpretação. Os números vêm do código, mas confira o texto antes de usá-lo no manuscrito.</div><div class="tip" lang="en">The AI can get the interpretation wrong. The numbers come from the code, but check the text before using it in the manuscript.</div><div class="tip" lang="es">La IA puede equivocarse en la interpretación. Las cifras vienen del código, pero revise el texto antes de usarlo en el manuscrito.</div>
-        </div>
-      </li>
-    </ol>
-  </div>
-</section>
-
-<!-- ================================================================ PROMPTS -->
-<section id="prompts" class="alt">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow"><span lang="pt">Prompts prontos</span><span lang="en">Ready prompts</span><span lang="es">Prompts listos</span></div>
-      <h2 lang="pt">Copie, troque o que está sublinhado e envie.</h2><h2 lang="en">Copy, replace the underlined parts and send.</h2><h2 lang="es">Copie, cambie lo subrayado y envíe.</h2>
-    </div>
-    <div class="prompts">
-      <div class="pcard">
-        <div class="when"><span lang="pt">Primeira análise</span><span lang="en">First analysis</span><span lang="es">Primer análisis</span></div>
-        <h3 lang="pt">Descrever a amostra</h3><h3 lang="en">Describe the sample</h3><h3 lang="es">Describir la muestra</h3>
-        <p lang="pt">Escores por domínio, confiabilidade e qualidade dos dados.</p><p lang="en">Domain scores, reliability and data quality.</p><p lang="es">Puntuaciones por dominio, fiabilidad y calidad de los datos.</p>
-        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Pontue e descreva o WHOQOL-BREF da planilha <span class="ph">dados.xlsx</span> e gere as tabelas para o artigo.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Score and describe the WHOQOL-BREF in <span class="ph">data.xlsx</span> and produce the tables for the paper.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Puntúa y describe el WHOQOL-BREF de <span class="ph">datos.xlsx</span> y genera las tablas para el artículo.</pre></div>
-      </div>
-      <div class="pcard">
-        <div class="when"><span lang="pt">Comparação</span><span lang="en">Comparison</span><span lang="es">Comparación</span></div>
-        <h3 lang="pt">Comparar grupos</h3><h3 lang="en">Compare groups</h3><h3 lang="es">Comparar grupos</h3>
-        <p lang="pt">Teste escolhido pelos dados, tamanho de efeito e correção de Holm.</p><p lang="en">Test chosen from the data, effect size and Holm correction.</p><p lang="es">Prueba elegida según los datos, tamaño del efecto y corrección de Holm.</p>
-        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Compare os domínios por <span class="ph">sexo</span> e <span class="ph">escolaridade</span> e ajuste por <span class="ph">idade</span>.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Compare the domains by <span class="ph">sex</span> and <span class="ph">education</span> and adjust for <span class="ph">age</span>.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Compara los dominios por <span class="ph">sexo</span> y <span class="ph">nivel educativo</span> y ajusta por <span class="ph">edad</span>.</pre></div>
-      </div>
-      <div class="pcard">
-        <div class="when"><span lang="pt">Psicometria</span><span lang="en">Psychometrics</span><span lang="es">Psicometría</span></div>
-        <h3 lang="pt">Validar o instrumento</h3><h3 lang="en">Validate the instrument</h3><h3 lang="es">Validar el instrumento</h3>
-        <p lang="pt">Confiabilidade, AFC, validade discriminante e script para o R.</p><p lang="en">Reliability, CFA, discriminant validity and an R script.</p><p lang="es">Fiabilidad, AFC, validez discriminante y script para R.</p>
-        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Avalie as propriedades psicométricas do WHOQOL-BREF em <span class="ph">dados.csv</span> para um artigo de validação.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Assess the psychometric properties of the WHOQOL-BREF in <span class="ph">data.csv</span> for a validation paper.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Evalúa las propiedades psicométricas del WHOQOL-BREF en <span class="ph">datos.csv</span> para un artículo de validación.</pre></div>
-      </div>
-      <div class="pcard">
-        <div class="when"><span lang="pt">Planilha codificada</span><span lang="en">Coded spreadsheet</span><span lang="es">Hoja codificada</span></div>
-        <h3 lang="pt">Explicar as variáveis</h3><h3 lang="en">Explain the variables</h3><h3 lang="es">Explicar las variables</h3>
-        <p lang="pt">Gera um dicionário pré-preenchido para rótulos, ordens e códigos de ausente.</p><p lang="en">Creates a pre-filled dictionary for labels, level orders and missing codes.</p><p lang="es">Genera un diccionario prerrellenado para etiquetas, órdenes y códigos de faltante.</p>
-        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Minha planilha <span class="ph">dados.sav</span> tem variáveis codificadas (1/2, 99). Crie o dicionário de dados para eu preencher.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>My spreadsheet <span class="ph">data.sav</span> has coded variables (1/2, 99). Create the data dictionary for me to fill in.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Mi hoja <span class="ph">datos.sav</span> tiene variables codificadas (1/2, 99). Crea el diccionario de datos para que lo complete.</pre></div>
       </div>
     </div>
   </div>
@@ -921,6 +803,125 @@ Q10 = 4 · Q15 = 4 · Q16 = 3 · Q17 = 4 · Q18 = 4
         <div class="file"><code>figures/</code><span lang="pt">Distribuições, respostas por item, correlações e grupos (PNG 300 dpi e PDF).</span><span lang="en">Distributions, item responses, correlations and groups (PNG 300 dpi and PDF).</span><span lang="es">Distribuciones, respuestas por ítem, correlaciones y grupos (PNG 300 dpi y PDF).</span></div>
         <div class="file"><code>cfa_wlsmv_lavaan.R</code><span lang="pt">AFC com estimador WLSMV no R, para artigos psicométricos.</span><span lang="en">CFA with the WLSMV estimator in R, for psychometric papers.</span><span lang="es">AFC con el estimador WLSMV en R, para artículos psicométricos.</span></div>
         <div class="file"><code>results.json</code><span lang="pt">Resumo legível por máquina.</span><span lang="en">Machine-readable summary.</span><span lang="es">Resumen legible por máquina.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ GUIDE -->
+<section id="guia" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Guia passo a passo</span><span lang="en">Step-by-step guide</span><span lang="es">Guía paso a paso</span></div>
+      <h2 lang="pt">Da instalação à primeira análise, em sete passos.</h2><h2 lang="en">From installation to the first analysis, in seven steps.</h2><h2 lang="es">De la instalación al primer análisis, en siete pasos.</h2>
+      <p lang="pt">Escolha o seu sistema e a IA que vai usar; o guia mostra só os comandos certos. Em cada caixa escura, clique em <b>copy</b> e cole no terminal.</p><p lang="en">Choose your system and the AI you will use; the guide shows only the right commands. In each dark box, click <b>copy</b> and paste into the terminal.</p><p lang="es">Elija su sistema y la IA que va a usar; la guía muestra solo los comandos adecuados. En cada caja oscura, haga clic en <b>copy</b> y pegue en la terminal.</p>
+    </div>
+    <div class="pickers">
+      <div><label><span lang="pt">Sistema</span><span lang="en">System</span><span lang="es">Sistema</span></label>
+        <div class="seg" role="group" aria-label="Operating system"><button type="button" data-set="os" data-val="win">Windows</button><button type="button" data-set="os" data-val="mac">macOS</button><button type="button" data-set="os" data-val="linux">Linux</button></div></div>
+      <div><label><span lang="pt">IA</span><span lang="en">AI</span><span lang="es">IA</span></label>
+        <div class="seg" role="group" aria-label="AI"><button type="button" data-set="ai" data-val="claude">Claude Code</button><button type="button" data-set="ai" data-val="agy">Antigravity</button></div></div>
+    </div>
+    <ol class="steps">
+      <li>
+        <h3 lang="pt">Abra o terminal</h3><h3 lang="en">Open the terminal</h3><h3 lang="es">Abra la terminal</h3>
+        <div class="txt">
+          <p lang="pt">O terminal é uma janela onde você digita comandos. Você vai usá-lo só para colar o que está nas caixas escuras.</p><p lang="en">The terminal is a window where you type commands. You will only use it to paste what is in the dark boxes.</p><p lang="es">La terminal es una ventana donde se escriben comandos. Solo la usará para pegar lo que está en las cajas oscuras.</p>
+          <p class="os-win" lang="pt">No Windows, aperte <kbd>⊞ Win</kbd>, digite <b>PowerShell</b> e abra o <b>Windows PowerShell</b>.</p><p class="os-win" lang="en">On Windows, press <kbd>⊞ Win</kbd>, type <b>PowerShell</b> and open <b>Windows PowerShell</b>.</p><p class="os-win" lang="es">En Windows, pulse <kbd>⊞ Win</kbd>, escriba <b>PowerShell</b> y abra <b>Windows PowerShell</b>.</p>
+          <p class="os-mac" lang="pt">No Mac, aperte <kbd>⌘ Cmd</kbd> + <kbd>Espaço</kbd>, digite <b>Terminal</b> e aperte <kbd>Enter</kbd>.</p><p class="os-mac" lang="en">On a Mac, press <kbd>⌘ Cmd</kbd> + <kbd>Space</kbd>, type <b>Terminal</b> and press <kbd>Enter</kbd>.</p><p class="os-mac" lang="es">En Mac, pulse <kbd>⌘ Cmd</kbd> + <kbd>Espacio</kbd>, escriba <b>Terminal</b> y pulse <kbd>Enter</kbd>.</p>
+          <p class="os-linux" lang="pt">No Linux, aperte <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</p><p class="os-linux" lang="en">On Linux, press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</p><p class="os-linux" lang="es">En Linux, pulse <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</p>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Instale o uv</h3><h3 lang="en">Install uv</h3><h3 lang="es">Instale uv</h3>
+        <div class="txt">
+          <p lang="pt">O <b>uv</b> é um programa gratuito que baixa sozinho as peças em Python que fazem os cálculos. Cole, aperte <kbd>Enter</kbd> e espere terminar.</p><p lang="en"><b>uv</b> is a free program that downloads the Python pieces that do the calculations. Paste, press <kbd>Enter</kbd> and wait.</p><p lang="es"><b>uv</b> es un programa gratuito que descarga las piezas en Python que hacen los cálculos. Pegue, pulse <kbd>Enter</kbd> y espere.</p>
+          <div class="code os-win"><button class="copy" type="button">copy</button><pre>powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"</pre></div>
+          <div class="code os-unix"><button class="copy" type="button">copy</button><pre>curl -LsSf https://astral.sh/uv/install.sh | sh</pre></div>
+          <div class="tip" lang="pt">Ao terminar, <b>feche o terminal e abra outro</b>. Isso vale para todos os passos de instalação.</div><div class="tip" lang="en">When it finishes, <b>close the terminal and open a new one</b>. This applies to every installation step.</div><div class="tip" lang="es">Al terminar, <b>cierre la terminal y abra otra</b>. Esto vale para todos los pasos de instalación.</div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Instale o assistente de IA</h3><h3 lang="en">Install the AI assistant</h3><h3 lang="es">Instale el asistente de IA</h3>
+        <div class="txt">
+          <div class="code ai-claude os-win"><button class="copy" type="button">copy</button><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
+          <div class="code ai-claude os-unix"><button class="copy" type="button">copy</button><pre>curl -fsSL https://claude.ai/install.sh | bash</pre></div>
+          <div class="code ai-agy os-win"><button class="copy" type="button">copy</button><pre>irm https://antigravity.google/cli/install.ps1 | iex</pre></div>
+          <div class="code ai-agy os-unix"><button class="copy" type="button">copy</button><pre>curl -fsSL https://antigravity.google/cli/install.sh | bash</pre></div>
+          <p lang="pt">Abra um terminal novo, digite o nome do assistente e entre na sua conta pelo navegador:</p><p lang="en">Open a new terminal, type the assistant's name and sign in through the browser:</p><p lang="es">Abra una terminal nueva, escriba el nombre del asistente e inicie sesión en el navegador:</p>
+          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre>claude</pre></div><div class="code ai-agy"><button class="copy" type="button">copy</button><pre>agy</pre></div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Instale o plugin</h3><h3 lang="en">Install the plugin</h3><h3 lang="es">Instale el plugin</h3>
+        <div class="txt">
+          <p class="ai-claude" lang="pt">Com o Claude Code aberto, cole as duas linhas, <b>uma de cada vez</b>, e depois digite <code>/exit</code>:</p><p class="ai-claude" lang="en">With Claude Code open, paste the two lines <b>one at a time</b>, then type <code>/exit</code>:</p><p class="ai-claude" lang="es">Con Claude Code abierto, pegue las dos líneas <b>una a la vez</b> y luego escriba <code>/exit</code>:</p>
+          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>/plugin marketplace add LaBiOmicS/whoqol-toolkit</pre></div>
+          <div class="code ai-claude"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>/plugin install whoqol-toolkit@labiomics</pre></div>
+          <p class="ai-agy" lang="pt">Fora do assistente, baixe o plugin com o git e instale-o:</p><p class="ai-agy" lang="en">Outside the assistant, download the plugin with git and install it:</p><p class="ai-agy" lang="es">Fuera del asistente, descargue el plugin con git e instálelo:</p>
+          <div class="code ai-agy"><button class="copy" type="button">copy</button><pre>git clone https://github.com/LaBiOmicS/whoqol-toolkit.git
+agy plugin install whoqol-toolkit
+agy plugin enable whoqol-toolkit</pre></div>
+          <div class="tip" lang="pt">O plugin passa a funcionar na próxima vez que você abrir o assistente.</div><div class="tip" lang="en">The plugin is active the next time you open the assistant.</div><div class="tip" lang="es">El plugin funciona la próxima vez que abra el asistente.</div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Prepare a pasta com a planilha</h3><h3 lang="en">Prepare the folder with the spreadsheet</h3><h3 lang="es">Prepare la carpeta con la hoja de cálculo</h3>
+        <div class="txt">
+          <p lang="pt">Crie uma pasta, por exemplo <b>pesquisa</b> em <b>Documentos</b>, e coloque nela a planilha exportada (.xlsx, .csv, .ods ou .sav). No terminal, digite <code>cd </code> com um espaço, <b>arraste a pasta para a janela</b> e aperte <kbd>Enter</kbd>.</p><p lang="en">Create a folder, for example <b>research</b> in <b>Documents</b>, and put the exported spreadsheet in it (.xlsx, .csv, .ods or .sav). In the terminal, type <code>cd </code> with a space, <b>drag the folder into the window</b> and press <kbd>Enter</kbd>.</p><p lang="es">Cree una carpeta, por ejemplo <b>investigacion</b> en <b>Documentos</b>, y ponga en ella la hoja exportada (.xlsx, .csv, .ods o .sav). En la terminal, escriba <code>cd </code> con un espacio, <b>arrastre la carpeta a la ventana</b> y pulse <kbd>Enter</kbd>.</p>
+          <div class="tip" lang="pt">As colunas podem ter o número da pergunta (<code>Q1</code>, <code>1.</code>) ou o próprio texto da pergunta, e as respostas podem ser números (1–5) ou texto ("Muito satisfeito"). Não é preciso arrumar a planilha.</div><div class="tip" lang="en">Columns can carry the question number (<code>Q1</code>, <code>1.</code>) or the question text itself, and answers can be numbers (1–5) or text ("Very satisfied"). There is no need to tidy the spreadsheet.</div><div class="tip" lang="es">Las columnas pueden tener el número de la pregunta (<code>Q1</code>, <code>1.</code>) o el texto de la pregunta, y las respuestas pueden ser números (1–5) o texto ("Muy satisfecho"). No hace falta ordenar la hoja.</div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Peça a análise</h3><h3 lang="en">Ask for the analysis</h3><h3 lang="es">Pida el análisis</h3>
+        <div class="txt">
+          <p lang="pt">Abra o assistente nessa pasta e escreva o pedido com as suas palavras, ou use um dos <a href='#prompts'>prompts prontos</a>.</p><p lang="en">Open the assistant in that folder and write the request in your own words, or use one of the <a href='#prompts'>ready prompts</a>.</p><p lang="es">Abra el asistente en esa carpeta y escriba la solicitud con sus palabras, o use uno de los <a href='#prompts'>prompts listos</a>.</p>
+          <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Analise a planilha <span class="ph">whoqol.xlsx</span> e compare os domínios por <span class="ph">sexo</span>.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Analyse <span class="ph">whoqol.xlsx</span> and compare the domains by <span class="ph">sex</span>.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Analiza <span class="ph">whoqol.xlsx</span> y compara los dominios por <span class="ph">sexo</span>.</pre></div>
+          <div class="tip warn" lang="pt"><b>O assistente vai mostrar as colunas que reconheceu</b> e perguntar o que você quer comparar. Confira: a análise depende disso. Ele também pede permissão para rodar programas; escolha <b>Yes</b>.</div><div class="tip warn" lang="en"><b>The assistant will show the columns it recognised</b> and ask what you want to compare. Check them: the analysis depends on it. It will also ask permission to run programs; choose <b>Yes</b>.</div><div class="tip warn" lang="es"><b>El asistente mostrará las columnas que reconoció</b> y preguntará qué quiere comparar. Revíselas: el análisis depende de ello. También pedirá permiso para ejecutar programas; elija <b>Yes</b>.</div>
+        </div>
+      </li>
+      <li>
+        <h3 lang="pt">Confira os resultados</h3><h3 lang="en">Check the results</h3><h3 lang="es">Revise los resultados</h3>
+        <div class="txt">
+          <p lang="pt">Os arquivos ficam na pasta <code>&lt;planilha&gt;_whoqol</code>. Comece pelo <b>report.md</b> (alertas e tabelas) e pelo <b>tables.docx</b> (tabelas prontas para o Word).</p><p lang="en">Files are written to the <code>&lt;spreadsheet&gt;_whoqol</code> folder. Start with <b>report.md</b> (alerts and tables) and <b>tables.docx</b> (tables ready for Word).</p><p lang="es">Los archivos quedan en la carpeta <code>&lt;hoja&gt;_whoqol</code>. Empiece por <b>report.md</b> (alertas y tablas) y <b>tables.docx</b> (tablas listas para Word).</p>
+          <div class="tip" lang="pt">A IA pode errar na interpretação. Os números vêm do código, mas confira o texto antes de usá-lo no manuscrito.</div><div class="tip" lang="en">The AI can get the interpretation wrong. The numbers come from the code, but check the text before using it in the manuscript.</div><div class="tip" lang="es">La IA puede equivocarse en la interpretación. Las cifras vienen del código, pero revise el texto antes de usarlo en el manuscrito.</div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================================================================ PROMPTS -->
+<section id="prompts">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span lang="pt">Prompts prontos</span><span lang="en">Ready prompts</span><span lang="es">Prompts listos</span></div>
+      <h2 lang="pt">Copie, troque o que está sublinhado e envie.</h2><h2 lang="en">Copy, replace the underlined parts and send.</h2><h2 lang="es">Copie, cambie lo subrayado y envíe.</h2>
+    </div>
+    <div class="prompts">
+      <div class="pcard">
+        <div class="when"><span lang="pt">Primeira análise</span><span lang="en">First analysis</span><span lang="es">Primer análisis</span></div>
+        <h3 lang="pt">Descrever a amostra</h3><h3 lang="en">Describe the sample</h3><h3 lang="es">Describir la muestra</h3>
+        <p lang="pt">Escores por domínio, confiabilidade e qualidade dos dados.</p><p lang="en">Domain scores, reliability and data quality.</p><p lang="es">Puntuaciones por dominio, fiabilidad y calidad de los datos.</p>
+        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Pontue e descreva o WHOQOL-BREF da planilha <span class="ph">dados.xlsx</span> e gere as tabelas para o artigo.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Score and describe the WHOQOL-BREF in <span class="ph">data.xlsx</span> and produce the tables for the paper.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Puntúa y describe el WHOQOL-BREF de <span class="ph">datos.xlsx</span> y genera las tablas para el artículo.</pre></div>
+      </div>
+      <div class="pcard">
+        <div class="when"><span lang="pt">Comparação</span><span lang="en">Comparison</span><span lang="es">Comparación</span></div>
+        <h3 lang="pt">Comparar grupos</h3><h3 lang="en">Compare groups</h3><h3 lang="es">Comparar grupos</h3>
+        <p lang="pt">Teste escolhido pelos dados, tamanho de efeito e correção de Holm.</p><p lang="en">Test chosen from the data, effect size and Holm correction.</p><p lang="es">Prueba elegida según los datos, tamaño del efecto y corrección de Holm.</p>
+        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Compare os domínios por <span class="ph">sexo</span> e <span class="ph">escolaridade</span> e ajuste por <span class="ph">idade</span>.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Compare the domains by <span class="ph">sex</span> and <span class="ph">education</span> and adjust for <span class="ph">age</span>.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Compara los dominios por <span class="ph">sexo</span> y <span class="ph">nivel educativo</span> y ajusta por <span class="ph">edad</span>.</pre></div>
+      </div>
+      <div class="pcard">
+        <div class="when"><span lang="pt">Psicometria</span><span lang="en">Psychometrics</span><span lang="es">Psicometría</span></div>
+        <h3 lang="pt">Validar o instrumento</h3><h3 lang="en">Validate the instrument</h3><h3 lang="es">Validar el instrumento</h3>
+        <p lang="pt">Confiabilidade, AFC, validade discriminante e script para o R.</p><p lang="en">Reliability, CFA, discriminant validity and an R script.</p><p lang="es">Fiabilidad, AFC, validez discriminante y script para R.</p>
+        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Avalie as propriedades psicométricas do WHOQOL-BREF em <span class="ph">dados.csv</span> para um artigo de validação.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Assess the psychometric properties of the WHOQOL-BREF in <span class="ph">data.csv</span> for a validation paper.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Evalúa las propiedades psicométricas del WHOQOL-BREF en <span class="ph">datos.csv</span> para un artículo de validación.</pre></div>
+      </div>
+      <div class="pcard">
+        <div class="when"><span lang="pt">Planilha codificada</span><span lang="en">Coded spreadsheet</span><span lang="es">Hoja codificada</span></div>
+        <h3 lang="pt">Explicar as variáveis</h3><h3 lang="en">Explain the variables</h3><h3 lang="es">Explicar las variables</h3>
+        <p lang="pt">Gera um dicionário pré-preenchido para rótulos, ordens e códigos de ausente.</p><p lang="en">Creates a pre-filled dictionary for labels, level orders and missing codes.</p><p lang="es">Genera un diccionario prerrellenado para etiquetas, órdenes y códigos de faltante.</p>
+        <div class="code" lang="pt"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Minha planilha <span class="ph">dados.sav</span> tem variáveis codificadas (1/2, 99). Crie o dicionário de dados para eu preencher.</pre></div><div class="code" lang="en"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>My spreadsheet <span class="ph">data.sav</span> has coded variables (1/2, 99). Create the data dictionary for me to fill in.</pre></div><div class="code" lang="es"><button class="copy" type="button">copy</button><pre><span class="p">&gt; </span>Mi hoja <span class="ph">datos.sav</span> tiene variables codificadas (1/2, 99). Crea el diccionario de datos para que lo complete.</pre></div>
       </div>
     </div>
   </div>
